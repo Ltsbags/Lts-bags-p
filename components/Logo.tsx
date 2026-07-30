@@ -3,11 +3,12 @@
 import React from 'react';
 
 interface LogoProps {
-  variant?: 'horizontal' | 'vertical' | 'icon-only';
+  variant?: 'horizontal' | 'vertical' | 'icon-only' | 'text-only';
   theme?: 'dark' | 'light';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   showSubtitle?: boolean;
+  showIcon?: boolean;
 }
 
 export default function Logo({
@@ -16,6 +17,7 @@ export default function Logo({
   size = 'md',
   className = '',
   showSubtitle = true,
+  showIcon = false,
 }: LogoProps) {
   // Dimension classes
   const iconSizes = {
@@ -48,25 +50,27 @@ export default function Logo({
   return (
     <div className={`inline-flex items-center gap-2.5 sm:gap-3 group ${className}`}>
       {/* High-Precision SVG Monogram Emblem (L + B) */}
-      <div className={`relative shrink-0 ${iconSizes[size]} flex items-center justify-center transition-transform group-hover:scale-105`}>
-        <svg
-          viewBox="0 0 160 180"
-          className="w-full h-full drop-shadow-xs"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* L in Steel Grey */}
-          <path
-            d="M 12 12 L 52 12 L 52 132 L 80 132 L 80 168 L 12 168 Z"
-            fill={lColor}
-          />
-          {/* B in Sky Blue */}
-          <path
-            d="M 52 12 L 112 12 C 140 12 156 28 156 52 C 156 68 146 80 132 86 C 150 92 160 108 160 128 C 160 156 140 168 112 168 L 80 168 L 80 132 L 110 132 C 124 132 130 124 130 112 C 130 100 122 92 106 92 L 52 92 Z M 52 48 L 106 48 C 120 48 126 54 126 64 C 126 74 120 80 106 80 L 52 80 Z"
-            fill={bColor}
-          />
-        </svg>
-      </div>
+      {showIcon && (
+        <div className={`relative shrink-0 ${iconSizes[size]} flex items-center justify-center transition-transform group-hover:scale-105`}>
+          <svg
+            viewBox="0 0 160 180"
+            className="w-full h-full drop-shadow-xs"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* L in Steel Grey */}
+            <path
+              d="M 12 12 L 52 12 L 52 132 L 80 132 L 80 168 L 12 168 Z"
+              fill={lColor}
+            />
+            {/* B in Sky Blue */}
+            <path
+              d="M 52 12 L 112 12 C 140 12 156 28 156 52 C 156 68 146 80 132 86 C 150 92 160 108 160 128 C 160 156 140 168 112 168 L 80 168 L 80 132 L 110 132 C 124 132 130 124 130 112 C 130 100 122 92 106 92 L 52 92 Z M 52 48 L 106 48 C 120 48 126 54 126 64 C 126 74 120 80 106 80 L 52 80 Z"
+              fill={bColor}
+            />
+          </svg>
+        </div>
+      )}
 
       {variant !== 'icon-only' && (
         <div className="flex flex-col justify-center leading-none">
