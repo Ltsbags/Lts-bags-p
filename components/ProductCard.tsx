@@ -24,31 +24,31 @@ export default function ProductCard({ product, onEnquire }: ProductCardProps) {
   };
 
   return (
-    <div className="group bg-white rounded-xl border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-amber-300 transition-all duration-300 flex flex-col overflow-hidden relative">
+    <div className="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-xl hover:border-sky-400 dark:hover:border-sky-500 transition-all duration-300 flex flex-col overflow-hidden relative">
       
       {/* Featured Badge */}
       {product.isFeatured && (
-        <span className="absolute top-3 left-3 z-10 bg-slate-900/90 backdrop-blur-xs text-amber-400 font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md border border-amber-500/30">
+        <span className="absolute top-3 left-3 z-10 bg-slate-900/90 dark:bg-slate-950/90 backdrop-blur-xs text-sky-400 font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md border border-sky-500/30">
           Featured B2B
         </span>
       )}
 
       {/* MOQ Badge */}
-      <span className="absolute top-3 right-3 z-10 bg-amber-600 text-white font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs">
+      <span className="absolute top-3 right-3 z-10 bg-sky-600 text-white font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs">
         MOQ: {product.moq} Units
       </span>
 
       {/* Product Image Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-4/3 overflow-hidden bg-slate-100">
+      <Link href={`/product/${product.slug}`} className="relative aspect-4/3 overflow-hidden bg-slate-100 dark:bg-slate-800">
         <img
           src={primaryImage}
           alt={product.imageAltText || product.name}
           referrerPolicy="no-referrer"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-          <span className="text-white text-xs font-bold flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-white/20">
-            View Factory Specifications <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+          <span className="text-white text-xs font-bold flex items-center gap-1.5 bg-slate-900/90 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-white/20">
+            View Factory Specifications <ArrowRight className="w-3.5 h-3.5 text-sky-400" />
           </span>
         </div>
       </Link>
@@ -57,32 +57,32 @@ export default function ProductCard({ product, onEnquire }: ProductCardProps) {
       <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
         <div>
           {/* Category Name */}
-          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-md inline-block mb-1.5 border border-amber-200/60">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 px-2.5 py-0.5 rounded-md inline-block mb-1.5 border border-sky-200/60 dark:border-sky-800/80">
             {product.categoryName || 'Custom Bags'}
           </span>
 
           {/* Product Title */}
           <Link href={`/product/${product.slug}`}>
-            <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-amber-600 transition-colors line-clamp-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base leading-snug group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-2">
               {product.name}
             </h3>
           </Link>
 
           {/* Short Desc */}
-          <p className="text-slate-600 text-xs mt-2 line-clamp-2 leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-300 text-xs mt-2 line-clamp-2 leading-relaxed">
             {product.shortDesc}
           </p>
         </div>
 
         {/* Material Specs Bar */}
-        <div className="pt-3 border-t border-slate-100 space-y-2">
-          <div className="flex items-center gap-1.5 text-xs text-slate-600">
-            <Layers className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-            <span className="truncate font-medium"><strong className="text-slate-700">Material:</strong> {product.materials}</span>
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+          <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300">
+            <Layers className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+            <span className="truncate font-medium"><strong className="text-slate-700 dark:text-slate-200">Material:</strong> {product.materials}</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-medium bg-emerald-50/80 px-2.5 py-1 rounded-md">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <div className="flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-300 font-medium bg-emerald-50/80 dark:bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-100 dark:border-emerald-900/50">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>Custom Branding (Embroidery / Rubber / Screen)</span>
           </div>
         </div>
@@ -91,13 +91,13 @@ export default function ProductCard({ product, onEnquire }: ProductCardProps) {
         <div className="pt-2 flex items-center gap-2">
           <Link
             href={`/product/${product.slug}`}
-            className="flex-1 py-2 px-3 border border-slate-300 hover:border-slate-800 text-slate-800 font-semibold text-xs rounded-lg text-center transition-colors"
+            className="flex-1 py-2 px-3 border border-slate-300 dark:border-slate-700 hover:border-slate-800 dark:hover:border-slate-300 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-lg text-center transition-colors"
           >
             Specs & Details
           </Link>
           <button
             onClick={handleEnquireClick}
-            className="flex-1 py-2 px-3 bg-slate-900 hover:bg-amber-600 text-white font-bold text-xs rounded-lg shadow-xs transition-colors flex items-center justify-center gap-1"
+            className="flex-1 py-2 px-3 bg-slate-900 dark:bg-sky-600 hover:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold text-xs rounded-lg shadow-xs transition-colors flex items-center justify-center gap-1"
           >
             <Package className="w-3.5 h-3.5" />
             Enquire Now

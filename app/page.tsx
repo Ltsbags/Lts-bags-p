@@ -38,7 +38,7 @@ export default function HomePage() {
   const orgSchema = generateOrganizationSchema();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
       <SchemaScript schema={orgSchema} />
       <Navbar />
 
@@ -57,14 +57,14 @@ export default function HomePage() {
               <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
                 
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs uppercase tracking-widest font-bold">
-                  <Award className="w-4 h-4 text-amber-400" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 font-mono text-xs uppercase tracking-widest font-bold">
+                  <Award className="w-4 h-4 text-sky-400" />
                   <span>ISO 9001:2015 Certified OEM / ODM Plant</span>
                 </div>
 
                 {/* Main Headline */}
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-serif leading-[1.15]">
-                  Premium Custom <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500">Bag Manufacturing</span> For Corporate Brands
+                  Premium Custom <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-sky-300 to-blue-500">Bag Manufacturing</span> For Corporate Brands
                 </h1>
 
                 {/* Subheading */}
@@ -92,7 +92,7 @@ export default function HomePage() {
                 <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                   <Link
                     href="/contact"
-                    className="w-full sm:w-auto bg-amber-600 hover:bg-amber-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-600/25 hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2 text-base"
+                    className="w-full sm:w-auto bg-sky-600 hover:bg-sky-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-sky-600/25 hover:shadow-sky-500/40 transition-all flex items-center justify-center gap-2 text-base"
                   >
                     <Send className="w-5 h-5" />
                     <span>Request Bulk Wholesale Quote</span>
@@ -103,7 +103,7 @@ export default function HomePage() {
                     className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-4 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-base"
                   >
                     <span>Explore Products</span>
-                    <ArrowRight className="w-4 h-4 text-amber-400" />
+                    <ArrowRight className="w-4 h-4 text-sky-400" />
                   </Link>
                 </div>
 
@@ -114,7 +114,7 @@ export default function HomePage() {
                 <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
                   <img
                     src="https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&q=80&w=1000"
-                    alt="ApexBags Custom Bag Manufacturing Facility & Executive Laptop Bags"
+                    alt="LTS BAGS Custom Bag Manufacturing Facility & Executive Laptop Bags"
                     referrerPolicy="no-referrer"
                     className="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
                   />
@@ -122,7 +122,7 @@ export default function HomePage() {
                   {/* Floating Overlay Card */}
                   <div className="absolute bottom-4 left-4 right-4 bg-slate-950/90 backdrop-blur-md p-4 rounded-xl border border-slate-800 shadow-xl space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-amber-400 text-xs font-bold uppercase tracking-wider font-mono">
+                      <span className="text-sky-400 text-xs font-bold uppercase tracking-wider font-mono">
                         Direct Factory Production
                       </span>
                       <span className="text-emerald-400 text-xs font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/50">
@@ -134,7 +134,7 @@ export default function HomePage() {
                     </p>
                     <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
                       <span>Daily Output: 10,000+ Bags</span>
-                      <span className="text-amber-300 font-semibold">100% Quality Inspected</span>
+                      <span className="text-sky-300 font-semibold">100% Quality Inspected</span>
                     </div>
                   </div>
                 </div>
@@ -145,45 +145,45 @@ export default function HomePage() {
         </section>
 
         {/* STATS STRIP */}
-        <section className="bg-amber-600 text-white py-8 border-y border-amber-700 shadow-inner">
+        <section className="bg-sky-600 dark:bg-sky-700 text-white py-8 border-y border-sky-700 dark:border-sky-800 shadow-inner transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div>
                 <p className="text-3xl sm:text-4xl font-black font-serif">15+ Years</p>
-                <p className="text-amber-100 text-xs font-medium uppercase tracking-wider mt-1">Manufacturing Experience</p>
+                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">Manufacturing Experience</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-black font-serif">5,000,000+</p>
-                <p className="text-amber-100 text-xs font-medium uppercase tracking-wider mt-1">Bags Shipped Globally</p>
+                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">Bags Shipped Globally</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-black font-serif">1,200+</p>
-                <p className="text-amber-100 text-xs font-medium uppercase tracking-wider mt-1">Corporate Clients</p>
+                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">Corporate Clients</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-black font-serif">99.4%</p>
-                <p className="text-amber-100 text-xs font-medium uppercase tracking-wider mt-1">On-Time Dispatch Rate</p>
+                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">On-Time Dispatch Rate</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* FEATURED CATEGORIES SECTION */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-white dark:bg-slate-900 transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
               <div>
-                <span className="text-amber-700 font-bold text-xs uppercase tracking-widest font-mono bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                <span className="text-sky-700 dark:text-sky-300 font-bold text-xs uppercase tracking-widest font-mono bg-sky-50 dark:bg-sky-950/80 px-3 py-1 rounded-full border border-sky-200 dark:border-sky-800">
                   Product Categories
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 font-serif mt-2">
+                <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 font-serif mt-2">
                   Specialized Bag Manufacturing Categories
                 </h2>
               </div>
               <Link
                 href="/products"
-                className="text-amber-700 hover:text-amber-800 font-bold text-sm flex items-center gap-1 hover:underline"
+                className="text-sky-700 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 font-bold text-sm flex items-center gap-1 hover:underline"
               >
                 View Full Catalog <ChevronRight className="w-4 h-4" />
               </Link>
@@ -194,9 +194,9 @@ export default function HomePage() {
                 <Link
                   key={cat.id}
                   href={`/category/${cat.slug}`}
-                  className="group bg-slate-50 rounded-2xl overflow-hidden border border-slate-200/80 hover:border-amber-400 hover:shadow-xl transition-all duration-300 flex flex-col"
+                  className="group bg-slate-50 dark:bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 hover:border-sky-400 dark:hover:border-sky-500 hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
-                  <div className="aspect-16/10 overflow-hidden relative bg-slate-200">
+                  <div className="aspect-16/10 overflow-hidden relative bg-slate-200 dark:bg-slate-800">
                     <img
                       src={cat.image}
                       alt={cat.name}
@@ -205,16 +205,16 @@ export default function HomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4 text-white">
-                      <h3 className="text-xl font-bold font-serif group-hover:text-amber-300 transition-colors">
+                      <h3 className="text-xl font-bold font-serif group-hover:text-sky-300 transition-colors">
                         {cat.name}
                       </h3>
                     </div>
                   </div>
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                    <p className="text-slate-600 text-xs leading-relaxed line-clamp-2">
+                    <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed line-clamp-2">
                       {cat.description}
                     </p>
-                    <div className="flex items-center justify-between text-xs font-bold text-amber-700 pt-2 border-t border-slate-200/60">
+                    <div className="flex items-center justify-between text-xs font-bold text-sky-700 dark:text-sky-400 pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
                       <span>Explore Collection</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -227,17 +227,17 @@ export default function HomePage() {
         </section>
 
         {/* FEATURED PRODUCTS CATALOG PREVIEW */}
-        <section className="py-20 bg-slate-100/70 border-t border-slate-200">
+        <section className="py-20 bg-slate-100/70 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-              <span className="text-amber-700 font-bold text-xs uppercase tracking-widest font-mono bg-amber-100/80 px-3 py-1 rounded-full border border-amber-300">
+              <span className="text-sky-700 dark:text-sky-300 font-bold text-xs uppercase tracking-widest font-mono bg-sky-100/80 dark:bg-sky-950/80 px-3 py-1 rounded-full border border-sky-300 dark:border-sky-800">
                 Top B2B Sellers
               </span>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 font-serif">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 font-serif">
                 Featured Custom Bag Models
               </h2>
-              <p className="text-slate-600 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                 Tested and trusted by leading MNCs, IT corporations, sports leagues, and educational institutions. Custom logo printing and sample prototyping available.
               </p>
             </div>
@@ -254,10 +254,10 @@ export default function HomePage() {
             <div className="mt-12 text-center">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-8 py-3.5 rounded-xl text-sm transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 bg-slate-900 dark:bg-sky-600 hover:bg-slate-800 dark:hover:bg-sky-500 text-white font-bold px-8 py-3.5 rounded-xl text-sm transition-colors shadow-sm"
               >
                 <span>Browse All Custom Bags & Specs</span>
-                <ArrowRight className="w-4 h-4 text-amber-400" />
+                <ArrowRight className="w-4 h-4 text-sky-400 dark:text-sky-200" />
               </Link>
             </div>
 
@@ -271,44 +271,44 @@ export default function HomePage() {
         <ManufacturingProcess />
 
         {/* CLIENT TRUST LOGOS */}
-        <section className="py-16 bg-white border-b border-slate-200">
+        <section className="py-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-            <p className="text-xs font-mono font-bold uppercase tracking-widest text-slate-600">
+            <p className="text-xs font-mono font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">
               Trusted Wholesale Supplier For Top Corporate Brands & Organizations
             </p>
             <div className="flex flex-wrap items-center justify-center gap-8 opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="flex items-center gap-2 text-slate-700 font-black text-lg tracking-wider font-mono">
-                <Building2 className="w-6 h-6 text-amber-600" /> TECHCORP GLOBAL
+              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
+                <Building2 className="w-6 h-6 text-sky-600 dark:text-sky-400" /> TECHCORP GLOBAL
               </div>
-              <div className="flex items-center gap-2 text-slate-700 font-black text-lg tracking-wider font-mono">
-                <ShieldCheck className="w-6 h-6 text-amber-600" /> INFOSERVE INC
+              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
+                <ShieldCheck className="w-6 h-6 text-sky-600 dark:text-sky-400" /> INFOSERVE INC
               </div>
-              <div className="flex items-center gap-2 text-slate-700 font-black text-lg tracking-wider font-mono">
-                <Award className="w-6 h-6 text-amber-600" /> METRO LOGISTICS
+              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
+                <Award className="w-6 h-6 text-sky-600 dark:text-sky-400" /> METRO LOGISTICS
               </div>
-              <div className="flex items-center gap-2 text-slate-700 font-black text-lg tracking-wider font-mono">
-                <Briefcase className="w-6 h-6 text-amber-600" /> GLOBAL SPORTING
+              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
+                <Briefcase className="w-6 h-6 text-sky-600 dark:text-sky-400" /> GLOBAL SPORTING
               </div>
             </div>
           </div>
         </section>
 
         {/* LATEST BLOGS */}
-        <section className="py-20 bg-slate-50">
+        <section className="py-20 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
               <div>
-                <span className="text-amber-700 font-bold text-xs uppercase tracking-widest font-mono bg-amber-100/80 px-3 py-1 rounded-full border border-amber-300">
+                <span className="text-sky-700 dark:text-sky-300 font-bold text-xs uppercase tracking-widest font-mono bg-sky-100/80 dark:bg-sky-950/80 px-3 py-1 rounded-full border border-sky-300 dark:border-sky-800">
                   Manufacturing Insights
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 font-serif mt-2">
+                <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 font-serif mt-2">
                   B2B Bag Buying Guides & Industry News
                 </h2>
               </div>
               <Link
                 href="/blog"
-                className="text-amber-700 hover:text-amber-800 font-bold text-sm flex items-center gap-1 hover:underline"
+                className="text-sky-700 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 font-bold text-sm flex items-center gap-1 hover:underline"
               >
                 Read All Articles <ChevronRight className="w-4 h-4" />
               </Link>
@@ -318,9 +318,9 @@ export default function HomePage() {
               {latestBlogs.map((blog) => (
                 <article
                   key={blog.id}
-                  className="bg-white rounded-xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-lg transition-shadow flex flex-col"
+                  className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-xs hover:shadow-lg transition-all flex flex-col"
                 >
-                  <Link href={`/blog/${blog.slug}`} className="aspect-16/9 overflow-hidden bg-slate-100 relative">
+                  <Link href={`/blog/${blog.slug}`} className="aspect-16/9 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
                     <img
                       src={blog.image}
                       alt={blog.title}
@@ -330,22 +330,22 @@ export default function HomePage() {
                   </Link>
                   <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950 px-2 py-0.5 rounded border border-sky-200 dark:border-sky-800">
                         {blog.category}
                       </span>
                       <Link href={`/blog/${blog.slug}`}>
-                        <h3 className="font-bold text-slate-900 text-lg hover:text-amber-600 transition-colors line-clamp-2">
+                        <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg hover:text-sky-600 dark:hover:text-sky-400 transition-colors line-clamp-2">
                           {blog.title}
                         </h3>
                       </Link>
-                      <p className="text-slate-600 text-xs leading-relaxed line-clamp-2">
+                      <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed line-clamp-2">
                         {blog.excerpt}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                       <span>{new Date(blog.publishedAt).toLocaleDateString()}</span>
-                      <Link href={`/blog/${blog.slug}`} className="text-amber-700 font-bold hover:underline">
+                      <Link href={`/blog/${blog.slug}`} className="text-sky-700 dark:text-sky-400 font-bold hover:underline">
                         Read Guide →
                       </Link>
                     </div>
@@ -360,8 +360,8 @@ export default function HomePage() {
         {/* CONTACT / QUOTE CTA */}
         <section className="py-20 bg-slate-950 text-white relative overflow-hidden">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs uppercase tracking-widest font-bold">
-              <PhoneCall className="w-4 h-4 text-amber-400" />
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 font-mono text-xs uppercase tracking-widest font-bold">
+              <PhoneCall className="w-4 h-4 text-sky-400" />
               Instant Factory Consultation
             </span>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight font-serif">
@@ -374,17 +374,17 @@ export default function HomePage() {
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/contact"
-                className="w-full sm:w-auto bg-amber-600 hover:bg-amber-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-base"
+                className="w-full sm:w-auto bg-sky-600 hover:bg-sky-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-base"
               >
                 <Send className="w-5 h-5" />
                 <span>Submit Wholesale Quote Form</span>
               </Link>
               <a
-                href="tel:+919876543210"
+                href="tel:+919833598338"
                 className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-4 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-base"
               >
-                <PhoneCall className="w-4 h-4 text-amber-400" />
-                <span>Call Sales: +91 98765 43210</span>
+                <PhoneCall className="w-4 h-4 text-sky-400" />
+                <span>Call Sales: +91 98335 98338</span>
               </a>
             </div>
           </div>

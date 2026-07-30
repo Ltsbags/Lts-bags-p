@@ -53,13 +53,13 @@ export default function ManufacturingProcess() {
   return (
     <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
       {/* Background Subtle Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-amber-900/20 via-slate-900 to-slate-950 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-sky-950/40 via-slate-900 to-slate-950 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-mono text-xs uppercase tracking-widest font-bold">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 font-mono text-xs uppercase tracking-widest font-bold">
             <Award className="w-3.5 h-3.5" /> ISO Certified Standard
           </span>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight font-serif text-white">
@@ -77,19 +77,19 @@ export default function ManufacturingProcess() {
             return (
               <div
                 key={item.step}
-                className="bg-slate-800/80 rounded-xl p-6 border border-slate-700/80 hover:border-amber-500/50 transition-all duration-300 relative group flex flex-col justify-between"
+                className="bg-slate-800/80 rounded-xl p-6 border border-slate-700/80 hover:border-sky-500/50 transition-all duration-300 relative group flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center font-bold group-hover:bg-amber-500 group-hover:text-slate-900 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center font-bold group-hover:bg-sky-500 group-hover:text-slate-900 transition-colors">
                       <IconComponent className="w-6 h-6" />
                     </div>
-                    <span className="text-3xl font-black text-slate-700 font-mono group-hover:text-amber-400/30 transition-colors">
+                    <span className="text-3xl font-black text-slate-700 font-mono group-hover:text-sky-400/30 transition-colors">
                       {item.step}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-white mb-2 font-serif group-hover:text-amber-400 transition-colors">
+                  <h3 className="text-lg font-bold text-white mb-2 font-serif group-hover:text-sky-400 transition-colors">
                     {item.title}
                   </h3>
 

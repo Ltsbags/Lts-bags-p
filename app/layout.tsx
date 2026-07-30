@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import FloatingContactButtons from '@/components/FloatingContactButtons';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
   title: 'LTS BAGS PRIVATE LIMITED - Custom B2B Bag Manufacturer & Wholesale Supplier',
@@ -9,12 +10,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning className="relative antialiased">
-        {children}
-        <FloatingContactButtons />
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning className="relative antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
+        <ThemeProvider>
+          {children}
+          <FloatingContactButtons />
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+
 
