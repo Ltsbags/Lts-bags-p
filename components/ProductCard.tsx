@@ -4,14 +4,23 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Product } from '@/lib/types';
-import { Package, ArrowRight, ShieldCheck, Layers } from 'lucide-react';
+import { Package, ArrowRight, ShieldCheck, Layers, SlidersHorizontal, Check } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
   onEnquire?: (productName: string) => void;
+  isCompared?: boolean;
+  onToggleCompare?: (product: Product) => void;
+  compareDisabled?: boolean;
 }
 
-export default function ProductCard({ product, onEnquire }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  onEnquire,
+  isCompared = false,
+  onToggleCompare,
+  compareDisabled = false,
+}: ProductCardProps) {
   const router = useRouter();
   const primaryImage = product.images?.[0] || 'https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&q=80&w=800';
 
@@ -24,7 +33,13 @@ export default function ProductCard({ product, onEnquire }: ProductCardProps) {
   };
 
   return (
-    <div className="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:shadow-xl hover:border-sky-400 dark:hover:border-sky-500 transition-all duration-300 flex flex-col overflow-hidden relative">
+    <div
+      className={`group bg-white dark:bg-slate-900 rounded-xl border shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden relative ${
+        isCompared
+          ? 'border-sky-500 ring-2 ring-sky-500/80 dark:ring-sky-400/80'
+          : 'border-slate-200/90 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500'
+      }`}
+    >
       
       {/* Featured Badge */}
       {product.isFeatured && (
@@ -56,10 +71,51 @@ export default function ProductCard({ product, onEnquire }: ProductCardProps) {
       {/* Card Content Body */}
       <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
         <div>
-          {/* Category Name */}
-          <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 px-2.5 py-0.5 rounded-md inline-block mb-1.5 border border-sky-200/60 dark:border-sky-800/80">
-            {product.categoryName || 'Custom Bags'}
-          </span>
+          {/* Top Bar: Category Name + Compare Button */}
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/80 px-2.5 py-0.5 rounded-md inline-block border border-sky-200/60 dark:border-sky-800/80 truncate">
+              {product.categoryName || 'Custom Bags'}
+            </span>
+
+            {/* Compare Toggle Button */}
+            {onToggleCompare && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onToggleCompare(product);
+                }}
+                disabled={!isCompared && compareDisabled}
+                className={`flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider transition-all shrink-0 ${
+                  isCompared
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : compareDisabled
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-60'
+                    : 'bg-slate-100 dark:bg-slate-800 hover:bg-sky-50 dark:hover:bg-sky-950 text-slate-700 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 border border-slate-200 dark:border-slate-700'
+                }`}
+                title={
+                  isCompared
+                    ? 'Remove from comparison'
+                    : compareDisabled
+                    ? 'Maximum 3 bags can be compared at once'
+                    : 'Add to side-by-side comparison table'
+                }
+              >
+                {isCompared ? (
+                  <>
+                    <Check className="w-3 h-3 text-white" />
+                    <span>Comparing</span>
+                  </>
+                ) : (
+                  <>
+                    <SlidersHorizontal className="w-3 h-3" />
+                    <span>+ Compare</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
 
           {/* Product Title */}
           <Link href={`/product/${product.slug}`}>
