@@ -1,0 +1,6 @@
+{
+  "name": "ApexBags - B2B Bag Manufacturer",
+  "description": "Custom B2B Bag Manufacturing & Wholesale Supply Platform for Corporate, Promotional, Travel, and Executive Luggage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
