@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -6,6 +7,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const { id } = await params;
     const body = await req.json();
     const updated = db.saveProduct({ ...body, id });
+    revalidatePath('/', 'layout');
     return NextResponse.json(updated);
   } catch (error) {
     console.error('Error updating product:', error);
@@ -18,6 +20,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const { id } = await params;
     const success = db.deleteProduct(id);
     if (success) {
+      revalidatePath('/', 'layout');
       return NextResponse.json({ message: 'Product deleted successfully' });
     }
     return NextResponse.json({ error: 'Product not found' }, { status: 404 });

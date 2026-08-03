@@ -8,6 +8,8 @@ import SchemaScript from '@/components/SchemaScript';
 import { db } from '@/lib/db';
 import { generatePageMetadata, generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = db.getProductBySlug(slug);

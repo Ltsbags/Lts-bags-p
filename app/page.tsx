@@ -25,6 +25,8 @@ import {
   Sparkles
 } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = generatePageMetadata({
   title: 'LTS BAGS PRIVATE LIMITED - Custom B2B Bag Manufacturer & Wholesale Supplier',
   description: 'Leading OEM & ODM manufacturer of corporate backpacks, executive laptop briefcases, travel duffels, and eco canvas totes with custom logo branding and direct factory pricing.',

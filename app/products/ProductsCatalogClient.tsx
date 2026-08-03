@@ -17,9 +17,25 @@ interface ProductsCatalogClientProps {
 }
 
 export default function ProductsCatalogClient({ allProducts, categories }: ProductsCatalogClientProps) {
+  const [productsList, setProductsList] = useState<Product[]>(allProducts);
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [moqFilter, setMoqFilter] = useState<string>('ALL');
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        if (active && Array.isArray(data) && data.length > 0) {
+          setProductsList(data);
+        }
+      })
+      .catch((err) => console.error(err));
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [selectedProductName, setSelectedProductName] = useState('');
@@ -75,7 +91,7 @@ export default function ProductsCatalogClient({ allProducts, categories }: Produ
   };
 
   const filteredProducts = useMemo(() => {
-    return allProducts.filter((product) => {
+    return productsList.filter((product) => {
       const matchesCategory = selectedCategory === 'ALL' || product.categoryId === selectedCategory;
       const matchesSearch =
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -93,7 +109,7 @@ export default function ProductsCatalogClient({ allProducts, categories }: Produ
 
       return matchesCategory && matchesSearch && matchesMoq;
     });
-  }, [allProducts, selectedCategory, searchQuery, moqFilter]);
+  }, [productsList, selectedCategory, searchQuery, moqFilter]);
 
   const handleEnquire = (productName: string) => {
     setSelectedProductName(productName);

@@ -9,6 +9,8 @@ import { db } from '@/lib/db';
 import { generatePageMetadata, generateBreadcrumbSchema } from '@/lib/seo';
 import { Layers, ShieldCheck, Award, ArrowRight } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const category = db.getCategoryBySlug(slug);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 
 export async function GET() {
@@ -18,6 +19,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Category name is required' }, { status: 400 });
     }
     const saved = db.saveCategory(body);
+    revalidatePath('/', 'layout');
     return NextResponse.json(saved, { status: 201 });
   } catch (error) {
     console.error('Error saving category:', error);

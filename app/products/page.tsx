@@ -4,6 +4,8 @@ import SchemaScript from '@/components/SchemaScript';
 import { db } from '@/lib/db';
 import { generatePageMetadata, generateBreadcrumbSchema } from '@/lib/seo';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = generatePageMetadata({
   title: 'Custom Bag Manufacturing Catalog & B2B Wholesale Models | ApexBags',
   description: 'Browse wholesale corporate backpacks, executive laptop briefcases, travel duffel bags, and eco-friendly organic canvas tote bags for bulk manufacturing.',
