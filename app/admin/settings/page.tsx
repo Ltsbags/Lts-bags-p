@@ -71,7 +71,17 @@ export default function AdminSettingsPage() {
       const data = await res.json();
       if (res.ok && data.url) {
         setLogoUrl(data.url);
-        setNotification({ type: 'success', message: 'Logo image uploaded successfully! Click "Save Changes" to apply.' });
+        // Automatically save to settings DB
+        await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            logoUrl: data.url,
+            logoText,
+            logoSubtitle,
+          }),
+        });
+        setNotification({ type: 'success', message: 'Logo image uploaded and saved successfully! The logo is now live across the website.' });
       } else {
         setNotification({ type: 'error', message: data.error || 'Failed to upload logo image.' });
       }

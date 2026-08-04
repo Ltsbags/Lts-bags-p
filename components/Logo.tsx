@@ -26,6 +26,7 @@ export default function Logo({
   overrideLogoSubtitle,
 }: LogoProps) {
   const [fetchedSettings, setFetchedSettings] = useState<{ logoUrl?: string; logoText?: string; logoSubtitle?: string } | null>(null);
+  const [imgError, setImgError] = useState<boolean>(false);
 
   useEffect(() => {
     if (overrideLogoUrl !== undefined) return;
@@ -102,13 +103,15 @@ export default function Logo({
 
   return (
     <div className={`inline-flex items-center gap-2.5 sm:gap-3 group ${className}`}>
-      {logoUrl ? (
+      {logoUrl && !imgError ? (
         <div className="flex items-center gap-3">
           {/* Custom Uploaded Image Logo */}
           <img
+            key={logoUrl}
             src={logoUrl}
             alt={logoText || 'Company Logo'}
             className={`${imgHeights[size]} object-contain transition-transform group-hover:scale-105`}
+            onError={() => setImgError(true)}
           />
         </div>
       ) : (
