@@ -1,7 +1,7 @@
 import 'server-only';
 import fs from 'fs';
 import path from 'path';
-import { Category, Product, Blog, Enquiry } from './types';
+import { Category, Product, Blog, Enquiry, SiteSettings } from './types';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
@@ -11,7 +11,15 @@ interface DatabaseSchema {
   products: Product[];
   blogs: Blog[];
   enquiries: Enquiry[];
+  settings?: SiteSettings;
 }
+
+const INITIAL_SETTINGS: SiteSettings = {
+  logoUrl: '',
+  logoText: 'LTS BAGS',
+  logoSubtitle: 'PRIVATE LIMITED',
+  updatedAt: new Date().toISOString(),
+};
 
 const INITIAL_CATEGORIES: Category[] = [
   {
@@ -432,6 +440,7 @@ function ensureDataFile(): DatabaseSchema {
         products: INITIAL_PRODUCTS,
         blogs: INITIAL_BLOGS,
         enquiries: INITIAL_ENQUIRIES,
+        settings: INITIAL_SETTINGS,
       };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
       return initialData;
@@ -701,5 +710,23 @@ export const db = {
       totalEnquiries: data.enquiries.length,
       newEnquiriesCount: data.enquiries.filter((e) => e.status === 'NEW').length,
     };
+  },
+
+  // Site Settings & Logo
+  getSettings(): SiteSettings {
+    const data = ensureDataFile();
+    return data.settings || INITIAL_SETTINGS;
+  },
+  updateSettings(newSettings: Partial<SiteSettings>): SiteSettings {
+    const data = ensureDataFile();
+    const current = data.settings || INITIAL_SETTINGS;
+    const updated: SiteSettings = {
+      ...current,
+      ...newSettings,
+      updatedAt: new Date().toISOString(),
+    };
+    data.settings = updated;
+    saveData(data);
+    return updated;
   },
 };

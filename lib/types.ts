@@ -1,3 +1,10 @@
+export interface SiteSettings {
+  logoUrl?: string;
+  logoText?: string;
+  logoSubtitle?: string;
+  updatedAt?: string;
+}
+
 export interface Category {
   id: string;
   name: string;

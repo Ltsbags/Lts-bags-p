@@ -11,7 +11,8 @@ import {
   LogOut, 
   LayoutDashboard,
   ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  Settings
 } from 'lucide-react';
 import Logo from './Logo';
 
@@ -39,6 +40,7 @@ export default function AdminHeader() {
     { name: 'Categories', href: '/admin/categories', icon: Layers },
     { name: 'Blog Posts', href: '/admin/blogs', icon: FileText },
     { name: 'Quote Enquiries', href: '/admin/enquiries', icon: MessageSquare },
+    { name: 'Logo & Settings', href: '/admin/settings', icon: Settings },
   ];
 
   return (

@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminHeader from '@/components/AdminHeader';
@@ -63,6 +65,12 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="flex items-center gap-2">
+              <Link
+                href="/admin/settings"
+                className="bg-slate-800 hover:bg-slate-900 text-slate-200 font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-sm"
+              >
+                <span>Change Company Logo</span>
+              </Link>
               <Link
                 href="/admin/products"
                 className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-sm"
