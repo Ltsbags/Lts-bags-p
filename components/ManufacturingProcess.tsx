@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { 
   FileText, 
   Ruler, 
@@ -9,46 +11,64 @@ import {
   ShieldCheck,
   Award
 } from 'lucide-react';
+import { HomepageProcessStep } from '@/lib/types';
 
-export default function ManufacturingProcess() {
-  const steps = [
+interface ManufacturingProcessProps {
+  initialSteps?: HomepageProcessStep[];
+  title?: string;
+  subtitle?: string;
+}
+
+export default function ManufacturingProcess({ initialSteps, title: customTitle, subtitle: customSubtitle }: ManufacturingProcessProps) {
+  const [steps, setSteps] = useState<HomepageProcessStep[]>(initialSteps || [
     {
-      step: '01',
-      title: 'Specification & Cad Design',
-      desc: 'Client submits target bag dimensions, fabric density (1680D/600D/Canvas), pocket arrangements, and branding specs.',
-      icon: FileText,
+      stepNumber: '01',
+      title: 'Specification & CAD Design',
+      description: 'Client submits target bag dimensions, fabric density (1680D/600D/Canvas), pocket arrangements, and branding specs.',
     },
     {
-      step: '02',
-      title: 'Golden Sample Approval',
-      desc: 'Our sample master craftsmen construct a physical pre-production prototype for touch, feel, load test, and client approval.',
-      icon: Ruler,
+      stepNumber: '02',
+      title: 'Golden Sample Prototyping',
+      description: 'Our sample master craftsmen construct a physical pre-production prototype for touch, feel, load test, and client approval.',
     },
     {
-      step: '03',
-      title: 'Precision Automated Cutting',
-      desc: 'Heavy fabric rolls undergo computer-guided CNC laser pattern cutting for 100% geometric accuracy across bulk quantities.',
-      icon: Scissors,
+      stepNumber: '03',
+      title: 'Precision Automated Cutting & Stitching',
+      description: 'Heavy fabric rolls undergo computer-guided pattern cutting and reinforced bar-tack joints on shoulder straps and handle anchors.',
     },
     {
-      step: '04',
-      title: 'Bar-Tack Stitching & Assembly',
-      desc: 'Precision stitching with high-tensile nylon thread. Reinforced bar-tack joints on shoulder straps and handle anchors.',
-      icon: Layers,
+      stepNumber: '04',
+      title: '100% Quality Inspection & Dispatch',
+      description: 'Strict AQL 2.5 quality control checks for zipper durability, seam strength, custom logo alignment, and global freight delivery.',
     },
-    {
-      step: '05',
-      title: '100% Quality Inspection',
-      desc: 'Strict AQL 2.5 quality control checks for zipper durability, seam strength, custom logo alignment, and clean thread trimming.',
-      icon: ShieldCheck,
-    },
-    {
-      step: '06',
-      title: 'Custom Packaging & Shipping',
-      desc: 'Individual poly-bagged items, moisture-absorbent silica packs, heavy 5-ply corrugated carton boxing, and global freight delivery.',
-      icon: Truck,
-    },
-  ];
+  ]);
+
+  const [title, setTitle] = useState(customTitle || '6-Step Precision OEM/ODM Production Workflow');
+  const [subtitle, setSubtitle] = useState(customSubtitle || 'From initial CAD design rendering to final container loading, every step in our bag factory is monitored for zero-defect compliance.');
+
+  useEffect(() => {
+    if (!initialSteps) {
+      fetch('/api/settings')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.homepage?.processSteps && data.homepage.processSteps.length > 0) {
+            setSteps(data.homepage.processSteps);
+          }
+          if (data?.homepage?.processTitle) {
+            setTitle(data.homepage.processTitle);
+          }
+          if (data?.homepage?.processSubtitle) {
+            setSubtitle(data.homepage.processSubtitle);
+          }
+        })
+        .catch((err) => console.error('Error fetching process steps:', err));
+    }
+  }, [initialSteps]);
+
+  const getStepIcon = (index: number) => {
+    const icons = [FileText, Ruler, Scissors, Layers, ShieldCheck, Truck];
+    return icons[index % icons.length];
+  };
 
   return (
     <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
@@ -58,50 +78,43 @@ export default function ManufacturingProcess() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 font-mono text-xs uppercase tracking-widest font-bold">
-            <Award className="w-3.5 h-3.5" /> ISO Certified Standard
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <span className="text-amber-400 font-bold text-xs uppercase tracking-widest font-mono bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+            Manufacturing Standard Operating Procedure
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight font-serif text-white">
-            6-Stage Precision Manufacturing Process
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-serif">
+            {title}
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            From initial technical blueprinting to global containerized delivery, our streamlined OEM/ODM production line guarantees consistent batch quality and on-time execution.
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            {subtitle}
           </p>
         </div>
 
         {/* Process Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {steps.map((item) => {
-            const IconComponent = item.icon;
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {steps.map((s, i) => {
+            const Icon = getStepIcon(i);
             return (
               <div
-                key={item.step}
-                className="bg-slate-800/80 rounded-xl p-6 border border-slate-700/80 hover:border-sky-500/50 transition-all duration-300 relative group flex flex-col justify-between"
+                key={i}
+                className="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 hover:border-amber-500/50 transition-all duration-300 space-y-4 relative group"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center font-bold group-hover:bg-sky-500 group-hover:text-slate-900 transition-colors">
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <span className="text-3xl font-black text-slate-700 font-mono group-hover:text-sky-400/30 transition-colors">
-                      {item.step}
-                    </span>
+                <div className="flex items-center justify-between border-b border-slate-700/60 pb-3">
+                  <span className="text-2xl font-black font-mono text-amber-400">
+                    {s.stepNumber || `0${i + 1}`}
+                  </span>
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-amber-400 border border-slate-700 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                    <Icon className="w-5 h-5" />
                   </div>
-
-                  <h3 className="text-lg font-bold text-white mb-2 font-serif group-hover:text-sky-400 transition-colors">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-slate-400 text-xs leading-relaxed">
-                    {item.desc}
-                  </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-700/50 flex items-center gap-1 text-[11px] font-semibold text-emerald-400">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>QC Checkpoint Passed</span>
-                </div>
+                <h3 className="text-lg font-bold text-white font-serif group-hover:text-amber-300 transition-colors">
+                  {s.title}
+                </h3>
+
+                <p className="text-slate-300 text-xs leading-relaxed">
+                  {s.description}
+                </p>
               </div>
             );
           })}

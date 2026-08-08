@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -14,12 +14,29 @@ import {
 import QuoteModal from './QuoteModal';
 import Logo from './Logo';
 import ThemeToggle from './ThemeToggle';
+import { CompanyContactInfo } from '@/lib/types';
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [selectedProductForQuote, setSelectedProductForQuote] = useState<string>('');
+  const [contactInfo, setContactInfo] = useState<Partial<CompanyContactInfo>>({
+    phone1: '+91 98335 98338',
+    phone2: '+91 96199 61971',
+    email1: 'info@ltsbags.com',
+  });
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.contactInfo) {
+          setContactInfo(data.contactInfo);
+        }
+      })
+      .catch((err) => console.error('Error fetching settings in Navbar:', err));
+  }, []);
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -35,18 +52,24 @@ export default function Navbar() {
       <div className="bg-slate-900 dark:bg-slate-950 text-slate-300 text-xs py-2 px-4 border-b border-slate-800 dark:border-slate-900 transition-colors duration-200">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-            <a href="tel:+919833598338" className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
-              <Phone className="w-3.5 h-3.5 text-sky-400" />
-              <span>+91 98335 98338</span>
-            </a>
-            <a href="tel:+919619961971" className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
-              <Phone className="w-3.5 h-3.5 text-sky-400" />
-              <span>+91 96199 61971</span>
-            </a>
-            <a href="mailto:info@ltsbags.com" className="hidden md:flex items-center gap-1.5 hover:text-sky-400 transition-colors">
-              <Mail className="w-3.5 h-3.5 text-sky-400" />
-              <span>info@ltsbags.com</span>
-            </a>
+            {contactInfo.phone1 && (
+              <a href={`tel:${contactInfo.phone1.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
+                <Phone className="w-3.5 h-3.5 text-sky-400" />
+                <span>{contactInfo.phone1}</span>
+              </a>
+            )}
+            {contactInfo.phone2 && (
+              <a href={`tel:${contactInfo.phone2.replace(/\s+/g, '')}`} className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
+                <Phone className="w-3.5 h-3.5 text-sky-400" />
+                <span>{contactInfo.phone2}</span>
+              </a>
+            )}
+            {contactInfo.email1 && (
+              <a href={`mailto:${contactInfo.email1}`} className="hidden md:flex items-center gap-1.5 hover:text-sky-400 transition-colors">
+                <Mail className="w-3.5 h-3.5 text-sky-400" />
+                <span>{contactInfo.email1}</span>
+              </a>
+            )}
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span className="flex items-center gap-1 text-emerald-400 font-medium">

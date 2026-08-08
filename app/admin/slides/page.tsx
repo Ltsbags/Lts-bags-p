@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { HeroSlide } from '@/lib/types';
 import {
@@ -51,9 +51,14 @@ export default function AdminSlidesPage() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Notification helper
+  const showNotification = useCallback((type: 'success' | 'error', message: string) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 4000);
+  }, []);
+
   // Fetch all slides
-  const fetchSlides = async () => {
-    setLoading(true);
+  const fetchSlides = useCallback(async () => {
     try {
       const res = await fetch('/api/slides');
       if (res.ok) {
@@ -66,16 +71,33 @@ export default function AdminSlidesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showNotification]);
 
   useEffect(() => {
-    fetchSlides();
-  }, []);
+    let active = true;
+    fetch('/api/slides')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (active && Array.isArray(data)) {
+          setSlides(data);
+        }
+      })
+      .catch((err) => {
+        if (active) {
+          console.error('Failed to load slides:', err);
+          showNotification('error', 'Failed to load slides.');
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setLoading(false);
+        }
+      });
 
-  const showNotification = (type: 'success' | 'error', message: string) => {
-    setNotification({ type, message });
-    setTimeout(() => setNotification(null), 4000);
-  };
+    return () => {
+      active = false;
+    };
+  }, [showNotification]);
 
   // Open Add Modal
   const handleOpenAddModal = () => {

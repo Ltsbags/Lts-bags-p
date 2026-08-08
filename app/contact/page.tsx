@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { CompanyContactInfo } from '@/lib/types';
 import { 
   Building2, 
   MapPin, 
@@ -258,6 +259,30 @@ function ContactFormInner() {
 }
 
 export default function ContactPage() {
+  const [contact, setContact] = useState<Partial<CompanyContactInfo>>({
+    companyName: 'LTS BAGS PRIVATE LIMITED',
+    tagline: 'Premier OEM/ODM Custom Bag Manufacturer & Global Exporter',
+    phone1: '+91 98335 98338',
+    phone2: '+91 96199 61971',
+    email1: 'info@ltsbags.com',
+    factoryAddress: 'Plot No. 42, Sector 8, Industrial Area, MIDC, Navi Mumbai, Maharashtra 400708, India',
+    googleMapsUrl: 'https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED',
+    workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM IST',
+    gstNumber: '27AABCL9876Q1Z5',
+    isoCertificate: 'ISO 9001:2015 Certified Manufacturing Facility',
+  });
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.contactInfo) {
+          setContact(data.contactInfo);
+        }
+      })
+      .catch((err) => console.error('Error fetching settings in contact page:', err));
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
       <Navbar />
@@ -273,10 +298,10 @@ export default function ContactPage() {
                 Direct Factory Sales Office
               </span>
               <h1 className="text-3xl sm:text-5xl font-black tracking-tight font-serif text-white">
-                Contact LTS BAGS PRIVATE LIMITED
+                Contact {contact.companyName}
               </h1>
               <p className="text-slate-300 text-sm leading-relaxed">
-                Connect with our team for custom bag manufacturing, OEM/ODM orders, bulk inquiries, and sample prototyping.
+                {contact.tagline || 'Connect with our team for custom bag manufacturing, OEM/ODM orders, bulk inquiries, and sample prototyping.'}
               </p>
             </div>
           </div>
@@ -302,7 +327,12 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <strong className="block text-slate-900 font-bold text-sm">Company Name</strong>
-                        <span className="text-slate-700 font-semibold">LTS BAGS PRIVATE LIMITED</span>
+                        <span className="text-slate-700 font-semibold">{contact.companyName}</span>
+                        {contact.gstNumber && (
+                          <span className="block text-[11px] text-slate-500 mt-0.5 font-mono">
+                            GSTIN: {contact.gstNumber}
+                          </span>
+                        )}
                       </div>
                     </li>
 
@@ -313,12 +343,16 @@ export default function ContactPage() {
                       <div>
                         <strong className="block text-slate-900 font-bold text-sm mb-1">Phone Numbers</strong>
                         <div className="space-y-1">
-                          <a href="tel:+919833598338" className="text-amber-700 hover:underline font-bold block text-xs">
-                            +91 98335 98338
-                          </a>
-                          <a href="tel:+919619961971" className="text-amber-700 hover:underline font-bold block text-xs">
-                            +91 96199 61971
-                          </a>
+                          {contact.phone1 && (
+                            <a href={`tel:${contact.phone1.replace(/\s+/g, '')}`} className="text-amber-700 hover:underline font-bold block text-xs">
+                              {contact.phone1}
+                            </a>
+                          )}
+                          {contact.phone2 && (
+                            <a href={`tel:${contact.phone2.replace(/\s+/g, '')}`} className="text-amber-700 hover:underline font-bold block text-xs">
+                              {contact.phone2}
+                            </a>
+                          )}
                         </div>
                       </div>
                     </li>
@@ -329,9 +363,18 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <strong className="block text-slate-900 font-bold text-sm">Email Address</strong>
-                        <a href="mailto:info@ltsbags.com" className="text-amber-700 hover:underline font-bold text-xs">
-                          info@ltsbags.com
-                        </a>
+                        <div className="space-y-0.5">
+                          {contact.email1 && (
+                            <a href={`mailto:${contact.email1}`} className="text-amber-700 hover:underline font-bold text-xs block">
+                              {contact.email1}
+                            </a>
+                          )}
+                          {contact.email2 && (
+                            <a href={`mailto:${contact.email2}`} className="text-amber-700 hover:underline font-bold text-xs block">
+                              {contact.email2}
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </li>
 
@@ -341,40 +384,42 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <strong className="block text-slate-900 font-bold text-sm">Operating Hours</strong>
-                        <span>Monday - Saturday: 9:00 AM - 7:00 PM IST</span>
+                        <span>{contact.workingHours}</span>
                       </div>
                     </li>
                   </ul>
                 </div>
 
                 {/* Google Maps Location Card */}
-                <div className="bg-white rounded-2xl p-6 border border-slate-200 space-y-4 shadow-xs">
-                  <div className="flex items-center gap-2 text-slate-900 font-bold text-base font-serif">
-                    <MapPin className="w-5 h-5 text-amber-600" />
-                    <span>Find Us On Google Maps</span>
+                {contact.googleMapsUrl && (
+                  <div className="bg-white rounded-2xl p-6 border border-slate-200 space-y-4 shadow-xs">
+                    <div className="flex items-center gap-2 text-slate-900 font-bold text-base font-serif">
+                      <MapPin className="w-5 h-5 text-amber-600" />
+                      <span>Find Us On Google Maps</span>
+                    </div>
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      Locate <strong>{contact.companyName}</strong> directly on Google Maps for office directions, reviews, and manufacturing hub details.
+                    </p>
+                    <a
+                      href={contact.googleMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs transition-colors shadow-sm"
+                    >
+                      <MapPin className="w-4 h-4 text-amber-400" />
+                      <span>Open Location on Google Maps</span>
+                    </a>
                   </div>
-                  <p className="text-slate-600 text-xs leading-relaxed">
-                    Locate <strong>LTS BAGS PRIVATE LIMITED</strong> directly on Google Maps for office directions, reviews, and manufacturing hub details.
-                  </p>
-                  <a
-                    href="https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED&shem=epsd1%2Cltae%2Crimspwouoe&shndl=30&source=sh%2Fx%2Floc%2Fosrp%2Fm1%2F4&kgs=20657782bd1aa7a9"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs transition-colors shadow-sm"
-                  >
-                    <MapPin className="w-4 h-4 text-amber-400" />
-                    <span>Open LTS BAGS on Google Maps</span>
-                  </a>
-                </div>
+                )}
 
                 {/* Trust Box */}
                 <div className="bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 space-y-3">
                   <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider font-mono">
                     <Award className="w-4 h-4" /> B2B Factory Assurance
                   </div>
-                  <h4 className="font-bold text-base font-serif">100% Guaranteed Quality & On-Time Delivery</h4>
+                  <h4 className="font-bold text-base font-serif">{contact.isoCertificate || '100% Guaranteed Quality & On-Time Delivery'}</h4>
                   <p className="text-slate-300 text-xs leading-relaxed">
-                    LTS BAGS PRIVATE LIMITED provides direct factory pricing, strict QC checks, and bulk production handling for corporate client projects.
+                    {contact.companyName} provides direct factory pricing, strict QC checks, and bulk production handling for corporate client projects.
                   </p>
                 </div>
 

@@ -39,7 +39,11 @@ export default function HomePage() {
   const featuredProducts = db.getProducts().filter((p) => p.isFeatured || p.moq <= 100).slice(0, 6);
   const latestBlogs = db.getBlogs().slice(0, 3);
   const slides = db.getSlides(true);
+  const settings = db.getSettings();
   const orgSchema = generateOrganizationSchema();
+
+  const homepage = settings.homepage;
+  const contact = settings.contactInfo;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
@@ -55,22 +59,17 @@ export default function HomePage() {
         <section className="bg-sky-600 dark:bg-sky-700 text-white py-8 border-y border-sky-700 dark:border-sky-800 shadow-inner transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div>
-                <p className="text-3xl sm:text-4xl font-black font-serif">15+ Years</p>
-                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">Manufacturing Experience</p>
-              </div>
-              <div>
-                <p className="text-3xl sm:text-4xl font-black font-serif">5,000,000+</p>
-                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">Bags Shipped Globally</p>
-              </div>
-              <div>
-                <p className="text-3xl sm:text-4xl font-black font-serif">1,200+</p>
-                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">Corporate Clients</p>
-              </div>
-              <div>
-                <p className="text-3xl sm:text-4xl font-black font-serif">99.4%</p>
-                <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">On-Time Dispatch Rate</p>
-              </div>
+              {(homepage?.stats && homepage.stats.length > 0 ? homepage.stats : [
+                { id: 's1', value: '15+ Years', label: 'Manufacturing Experience' },
+                { id: 's2', value: '5,000,000+', label: 'Bags Shipped Globally' },
+                { id: 's3', value: '1,200+', label: 'Corporate Clients' },
+                { id: 's4', value: '99.4%', label: 'On-Time Dispatch Rate' }
+              ]).map((st, i) => (
+                <div key={st.id || i}>
+                  <p className="text-3xl sm:text-4xl font-black font-serif">{st.value}</p>
+                  <p className="text-sky-100 text-xs font-medium uppercase tracking-wider mt-1">{st.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -272,10 +271,10 @@ export default function HomePage() {
               Instant Factory Consultation
             </span>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight font-serif">
-              Ready to Order Custom Bags for Your Brand?
+              {homepage?.ctaTitle || 'Ready to Order Custom Bags for Your Brand?'}
             </h2>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-              Send us your bag design drawings, sample requests, or target budget. Our sales team will deliver custom samples and transparent factory unit pricing within 24 hours.
+              {homepage?.ctaDescription || 'Send us your bag design drawings, sample requests, or target budget. Our sales team will deliver custom samples and transparent factory unit pricing within 24 hours.'}
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -286,13 +285,15 @@ export default function HomePage() {
                 <Send className="w-5 h-5" />
                 <span>Submit Wholesale Quote Form</span>
               </Link>
-              <a
-                href="tel:+919833598338"
-                className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-4 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-base"
-              >
-                <PhoneCall className="w-4 h-4 text-sky-400" />
-                <span>Call Sales: +91 98335 98338</span>
-              </a>
+              {contact?.phone1 && (
+                <a
+                  href={`tel:${contact.phone1.replace(/\s+/g, '')}`}
+                  className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-4 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-base"
+                >
+                  <PhoneCall className="w-4 h-4 text-sky-400" />
+                  <span>Call Sales: {contact.phone1}</span>
+                </a>
+              )}
             </div>
           </div>
         </section>

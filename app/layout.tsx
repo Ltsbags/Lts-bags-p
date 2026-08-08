@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import FloatingContactButtons from '@/components/FloatingContactButtons';
+import AiChatbot from '@/components/AiChatbot';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <ThemeProvider>
           {children}
           <FloatingContactButtons />
+          <AiChatbot />
         </ThemeProvider>
       </body>
     </html>

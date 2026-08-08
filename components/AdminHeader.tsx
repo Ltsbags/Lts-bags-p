@@ -38,11 +38,11 @@ export default function AdminHeader({ activeTab }: { activeTab?: string }) {
   const navItems = [
     { id: 'dashboard', name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
     { id: 'slides', name: 'Hero Slider', href: '/admin/slides', icon: Sliders },
+    { id: 'settings', name: 'Website Content', href: '/admin/settings', icon: Settings },
     { id: 'products', name: 'Products', href: '/admin/products', icon: Package },
     { id: 'categories', name: 'Categories', href: '/admin/categories', icon: Layers },
     { id: 'blogs', name: 'Blog Posts', href: '/admin/blogs', icon: FileText },
     { id: 'enquiries', name: 'Quote Enquiries', href: '/admin/enquiries', icon: MessageSquare },
-    { id: 'settings', name: 'Logo & Settings', href: '/admin/settings', icon: Settings },
   ];
 
   return (

@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   MapPin, 
@@ -11,8 +13,42 @@ import {
   Globe
 } from 'lucide-react';
 import Logo from './Logo';
+import { CompanyContactInfo, FooterContent } from '@/lib/types';
 
 export default function Footer() {
+  const [contact, setContact] = useState<Partial<CompanyContactInfo>>({
+    companyName: 'LTS BAGS PRIVATE LIMITED',
+    phone1: '+91 98335 98338',
+    phone2: '+91 96199 61971',
+    email1: 'info@ltsbags.com',
+    factoryAddress: 'Plot No. 42, Sector 8, MIDC, Navi Mumbai, Maharashtra 400708',
+    googleMapsUrl: 'https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED',
+    workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM IST',
+    isoCertificate: 'ISO 9001:2015 Certified Factory',
+  });
+
+  const [footerContent, setFooterContent] = useState<Partial<FooterContent>>({
+    aboutBrief: 'LTS BAGS PRIVATE LIMITED is a premier custom bag manufacturer and global bulk exporter. We specialize in corporate backpacks, executive laptop briefcases, travel duffels, and eco canvas totes with custom logo branding.',
+    copyrightText: 'LTS BAGS PRIVATE LIMITED ®. All Rights Reserved.',
+    quickLinksTitle: 'Quick Navigation',
+    categoriesTitle: 'Bag Categories',
+    contactTitle: 'Manufacturing Unit',
+  });
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.contactInfo) {
+          setContact(data.contactInfo);
+        }
+        if (data?.footer) {
+          setFooterContent(data.footer);
+        }
+      })
+      .catch((err) => console.error('Error fetching settings in Footer:', err));
+  }, []);
+
   return (
     <footer className="bg-slate-950 text-slate-300 pt-16 pb-8 border-t border-sky-500/20 relative overflow-hidden">
       {/* Background Subtle Sky Blue Gradient Glow */}
@@ -29,12 +65,12 @@ export default function Footer() {
             </Link>
 
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
-              LTS BAGS PRIVATE LIMITED is a premier custom bag manufacturer and global bulk exporter. We specialize in corporate backpacks, executive laptop briefcases, travel duffels, and eco canvas totes with custom logo branding.
+              {footerContent.aboutBrief}
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-2.5 text-xs">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-sky-500/30 text-sky-300 font-semibold shadow-xs">
-                <Award className="w-3.5 h-3.5 text-sky-400" /> ISO Certified Factory
+                <Award className="w-3.5 h-3.5 text-sky-400" /> {contact.isoCertificate || 'ISO Certified Factory'}
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-emerald-500/30 text-emerald-400 font-semibold shadow-xs">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Quality QC Guaranteed
@@ -46,7 +82,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-sky-400 font-bold text-sm uppercase tracking-wider font-mono border-b border-sky-500/20 pb-2 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
-              Quick Navigation
+              {footerContent.quickLinksTitle || 'Quick Navigation'}
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
@@ -56,7 +92,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/about" className="hover:text-sky-400 transition-colors flex items-center gap-2 text-slate-300 hover:translate-x-1 transform duration-200">
-                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0" /> About LTS BAGS
+                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0" /> About Company
                 </Link>
               </li>
               <li>
@@ -81,7 +117,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-sky-400 font-bold text-sm uppercase tracking-wider font-mono border-b border-sky-500/20 pb-2 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
-              Bag Categories
+              {footerContent.categoriesTitle || 'Bag Categories'}
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
@@ -111,44 +147,55 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-sky-400 font-bold text-sm uppercase tracking-wider font-mono border-b border-sky-500/20 pb-2 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
-              Manufacturing Unit
+              {footerContent.contactTitle || 'Manufacturing Unit'}
             </h3>
             <ul className="space-y-3 text-sm text-slate-400">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-white block">LTS BAGS PRIVATE LIMITED</span>
-                  <a 
-                    href="https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED&shem=epsd1%2Cltae%2Crimspwouoe&shndl=30&source=sh%2Fx%2Floc%2Fosrp%2Fm1%2F4&kgs=20657782bd1aa7a9"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-sky-400 hover:text-sky-300 underline flex items-center gap-1 mt-1 font-semibold"
-                  >
-                    <Globe className="w-3.5 h-3.5" /> View on Google Maps
-                  </a>
+                  <span className="font-bold text-white block">{contact.companyName || 'LTS BAGS PRIVATE LIMITED'}</span>
+                  <p className="text-xs text-slate-400 mt-0.5">{contact.factoryAddress}</p>
+                  {contact.googleMapsUrl && (
+                    <a 
+                      href={contact.googleMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-sky-400 hover:text-sky-300 underline flex items-center gap-1 mt-1 font-semibold"
+                    >
+                      <Globe className="w-3.5 h-3.5" /> View on Google Maps
+                    </a>
+                  )}
                 </div>
               </li>
               <li className="flex items-start gap-2.5">
                 <Phone className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                 <div className="flex flex-col gap-0.5">
-                  <a href="tel:+919833598338" className="hover:text-sky-300 transition-colors font-medium">
-                    +91 98335 98338
-                  </a>
-                  <a href="tel:+919619961971" className="hover:text-sky-300 transition-colors font-medium">
-                    +91 96199 61971
-                  </a>
+                  {contact.phone1 && (
+                    <a href={`tel:${contact.phone1.replace(/\s+/g, '')}`} className="hover:text-sky-300 transition-colors font-medium">
+                      {contact.phone1}
+                    </a>
+                  )}
+                  {contact.phone2 && (
+                    <a href={`tel:${contact.phone2.replace(/\s+/g, '')}`} className="hover:text-sky-300 transition-colors font-medium">
+                      {contact.phone2}
+                    </a>
+                  )}
                 </div>
               </li>
-              <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-sky-400 shrink-0" />
-                <a href="mailto:info@ltsbags.com" className="hover:text-sky-300 transition-colors font-medium">
-                  info@ltsbags.com
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5 text-xs text-slate-400">
-                <Clock className="w-4 h-4 text-sky-400 shrink-0" />
-                <span>Mon - Sat: 9:00 AM - 7:00 PM IST</span>
-              </li>
+              {contact.email1 && (
+                <li className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-sky-400 shrink-0" />
+                  <a href={`mailto:${contact.email1}`} className="hover:text-sky-300 transition-colors font-medium">
+                    {contact.email1}
+                  </a>
+                </li>
+              )}
+              {contact.workingHours && (
+                <li className="flex items-center gap-2.5 text-xs text-slate-400">
+                  <Clock className="w-4 h-4 text-sky-400 shrink-0" />
+                  <span>{contact.workingHours}</span>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -156,7 +203,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} <strong className="text-slate-200">LTS BAGS PRIVATE LIMITED ®</strong>. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} <strong className="text-slate-200">{contact.companyName || 'LTS BAGS PRIVATE LIMITED'}</strong>. {footerContent.copyrightText || 'All Rights Reserved.'}</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy-policy" className="hover:text-sky-400 transition-colors">
               Privacy Policy

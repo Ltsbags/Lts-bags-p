@@ -7,23 +7,107 @@ import AdminHeader from '@/components/AdminHeader';
 import Logo from '@/components/Logo';
 import { 
   Upload, 
-  Image as ImageIcon, 
   Save, 
   RotateCcw, 
   CheckCircle2, 
   AlertCircle, 
-  Sparkles, 
-  Link as LinkIcon,
-  Building,
-  Eye,
-  Type
+  Building2, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Clock, 
+  FileText, 
+  HelpCircle, 
+  ShieldCheck, 
+  Award, 
+  Plus, 
+  Trash2, 
+  Star, 
+  Globe, 
+  Image as ImageIcon,
+  LayoutGrid,
+  Check,
+  ChevronRight,
+  Factory,
+  Truck,
+  Layers,
+  Sliders,
+  Sparkles
 } from 'lucide-react';
+import { SiteSettings, StatItem, FeatureItem, ProcessStepItem, TestimonialItem, ClientLogoItem } from '@/lib/types';
 
 export default function AdminSettingsPage() {
+  const [activeTab, setActiveTab] = useState<'brand' | 'contact' | 'homepage' | 'features' | 'testimonials' | 'about' | 'footer'>('brand');
+  
+  // Settings state
   const [logoUrl, setLogoUrl] = useState<string>('');
   const [logoText, setLogoText] = useState<string>('LTS BAGS');
   const [logoSubtitle, setLogoSubtitle] = useState<string>('PRIVATE LIMITED');
-  
+
+  // Contact Info
+  const [companyName, setCompanyName] = useState('LTS BAGS PRIVATE LIMITED');
+  const [tagline, setTagline] = useState('Premier OEM/ODM Custom Bag Manufacturer & Global Exporter');
+  const [phone1, setPhone1] = useState('+91 98335 98338');
+  const [phone2, setPhone2] = useState('+91 96199 61971');
+  const [email1, setEmail1] = useState('info@ltsbags.com');
+  const [email2, setEmail2] = useState('sales@ltsbags.com');
+  const [factoryAddress, setFactoryAddress] = useState('Plot No. 42, Sector 8, Industrial Area, MIDC, Navi Mumbai, Maharashtra 400708, India');
+  const [googleMapsUrl, setGoogleMapsUrl] = useState('https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED');
+  const [workingHours, setWorkingHours] = useState('Mon - Sat: 9:00 AM - 7:00 PM IST');
+  const [gstNumber, setGstNumber] = useState('27AABCL9876Q1Z5');
+  const [isoCertificate, setIsoCertificate] = useState('ISO 9001:2015 Certified Manufacturing Facility');
+  const [socialLinkedin, setSocialLinkedin] = useState('https://linkedin.com/company/ltsbags');
+  const [socialFacebook, setSocialFacebook] = useState('https://facebook.com/ltsbags');
+  const [socialInstagram, setSocialInstagram] = useState('https://instagram.com/ltsbags');
+  const [socialYoutube, setSocialYoutube] = useState('https://youtube.com/@ltsbags');
+  const [socialWhatsapp, setSocialWhatsapp] = useState('+919833598338');
+
+  // Homepage
+  const [stats, setStats] = useState<StatItem[]>([]);
+  const [categoriesTitle, setCategoriesTitle] = useState('Explore Product Categories');
+  const [categoriesSubtitle, setCategoriesSubtitle] = useState('Direct factory supply across corporate, educational, travel, and promotional bag collections.');
+  const [featuredTitle, setFeaturedTitle] = useState('Featured Wholesale Products');
+  const [featuredSubtitle, setFeaturedSubtitle] = useState('Hand-picked bestsellers for corporate gifting, employee onboarding kits, and institutional orders.');
+  const [whyChooseTitle, setWhyChooseTitle] = useState('Why Choose LTS BAGS Factory');
+  const [whyChooseSubtitle, setWhyChooseSubtitle] = useState('State-of-the-art machinery, rigorous quality assurance, and end-to-end custom branding solutions.');
+  const [whyChooseFeatures, setWhyChooseFeatures] = useState<FeatureItem[]>([]);
+  const [processTitle, setProcessTitle] = useState('Our 4-Step Bulk Production Workflow');
+  const [processSubtitle, setProcessSubtitle] = useState('From concept design and material selection to high-speed stitching and final quality dispatch.');
+  const [processSteps, setProcessSteps] = useState<ProcessStepItem[]>([]);
+  const [testimonialsTitle, setTestimonialsTitle] = useState('What Corporate Clients Say');
+  const [testimonialsSubtitle, setTestimonialsSubtitle] = useState('Trusted by leading MNCs, tech enterprises, and educational institutions nationwide.');
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
+  const [clientLogos, setClientLogos] = useState<ClientLogoItem[]>([]);
+  const [ctaTitle, setCtaTitle] = useState('Ready to Order Custom Corporate Bags in Bulk?');
+  const [ctaDescription, setCtaDescription] = useState('Request a customized factory quotation with your logo specs, sample request, and bulk volume discount within 24 hours.');
+  const [ctaButtonText, setCtaButtonText] = useState('Request Wholesale Quote');
+  const [ctaButtonUrl, setCtaButtonUrl] = useState('/contact');
+  const [blogTitle, setBlogTitle] = useState('Bag Manufacturing Insights & B2B Guides');
+  const [blogSubtitle, setBlogSubtitle] = useState('Expert articles on material selection, QC protocols, and corporate gifting trends.');
+
+  // About Page
+  const [aboutHeadline, setAboutHeadline] = useState('About LTS BAGS PRIVATE LIMITED');
+  const [aboutSubtitle, setAboutSubtitle] = useState("India's Premier OEM/ODM Custom Bag Manufacturing Factory & Wholesale Exporter");
+  const [aboutStoryTitle, setAboutStoryTitle] = useState('Our Manufacturing Legacy & Heritage');
+  const [aboutStoryContent, setAboutStoryContent] = useState('');
+  const [aboutMissionTitle, setAboutMissionTitle] = useState('Our Mission');
+  const [aboutMissionContent, setAboutMissionContent] = useState('');
+  const [aboutVisionTitle, setAboutVisionTitle] = useState('Our Vision');
+  const [aboutVisionContent, setAboutVisionContent] = useState('');
+  const [aboutFactoryCapacityTitle, setAboutFactoryCapacityTitle] = useState('Factory Scale & Daily Capacity');
+  const [aboutFactoryCapacityDetails, setAboutFactoryCapacityDetails] = useState('');
+  const [aboutQualityPolicyTitle, setAboutQualityPolicyTitle] = useState('Zero-Defect Quality Policy');
+  const [aboutQualityPolicyDetails, setAboutQualityPolicyDetails] = useState('');
+
+  // Footer Content
+  const [footerAboutBrief, setFooterAboutBrief] = useState('');
+  const [footerCopyrightText, setFooterCopyrightText] = useState('LTS BAGS PRIVATE LIMITED ®. All Rights Reserved.');
+  const [footerQuickLinksTitle, setFooterQuickLinksTitle] = useState('Quick Navigation');
+  const [footerCategoriesTitle, setFooterCategoriesTitle] = useState('Bag Categories');
+  const [footerContactTitle, setFooterContactTitle] = useState('Manufacturing Unit');
+
+  // UI state
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -34,23 +118,95 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     fetch('/api/settings')
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: SiteSettings) => {
         if (data) {
-          if (data.logoUrl) setLogoUrl(data.logoUrl);
+          if (data.logoUrl !== undefined) setLogoUrl(data.logoUrl);
           if (data.logoText) setLogoText(data.logoText);
           if (data.logoSubtitle) setLogoSubtitle(data.logoSubtitle);
+
+          if (data.contactInfo) {
+            const c = data.contactInfo;
+            if (c.companyName) setCompanyName(c.companyName);
+            if (c.tagline) setTagline(c.tagline);
+            if (c.phone1) setPhone1(c.phone1);
+            if (c.phone2) setPhone2(c.phone2);
+            if (c.email1) setEmail1(c.email1);
+            if (c.email2) setEmail2(c.email2);
+            if (c.factoryAddress) setFactoryAddress(c.factoryAddress);
+            if (c.googleMapsUrl) setGoogleMapsUrl(c.googleMapsUrl);
+            if (c.workingHours) setWorkingHours(c.workingHours);
+            if (c.gstNumber) setGstNumber(c.gstNumber);
+            if (c.isoCertificate) setIsoCertificate(c.isoCertificate);
+            if (c.socialLinkedin) setSocialLinkedin(c.socialLinkedin);
+            if (c.socialFacebook) setSocialFacebook(c.socialFacebook);
+            if (c.socialInstagram) setSocialInstagram(c.socialInstagram);
+            if (c.socialYoutube) setSocialYoutube(c.socialYoutube);
+            if (c.socialWhatsapp) setSocialWhatsapp(c.socialWhatsapp);
+          }
+
+          if (data.homepage) {
+            const h = data.homepage;
+            if (h.stats) setStats(h.stats);
+            if (h.categoriesTitle) setCategoriesTitle(h.categoriesTitle);
+            if (h.categoriesSubtitle) setCategoriesSubtitle(h.categoriesSubtitle);
+            if (h.featuredTitle) setFeaturedTitle(h.featuredTitle);
+            if (h.featuredSubtitle) setFeaturedSubtitle(h.featuredSubtitle);
+            if (h.whyChooseTitle) setWhyChooseTitle(h.whyChooseTitle);
+            if (h.whyChooseSubtitle) setWhyChooseSubtitle(h.whyChooseSubtitle);
+            if (h.whyChooseFeatures) setWhyChooseFeatures(h.whyChooseFeatures);
+            if (h.processTitle) setProcessTitle(h.processTitle);
+            if (h.processSubtitle) setProcessSubtitle(h.processSubtitle);
+            if (h.processSteps) setProcessSteps(h.processSteps);
+            if (h.testimonialsTitle) setTestimonialsTitle(h.testimonialsTitle);
+            if (h.testimonialsSubtitle) setTestimonialsSubtitle(h.testimonialsSubtitle);
+            if (h.testimonials) setTestimonials(h.testimonials);
+            if (h.clientLogos) setClientLogos(h.clientLogos);
+            if (h.ctaTitle) setCtaTitle(h.ctaTitle);
+            if (h.ctaDescription) setCtaDescription(h.ctaDescription);
+            if (h.ctaButtonText) setCtaButtonText(h.ctaButtonText);
+            if (h.ctaButtonUrl) setCtaButtonUrl(h.ctaButtonUrl);
+            if (h.blogTitle) setBlogTitle(h.blogTitle);
+            if (h.blogSubtitle) setBlogSubtitle(h.blogSubtitle);
+          }
+
+          if (data.about) {
+            const a = data.about;
+            if (a.headline) setAboutHeadline(a.headline);
+            if (a.subtitle) setAboutSubtitle(a.subtitle);
+            if (a.storyTitle) setAboutStoryTitle(a.storyTitle);
+            if (a.storyContent) setAboutStoryContent(a.storyContent);
+            if (a.missionTitle) setAboutMissionTitle(a.missionTitle);
+            if (a.missionContent) setAboutMissionContent(a.missionContent);
+            if (a.visionTitle) setAboutVisionTitle(a.visionTitle);
+            if (a.visionContent) setAboutVisionContent(a.visionContent);
+            if (a.factoryCapacityTitle) setAboutFactoryCapacityTitle(a.factoryCapacityTitle);
+            if (a.factoryCapacityDetails) setAboutFactoryCapacityDetails(a.factoryCapacityDetails);
+            if (a.qualityPolicyTitle) setAboutQualityPolicyTitle(a.qualityPolicyTitle);
+            if (a.qualityPolicyDetails) setAboutQualityPolicyDetails(a.qualityPolicyDetails);
+          }
+
+          if (data.footer) {
+            const f = data.footer;
+            if (f.aboutBrief) setFooterAboutBrief(f.aboutBrief);
+            if (f.copyrightText) setFooterCopyrightText(f.copyrightText);
+            if (f.quickLinksTitle) setFooterQuickLinksTitle(f.quickLinksTitle);
+            if (f.categoriesTitle) setFooterCategoriesTitle(f.categoriesTitle);
+            if (f.contactTitle) setFooterContactTitle(f.contactTitle);
+          }
         }
       })
       .catch((err) => {
         console.error('Error fetching settings:', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, targetField: 'logo' | 'clientLogo') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       setNotification({ type: 'error', message: 'Please select a valid image file (PNG, JPG, SVG, WEBP).' });
       return;
@@ -70,20 +226,12 @@ export default function AdminSettingsPage() {
 
       const data = await res.json();
       if (res.ok && data.url) {
-        setLogoUrl(data.url);
-        // Automatically save to settings DB
-        await fetch('/api/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            logoUrl: data.url,
-            logoText,
-            logoSubtitle,
-          }),
-        });
-        setNotification({ type: 'success', message: 'Logo image uploaded and saved successfully! The logo is now live across the website.' });
+        if (targetField === 'logo') {
+          setLogoUrl(data.url);
+          setNotification({ type: 'success', message: 'Logo uploaded! Click "Save Website Content" to publish changes.' });
+        }
       } else {
-        setNotification({ type: 'error', message: data.error || 'Failed to upload logo image.' });
+        setNotification({ type: 'error', message: data.error || 'Failed to upload image.' });
       }
     } catch (err) {
       console.error('Upload error:', err);
@@ -93,304 +241,1051 @@ export default function AdminSettingsPage() {
     }
   };
 
-  const handleSaveSettings = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveAllSettings = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setIsSaving(true);
     setNotification(null);
+
+    const payload: SiteSettings = {
+      logoUrl,
+      logoText,
+      logoSubtitle,
+      contactInfo: {
+        companyName,
+        tagline,
+        logoUrl,
+        phone1,
+        phone2,
+        email1,
+        email2,
+        factoryAddress,
+        googleMapsUrl,
+        workingHours,
+        gstNumber,
+        isoCertificate,
+        socialLinkedin,
+        socialFacebook,
+        socialInstagram,
+        socialYoutube,
+        socialWhatsapp,
+      },
+      homepage: {
+        stats,
+        categoriesTitle,
+        categoriesSubtitle,
+        featuredTitle,
+        featuredSubtitle,
+        whyChooseTitle,
+        whyChooseSubtitle,
+        whyChooseFeatures,
+        processTitle,
+        processSubtitle,
+        processSteps,
+        testimonialsTitle,
+        testimonialsSubtitle,
+        testimonials,
+        clientLogos,
+        ctaTitle,
+        ctaDescription,
+        ctaButtonText,
+        ctaButtonUrl,
+        blogTitle,
+        blogSubtitle,
+      },
+      about: {
+        headline: aboutHeadline,
+        subtitle: aboutSubtitle,
+        storyTitle: aboutStoryTitle,
+        storyContent: aboutStoryContent,
+        missionTitle: aboutMissionTitle,
+        missionContent: aboutMissionContent,
+        visionTitle: aboutVisionTitle,
+        visionContent: aboutVisionContent,
+        factoryCapacityTitle: aboutFactoryCapacityTitle,
+        factoryCapacityDetails: aboutFactoryCapacityDetails,
+        qualityPolicyTitle: aboutQualityPolicyTitle,
+        qualityPolicyDetails: aboutQualityPolicyDetails,
+      },
+      footer: {
+        aboutBrief: footerAboutBrief,
+        copyrightText: footerCopyrightText,
+        quickLinksTitle: footerQuickLinksTitle,
+        categoriesTitle: footerCategoriesTitle,
+        contactTitle: footerContactTitle,
+      },
+      updatedAt: new Date().toISOString(),
+    };
 
     try {
       const res = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          logoUrl,
-          logoText,
-          logoSubtitle,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
-        setNotification({ type: 'success', message: 'Company logo & brand settings saved successfully across the website!' });
+        setNotification({ 
+          type: 'success', 
+          message: 'Website content updated successfully! All public pages and components have been updated automatically.' 
+        });
       } else {
         const errorData = await res.json();
         setNotification({ type: 'error', message: errorData.error || 'Failed to save settings.' });
       }
     } catch (err) {
       console.error('Save error:', err);
-      setNotification({ type: 'error', message: 'An error occurred while saving brand settings.' });
+      setNotification({ type: 'error', message: 'An error occurred while saving website content.' });
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleResetDefault = () => {
-    setLogoUrl('');
-    setLogoText('LTS BAGS');
-    setLogoSubtitle('PRIVATE LIMITED');
-    setNotification({ type: 'success', message: 'Reset to default SVG emblem logo. Remember to click "Save Changes".' });
+  // Helper functions for stats management
+  const addStat = () => {
+    setStats([...stats, { id: 'stat-' + Date.now(), label: 'New Metric', value: '100+', sublabel: 'Metric description' }]);
   };
+  const updateStat = (id: string, field: keyof StatItem, value: string) => {
+    setStats(stats.map(s => s.id === id ? { ...s, [field]: value } : s));
+  };
+  const deleteStat = (id: string) => {
+    setStats(stats.filter(s => s.id !== id));
+  };
+
+  // Helper functions for features
+  const addFeature = () => {
+    setWhyChooseFeatures([...whyChooseFeatures, { id: 'feat-' + Date.now(), title: 'New Quality Feature', description: 'Detailed feature description', iconName: 'ShieldCheck' }]);
+  };
+  const updateFeature = (id: string | undefined, field: keyof FeatureItem, value: string) => {
+    if (!id) return;
+    setWhyChooseFeatures(whyChooseFeatures.map(f => f.id === id ? { ...f, [field]: value } : f));
+  };
+  const deleteFeature = (id?: string) => {
+    if (!id) return;
+    setWhyChooseFeatures(whyChooseFeatures.filter(f => f.id !== id));
+  };
+
+  // Helper functions for process steps
+  const addProcessStep = () => {
+    const nextNum = (processSteps.length + 1).toString().padStart(2, '0');
+    setProcessSteps([...processSteps, { id: 'step-' + Date.now(), stepNumber: nextNum, title: 'New Production Step', description: 'Step description' }]);
+  };
+  const updateProcessStep = (id: string | undefined, field: keyof ProcessStepItem, value: string) => {
+    if (!id) return;
+    setProcessSteps(processSteps.map(p => p.id === id ? { ...p, [field]: value } : p));
+  };
+  const deleteProcessStep = (id?: string) => {
+    if (!id) return;
+    setProcessSteps(processSteps.filter(p => p.id !== id));
+  };
+
+  // Helper functions for testimonials
+  const addTestimonial = () => {
+    setTestimonials([...testimonials, { id: 'test-' + Date.now(), name: 'Client Name', role: 'Procurement Head', company: 'Company Name', content: 'Great manufacturing quality and prompt delivery.', rating: 5 }]);
+  };
+  const updateTestimonial = (id: string, field: keyof TestimonialItem, value: any) => {
+    setTestimonials(testimonials.map(t => t.id === id ? { ...t, [field]: value } : t));
+  };
+  const deleteTestimonial = (id: string) => {
+    setTestimonials(testimonials.filter(t => t.id !== id));
+  };
+
+  // Helper functions for client logos
+  const addClientLogo = () => {
+    setClientLogos([...clientLogos, { id: 'client-' + Date.now(), companyName: 'Partner Enterprise', logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300' }]);
+  };
+  const updateClientLogo = (id: string, field: keyof ClientLogoItem, value: string) => {
+    setClientLogos(clientLogos.map(c => c.id === id ? { ...c, [field]: value } : c));
+  };
+  const deleteClientLogo = (id: string) => {
+    setClientLogos(clientLogos.filter(c => c.id !== id));
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans">
+        <AdminHeader activeTab="settings" />
+        <main className="flex-1 flex items-center justify-center p-12">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-10 h-10 border-4 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm font-semibold text-slate-600">Loading website content from database...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans">
-      <AdminHeader />
+      <AdminHeader activeTab="settings" />
 
       <main className="flex-1 py-8">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           
-          {/* Page Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+          {/* Top Page Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
             <div>
               <div className="flex items-center gap-2">
-                <span className="bg-amber-100 text-amber-800 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-amber-200 uppercase tracking-wider">
-                  Brand Identity
+                <span className="bg-sky-100 text-sky-800 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-sky-200 uppercase tracking-wider">
+                  CMS Management
                 </span>
                 <h1 className="text-2xl font-black text-slate-900 font-serif">
-                  Company Logo & Branding Settings
+                  Global Website Content & Business Information
                 </h1>
               </div>
-              <p className="text-slate-600 text-xs mt-1">
-                Upload your custom company logo image or customize the header emblem displayed on the website and admin portal.
+              <p className="text-slate-500 text-xs mt-1">
+                Manage static headings, contact phone numbers, factory address, testimonials, features, and page sections dynamically.
               </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => handleSaveAllSettings()}
+                disabled={isSaving}
+                className="bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all flex items-center gap-2 disabled:opacity-50"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Saving to Database...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    <span>Save Website Content</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
 
           {/* Toast Notification */}
           {notification && (
-            <div className={`p-4 rounded-xl text-xs font-semibold flex items-center justify-between gap-3 shadow-xs transition-all ${
-              notification.type === 'success' 
-                ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' 
-                : 'bg-red-50 text-red-900 border border-red-200'
-            }`}>
-              <div className="flex items-center gap-2">
-                {notification.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                ) : (
-                  <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-                )}
-                <span>{notification.message}</span>
+            <div
+              className={`p-4 rounded-xl border flex items-start gap-3 shadow-xs transition-all ${
+                notification.type === 'success'
+                  ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                  : 'bg-rose-50 text-rose-900 border-rose-200'
+              }`}
+            >
+              {notification.type === 'success' ? (
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+              )}
+              <div className="flex-1 text-xs font-medium leading-relaxed">
+                {notification.message}
               </div>
-              <button 
-                onClick={() => setNotification(null)}
-                className="text-slate-400 hover:text-slate-600 font-bold"
-              >
-                ✕
-              </button>
             </div>
           )}
 
-          <form onSubmit={handleSaveSettings} className="space-y-8">
-            
-            {/* Live Logo Preview Section */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Eye className="w-4 h-4 text-amber-600" />
-                  <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">
-                    Live Logo Preview
-                  </h2>
-                </div>
-                <span className="text-[11px] text-slate-500 font-mono">Real-time Header & Footer Display</span>
-              </div>
+          {/* Navigation Tabs */}
+          <div className="bg-white rounded-xl border border-slate-200 p-1.5 flex flex-wrap gap-1 shadow-xs overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('brand')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'brand'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Building2 className="w-4 h-4" />
+              <span>Logo & Branding</span>
+            </button>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                
-                {/* Light Mode Preview */}
-                <div className="bg-white border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-center min-h-[140px] text-center space-y-3 relative overflow-hidden group">
-                  <span className="absolute top-2 left-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">
-                    Light Theme Navbar
-                  </span>
-                  <div className="pt-3">
-                    <Logo 
-                      size="md" 
-                      theme="light" 
-                      overrideLogoUrl={logoUrl} 
-                      overrideLogoText={logoText} 
-                      overrideLogoSubtitle={logoSubtitle}
+            <button
+              onClick={() => setActiveTab('contact')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'contact'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Phone className="w-4 h-4" />
+              <span>Company & Contact Info</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('homepage')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'homepage'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span>Homepage Headings & Stats</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('features')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'features'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>Why Choose Us & Process</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('testimonials')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'testimonials'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Star className="w-4 h-4" />
+              <span>Testimonials & Clients</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('about')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'about'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>About Us Page</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('footer')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'footer'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              <span>Footer Content</span>
+            </button>
+          </div>
+
+          {/* TAB 1: Brand & Logo */}
+          {activeTab === 'brand' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="border-b border-slate-100 pb-3">
+                  <h3 className="text-lg font-bold text-slate-900 font-serif">Brand Logo & Typography</h3>
+                  <p className="text-slate-500 text-xs">Configure the main company logo image or text emblem.</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Company Primary Name</label>
+                    <input
+                      type="text"
+                      value={logoText}
+                      onChange={(e) => setLogoText(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
                     />
                   </div>
-                </div>
 
-                {/* Dark Mode Preview */}
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col items-center justify-center min-h-[140px] text-center space-y-3 relative overflow-hidden group">
-                  <span className="absolute top-2 left-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-800 px-2 py-0.5 rounded">
-                    Dark Theme / Footer
-                  </span>
-                  <div className="pt-3">
-                    <Logo 
-                      size="md" 
-                      theme="dark" 
-                      overrideLogoUrl={logoUrl} 
-                      overrideLogoText={logoText} 
-                      overrideLogoSubtitle={logoSubtitle}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Company Tagline / Subtitle</label>
+                    <input
+                      type="text"
+                      value={logoSubtitle}
+                      onChange={(e) => setLogoSubtitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
                     />
                   </div>
-                </div>
 
-              </div>
-            </div>
-
-            {/* Logo Image Upload & URL Section */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-6">
-              <div className="border-b border-slate-100 pb-4">
-                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-amber-600" />
-                  Upload Custom Company Logo
-                </h2>
-                <p className="text-xs text-slate-500 mt-1">
-                  Upload your brand logo file (PNG with transparent background, SVG, WEBP, or JPG) or enter an image URL.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                
-                {/* File Upload Box */}
-                <div className="space-y-3">
-                  <label className="block text-xs font-bold text-slate-700">
-                    Option 1: Upload Logo File from Computer
-                  </label>
-
-                  <div 
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all hover:bg-slate-50 ${
-                      isUploading ? 'border-amber-400 bg-amber-50/50' : 'border-slate-300 hover:border-amber-500'
-                    }`}
-                  >
-                    <input 
-                      ref={fileInputRef}
-                      type="file" 
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-
-                    <div className="flex flex-col items-center space-y-2">
-                      <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200">
-                        <Upload className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-slate-800">
-                          {isUploading ? 'Uploading Image...' : 'Click to Upload Logo File'}
-                        </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          Supports PNG, SVG, JPG, WEBP (Max 5MB)
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Direct URL Input */}
-                <div className="space-y-3">
-                  <label htmlFor="logoUrlInput" className="block text-xs font-bold text-slate-700">
-                    Option 2: Enter Direct Logo Image URL
-                  </label>
-
-                  <div className="space-y-2">
-                    <div className="relative">
-                      <LinkIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                      <input 
-                        id="logoUrlInput"
-                        type="url" 
-                        value={logoUrl}
-                        onChange={(e) => setLogoUrl(e.target.value)}
-                        placeholder="https://example.com/logo.png"
-                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 font-mono"
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Upload Custom Brand Logo Image</label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={(e) => handleFileUpload(e, 'logo')}
+                        accept="image/*"
+                        className="hidden"
                       />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploading}
+                        className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-lg flex items-center gap-2"
+                      >
+                        <Upload className="w-4 h-4" />
+                        <span>{isUploading ? 'Uploading Image...' : 'Choose Logo File'}</span>
+                      </button>
+                      {logoUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setLogoUrl('')}
+                          className="text-rose-600 hover:text-rose-700 text-xs font-semibold"
+                        >
+                          Clear Custom Logo Image
+                        </button>
+                      )}
                     </div>
-                    <p className="text-[11px] text-slate-500">
-                      If you host your logo image on an external URL or CDN, paste it directly here.
-                    </p>
                   </div>
 
                   {logoUrl && (
-                    <div className="pt-2 flex items-center gap-2">
-                      <span className="text-xs text-slate-600">Current Logo URL set:</span>
-                      <button
-                        type="button"
-                        onClick={() => setLogoUrl('')}
-                        className="text-[11px] text-red-600 hover:underline font-bold"
-                      >
-                        Remove Logo Image
-                      </button>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Or Logo Image URL</label>
+                      <input
+                        type="text"
+                        value={logoUrl}
+                        onChange={(e) => setLogoUrl(e.target.value)}
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                      />
                     </div>
                   )}
                 </div>
+              </div>
 
+              {/* Preview Box */}
+              <div className="lg:col-span-5 bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 shadow-md space-y-4">
+                <span className="text-sky-400 font-mono text-[10px] uppercase font-bold tracking-widest bg-sky-500/10 px-2.5 py-1 rounded-md border border-sky-500/20">
+                  Header & Footer Logo Preview
+                </span>
+
+                <div className="p-6 bg-slate-950/80 rounded-xl border border-slate-800 flex items-center justify-center">
+                  <Logo size="lg" theme="dark" showSubtitle={true} />
+                </div>
+
+                <div className="p-6 bg-white rounded-xl border border-slate-200 flex items-center justify-center">
+                  <Logo size="lg" theme="light" showSubtitle={true} />
+                </div>
               </div>
             </div>
+          )}
 
-            {/* Brand Name & Text Customization */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-6">
-              <div className="border-b border-slate-100 pb-4">
-                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono flex items-center gap-2">
-                  <Type className="w-4 h-4 text-amber-600" />
-                  Brand Name & Subtitle Customization
-                </h2>
-                <p className="text-xs text-slate-500 mt-1">
-                  Customize the company title and legal suffix used for fallbacks and alt attributes.
-                </p>
+          {/* TAB 2: Company & Contact Info */}
+          {activeTab === 'contact' && (
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+              <div className="border-b border-slate-100 pb-3">
+                <h3 className="text-lg font-bold text-slate-900 font-serif">Corporate Contact Details & Social Handles</h3>
+                <p className="text-slate-500 text-xs">This information is displayed in the Header, Footer, Contact Page, and Floating Action Buttons.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                
-                {/* Brand Name */}
-                <div className="space-y-1.5">
-                  <label htmlFor="logoTextInput" className="block text-xs font-bold text-slate-700">
-                    Brand / Company Title
-                  </label>
-                  <div className="relative">
-                    <Building className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input 
-                      id="logoTextInput"
-                      type="text" 
-                      value={logoText}
-                      onChange={(e) => setLogoText(e.target.value)}
-                      placeholder="LTS BAGS"
-                      className="w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 font-bold"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Registered Company Name</label>
+                  <input
+                    type="text"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Company Tagline</label>
+                  <input
+                    type="text"
+                    value={tagline}
+                    onChange={(e) => setTagline(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Primary Phone / Sales Hotline</label>
+                  <input
+                    type="text"
+                    value={phone1}
+                    onChange={(e) => setPhone1(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Secondary Phone / WhatsApp</label>
+                  <input
+                    type="text"
+                    value={phone2}
+                    onChange={(e) => setPhone2(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Primary Official Email</label>
+                  <input
+                    type="email"
+                    value={email1}
+                    onChange={(e) => setEmail1(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Sales Enquiry Email</label>
+                  <input
+                    type="email"
+                    value={email2}
+                    onChange={(e) => setEmail2(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">GST / Business Tax Registration ID</label>
+                  <input
+                    type="text"
+                    value={gstNumber}
+                    onChange={(e) => setGstNumber(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">ISO / QC Certificate Badge Text</label>
+                  <input
+                    type="text"
+                    value={isoCertificate}
+                    onChange={(e) => setIsoCertificate(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Factory & Registered Address</label>
+                  <textarea
+                    rows={2}
+                    value={factoryAddress}
+                    onChange={(e) => setFactoryAddress(e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Google Maps Profile URL</label>
+                  <input
+                    type="text"
+                    value={googleMapsUrl}
+                    onChange={(e) => setGoogleMapsUrl(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Factory Working Hours</label>
+                  <input
+                    type="text"
+                    value={workingHours}
+                    onChange={(e) => setWorkingHours(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">WhatsApp Direct Number (e.g., +919833598338)</label>
+                  <input
+                    type="text"
+                    value={socialWhatsapp}
+                    onChange={(e) => setSocialWhatsapp(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">LinkedIn Company Page URL</label>
+                  <input
+                    type="text"
+                    value={socialLinkedin}
+                    onChange={(e) => setSocialLinkedin(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: Homepage Sections & Stats */}
+          {activeTab === 'homepage' && (
+            <div className="space-y-8">
+              {/* Stats Section */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 font-serif">Homepage Key Highlight Stats</h3>
+                    <p className="text-slate-500 text-xs">Metrics displayed in the hero section banner.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addStat}
+                    className="bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 border border-sky-200"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Metric</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {stats.map((st) => (
+                    <div key={st.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 relative space-y-3">
+                      <button
+                        type="button"
+                        onClick={() => deleteStat(st.id)}
+                        className="absolute top-3 right-3 text-slate-400 hover:text-rose-600"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Stat Value</label>
+                          <input
+                            type="text"
+                            value={st.value}
+                            onChange={(e) => updateStat(st.id, 'value', e.target.value)}
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold text-sky-700"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Label</label>
+                          <input
+                            type="text"
+                            value={st.label}
+                            onChange={(e) => updateStat(st.id, 'label', e.target.value)}
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 uppercase">Sublabel / Context</label>
+                        <input
+                          type="text"
+                          value={st.sublabel}
+                          onChange={(e) => updateStat(st.id, 'sublabel', e.target.value)}
+                          className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Headings & Subtitles */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="border-b border-slate-100 pb-3">
+                  <h3 className="text-lg font-bold text-slate-900 font-serif">Homepage Section Titles</h3>
+                  <p className="text-slate-500 text-xs">Customize headings for Categories, Featured Products, Blog, and CTA.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Categories Section Title</label>
+                    <input
+                      type="text"
+                      value={categoriesTitle}
+                      onChange={(e) => setCategoriesTitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Categories Subtitle</label>
+                    <input
+                      type="text"
+                      value={categoriesSubtitle}
+                      onChange={(e) => setCategoriesSubtitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Featured Products Title</label>
+                    <input
+                      type="text"
+                      value={featuredTitle}
+                      onChange={(e) => setFeaturedTitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Featured Products Subtitle</label>
+                    <input
+                      type="text"
+                      value={featuredSubtitle}
+                      onChange={(e) => setFeaturedSubtitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">CTA Callout Heading</label>
+                    <input
+                      type="text"
+                      value={ctaTitle}
+                      onChange={(e) => setCtaTitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">CTA Primary Button Label</label>
+                    <input
+                      type="text"
+                      value={ctaButtonText}
+                      onChange={(e) => setCtaButtonText(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-bold text-slate-700 mb-1">CTA Banner Description</label>
+                    <textarea
+                      rows={2}
+                      value={ctaDescription}
+                      onChange={(e) => setCtaDescription(e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: Why Choose Us & Process */}
+          {activeTab === 'features' && (
+            <div className="space-y-8">
+              {/* Features List */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 font-serif">Why Choose Us Feature Cards</h3>
+                    <p className="text-slate-500 text-xs">Highlights detailing factory capabilities, MOQs, and quality control.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addFeature}
+                    className="bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 border border-sky-200"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Feature Card</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {whyChooseFeatures.map((ft) => (
+                    <div key={ft.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 relative space-y-3">
+                      <button
+                        type="button"
+                        onClick={() => deleteFeature(ft.id)}
+                        className="absolute top-3 right-3 text-slate-400 hover:text-rose-600"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 uppercase">Feature Title</label>
+                        <input
+                          type="text"
+                          value={ft.title}
+                          onChange={(e) => updateFeature(ft.id, 'title', e.target.value)}
+                          className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 uppercase">Description</label>
+                        <textarea
+                          rows={2}
+                          value={ft.description}
+                          onChange={(e) => updateFeature(ft.id, 'description', e.target.value)}
+                          className="w-full p-2 border border-slate-300 rounded text-xs"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Manufacturing Steps */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 font-serif">Manufacturing Production Steps</h3>
+                    <p className="text-slate-500 text-xs">Step-by-step workflow from design brief to dispatch.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addProcessStep}
+                    className="bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 border border-sky-200"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Step</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {processSteps.map((stp) => (
+                    <div key={stp.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 relative space-y-3">
+                      <button
+                        type="button"
+                        onClick={() => deleteProcessStep(stp.id)}
+                        className="absolute top-3 right-3 text-slate-400 hover:text-rose-600"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      <div className="grid grid-cols-4 gap-2">
+                        <div className="col-span-1">
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Step #</label>
+                          <input
+                            type="text"
+                            value={stp.stepNumber}
+                            onChange={(e) => updateProcessStep(stp.id, 'stepNumber', e.target.value)}
+                            className="w-full px-2 py-1.5 border border-slate-300 rounded text-xs font-mono font-bold text-center"
+                          />
+                        </div>
+                        <div className="col-span-3">
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Step Title</label>
+                          <input
+                            type="text"
+                            value={stp.title}
+                            onChange={(e) => updateProcessStep(stp.id, 'title', e.target.value)}
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 uppercase">Description</label>
+                        <textarea
+                          rows={2}
+                          value={stp.description}
+                          onChange={(e) => updateProcessStep(stp.id, 'description', e.target.value)}
+                          className="w-full p-2 border border-slate-300 rounded text-xs"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: Testimonials & Client Logos */}
+          {activeTab === 'testimonials' && (
+            <div className="space-y-8">
+              {/* Testimonials */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 font-serif">Corporate Client Testimonials</h3>
+                    <p className="text-slate-500 text-xs">Customer feedback from MNC procurement officers and brand heads.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addTestimonial}
+                    className="bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 border border-sky-200"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Testimonial</span>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {testimonials.map((t) => (
+                    <div key={t.id} className="p-4 bg-slate-50 rounded-xl border border-slate-200 relative space-y-3">
+                      <button
+                        type="button"
+                        onClick={() => deleteTestimonial(t.id)}
+                        className="absolute top-3 right-3 text-slate-400 hover:text-rose-600"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Client Name</label>
+                          <input
+                            type="text"
+                            value={t.name}
+                            onChange={(e) => updateTestimonial(t.id, 'name', e.target.value)}
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs font-bold"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Designation / Role</label>
+                          <input
+                            type="text"
+                            value={t.role}
+                            onChange={(e) => updateTestimonial(t.id, 'role', e.target.value)}
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-600 uppercase">Company Name</label>
+                          <input
+                            type="text"
+                            value={t.company}
+                            onChange={(e) => updateTestimonial(t.id, 'company', e.target.value)}
+                            className="w-full px-2.5 py-1.5 border border-slate-300 rounded text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 uppercase">Review / Feedback</label>
+                        <textarea
+                          rows={2}
+                          value={t.content}
+                          onChange={(e) => updateTestimonial(t.id, 'content', e.target.value)}
+                          className="w-full p-2 border border-slate-300 rounded text-xs"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: About Us Page */}
+          {activeTab === 'about' && (
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+              <div className="border-b border-slate-100 pb-3">
+                <h3 className="text-lg font-bold text-slate-900 font-serif">About Us Page Content</h3>
+                <p className="text-slate-500 text-xs">Manage company story, mission, vision, and factory capacity details.</p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Page Main Headline</label>
+                    <input
+                      type="text"
+                      value={aboutHeadline}
+                      onChange={(e) => setAboutHeadline(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Page Subtitle</label>
+                    <input
+                      type="text"
+                      value={aboutSubtitle}
+                      onChange={(e) => setAboutSubtitle(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
                     />
                   </div>
                 </div>
 
-                {/* Subtitle */}
-                <div className="space-y-1.5">
-                  <label htmlFor="logoSubtitleInput" className="block text-xs font-bold text-slate-700">
-                    Subtitle / Legal Tagline
-                  </label>
-                  <input 
-                    id="logoSubtitleInput"
-                    type="text" 
-                    value={logoSubtitle}
-                    onChange={(e) => setLogoSubtitle(e.target.value)}
-                    placeholder="PRIVATE LIMITED"
-                    className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 uppercase font-mono tracking-wider"
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Manufacturing Legacy & Story</label>
+                  <textarea
+                    rows={4}
+                    value={aboutStoryContent}
+                    onChange={(e) => setAboutStoryContent(e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg text-xs"
                   />
                 </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Company Mission</label>
+                    <textarea
+                      rows={3}
+                      value={aboutMissionContent}
+                      onChange={(e) => setAboutMissionContent(e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Company Vision</label>
+                    <textarea
+                      rows={3}
+                      value={aboutVisionContent}
+                      onChange={(e) => setAboutVisionContent(e.target.value)}
+                      className="w-full p-3 border border-slate-300 rounded-lg text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Factory Capacity & Infrastructure</label>
+                  <textarea
+                    rows={3}
+                    value={aboutFactoryCapacityDetails}
+                    onChange={(e) => setAboutFactoryCapacityDetails(e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Zero-Defect Quality Policy</label>
+                  <textarea
+                    rows={3}
+                    value={aboutQualityPolicyDetails}
+                    onChange={(e) => setAboutQualityPolicyDetails(e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
               </div>
             </div>
+          )}
 
-            {/* Submit & Reset Bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-              <button
-                type="button"
-                onClick={handleResetDefault}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors flex items-center justify-center gap-2"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset to Default Logo</span>
-              </button>
+          {/* TAB 7: Footer Content */}
+          {activeTab === 'footer' && (
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+              <div className="border-b border-slate-100 pb-3">
+                <h3 className="text-lg font-bold text-slate-900 font-serif">Footer Information & Copyright</h3>
+                <p className="text-slate-500 text-xs">Static copy rendered at the bottom of every page.</p>
+              </div>
 
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold text-xs px-8 py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
-              >
-                <Save className="w-4 h-4" />
-                <span>{isSaving ? 'Saving Settings...' : 'Save Logo & Brand Changes'}</span>
-              </button>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Footer Short Bio / Company Overview</label>
+                  <textarea
+                    rows={3}
+                    value={footerAboutBrief}
+                    onChange={(e) => setFooterAboutBrief(e.target.value)}
+                    className="w-full p-3 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Footer Copyright Line</label>
+                  <input
+                    type="text"
+                    value={footerCopyrightText}
+                    onChange={(e) => setFooterCopyrightText(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
+                  />
+                </div>
+              </div>
             </div>
+          )}
 
-          </form>
+          {/* Bottom Floating Save Button */}
+          <div className="pt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={() => handleSaveAllSettings()}
+              disabled={isSaving}
+              className="bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm px-8 py-3.5 rounded-xl shadow-lg transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              {isSaving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Saving Website Content...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-5 h-5" />
+                  <span>Save All Website Content</span>
+                </>
+              )}
+            </button>
+          </div>
 
         </div>
       </main>

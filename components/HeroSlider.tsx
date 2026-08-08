@@ -14,7 +14,9 @@ export default function HeroSlider({
   initialSlides = [],
   autoplayInterval = 5000,
 }: HeroSliderProps) {
-  const [slides, setSlides] = useState<HeroSlide[]>(initialSlides);
+  const [slides, setSlides] = useState<HeroSlide[]>(() => 
+    initialSlides.length > 0 ? initialSlides.filter((s) => s.isActive) : []
+  );
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -25,8 +27,6 @@ export default function HeroSlider({
   // Fetch active slides if none provided
   useEffect(() => {
     if (initialSlides.length > 0) {
-      setSlides(initialSlides.filter((s) => s.isActive));
-      setIsLoading(false);
       return;
     }
 
@@ -76,6 +76,27 @@ export default function HeroSlider({
 
     return () => clearInterval(timer);
   }, [activeSlides.length, isPaused, isHovered, autoplayInterval, goToNext]);
+
+  // Keyboard navigation support (ArrowLeft / ArrowRight)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore key events if typing in an input or textarea
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA'
+      ) {
+        return;
+      }
+      if (e.key === 'ArrowLeft') {
+        goToPrev();
+      } else if (e.key === 'ArrowRight') {
+        goToNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goToNext, goToPrev]);
 
   // Touch Swipe Handlers for mobile
   const minSwipeDistance = 50;

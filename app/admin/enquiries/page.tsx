@@ -13,7 +13,10 @@ import {
   Mail, 
   Phone, 
   Package,
-  Check
+  Check,
+  Bot,
+  FileText,
+  Sparkles
 } from 'lucide-react';
 
 export default function AdminEnquiriesPage() {
@@ -21,6 +24,7 @@ export default function AdminEnquiriesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [sourceFilter, setSourceFilter] = useState<'ALL' | 'DIRECT' | 'AI_CHATBOT'>('ALL');
 
   useEffect(() => {
     let active = true;
@@ -81,6 +85,9 @@ export default function AdminEnquiriesPage() {
     }
   };
 
+  const chatbotCount = enquiries.filter((e) => e.source === 'AI_CHATBOT').length;
+  const directCount = enquiries.filter((e) => e.source !== 'AI_CHATBOT').length;
+
   const filtered = enquiries.filter((e) => {
     const matchesSearch =
       e.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -89,12 +96,20 @@ export default function AdminEnquiriesPage() {
       e.productRequirement.toLowerCase().includes(search.toLowerCase());
 
     const matchesStatus = statusFilter === 'ALL' || e.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    
+    let matchesSource = true;
+    if (sourceFilter === 'AI_CHATBOT') {
+      matchesSource = e.source === 'AI_CHATBOT';
+    } else if (sourceFilter === 'DIRECT') {
+      matchesSource = e.source !== 'AI_CHATBOT';
+    }
+
+    return matchesSearch && matchesStatus && matchesSource;
   });
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans">
-      <AdminHeader />
+      <AdminHeader activeTab="enquiries" />
 
       <main className="flex-1 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -103,9 +118,51 @@ export default function AdminEnquiriesPage() {
             <div>
               <h1 className="text-2xl font-black text-slate-900 font-serif">Inbound Wholesale Quote Enquiries</h1>
               <p className="text-slate-600 text-xs mt-1">
-                View B2B client contact details, custom quantity requirements, and update sales quote status.
+                View B2B client contact details, custom quantity requirements, and AI chatbot leads.
               </p>
             </div>
+          </div>
+
+          {/* Source Tabs */}
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
+            <button
+              onClick={() => setSourceFilter('ALL')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                sourceFilter === 'ALL'
+                  ? 'bg-slate-900 text-amber-400 shadow-md'
+                  : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+              }`}
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>All Enquiries ({enquiries.length})</span>
+            </button>
+
+            <button
+              onClick={() => setSourceFilter('AI_CHATBOT')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                sourceFilter === 'AI_CHATBOT'
+                  ? 'bg-sky-600 text-white shadow-md shadow-sky-600/30'
+                  : 'bg-white text-slate-600 hover:bg-sky-50 hover:text-sky-700 border border-slate-200'
+              }`}
+            >
+              <Bot className="w-3.5 h-3.5 text-sky-300" />
+              <span>AI Chatbot Leads</span>
+              <span className="bg-sky-100 text-sky-900 text-[10px] font-mono px-1.5 py-0.2 rounded-full font-bold">
+                {chatbotCount}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSourceFilter('DIRECT')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                sourceFilter === 'DIRECT'
+                  ? 'bg-slate-800 text-white shadow-md'
+                  : 'bg-white text-slate-600 hover:bg-slate-200 border border-slate-200'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Web Form Quotes ({directCount})</span>
+            </button>
           </div>
 
           {/* Filter Bar */}
@@ -157,8 +214,21 @@ export default function AdminEnquiriesPage() {
                         {e.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-bold text-slate-900 text-base">{e.name}</h3>
-                        <p className="text-slate-500 text-xs flex items-center gap-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-slate-900 text-base">{e.name}</h3>
+                          {e.source === 'AI_CHATBOT' ? (
+                            <span className="bg-sky-100 text-sky-800 border border-sky-300 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold flex items-center gap-1">
+                              <Bot className="w-3 h-3 text-sky-600" />
+                              <span>AI Chatbot Lead</span>
+                            </span>
+                          ) : (
+                            <span className="bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
+                              <FileText className="w-3 h-3 text-slate-500" />
+                              <span>Web Form</span>
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-slate-500 text-xs flex items-center gap-1 mt-0.5">
                           <Building2 className="w-3.5 h-3.5 text-slate-400" />
                           <span>{e.company}</span>
                         </p>
@@ -256,3 +326,4 @@ export default function AdminEnquiriesPage() {
     </div>
   );
 }
+
