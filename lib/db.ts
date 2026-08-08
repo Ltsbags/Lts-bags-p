@@ -1,7 +1,7 @@
 import 'server-only';
 import fs from 'fs';
 import path from 'path';
-import { Category, Product, Blog, Enquiry, SiteSettings } from './types';
+import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide } from './types';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
@@ -12,6 +12,7 @@ interface DatabaseSchema {
   blogs: Blog[];
   enquiries: Enquiry[];
   settings?: SiteSettings;
+  slides?: HeroSlide[];
 }
 
 const INITIAL_SETTINGS: SiteSettings = {
@@ -20,6 +21,48 @@ const INITIAL_SETTINGS: SiteSettings = {
   logoSubtitle: 'PRIVATE LIMITED',
   updatedAt: new Date().toISOString(),
 };
+
+const INITIAL_SLIDES: HeroSlide[] = [
+  {
+    id: 'slide-1',
+    title: 'Premium Custom Bag Manufacturing For Corporate Brands',
+    description: 'Direct factory supply of executive laptop bags, corporate tech backpacks, heavy travel duffels, and eco canvas totes.',
+    imageUrl: 'https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&q=80&w=1600',
+    buttonText: 'Request Bulk Quote',
+    buttonUrl: '/contact',
+    badgeText: 'ISO 9001:2015 CERTIFIED PLANT',
+    displayOrder: 1,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'slide-2',
+    title: 'Executive Tech Backpacks & Briefcases with Custom Logos',
+    description: 'Engineered with high-density ballistic nylon, anti-theft compartments, custom 3D embroidery, and fast turnaround times.',
+    imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=1600',
+    buttonText: 'Explore Product Catalog',
+    buttonUrl: '/products',
+    badgeText: 'DIRECT FACTORY WHOLESALE',
+    displayOrder: 2,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'slide-3',
+    title: 'Heavy Duty Travel Duffels & Custom Eco Canvas Totes',
+    description: 'Crafted for corporate gifting, sports events, and employee onboarding kits. Guaranteed quality and low minimum order quantities.',
+    imageUrl: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=1600',
+    buttonText: 'View Categories',
+    buttonUrl: '/categories',
+    badgeText: 'BULK B2B ORDERS',
+    displayOrder: 3,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
 
 const INITIAL_CATEGORIES: Category[] = [
   {
@@ -441,12 +484,18 @@ function ensureDataFile(): DatabaseSchema {
         blogs: INITIAL_BLOGS,
         enquiries: INITIAL_ENQUIRIES,
         settings: INITIAL_SETTINGS,
+        slides: INITIAL_SLIDES,
       };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
       return initialData;
     }
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
-    return JSON.parse(raw) as DatabaseSchema;
+    const parsed = JSON.parse(raw) as DatabaseSchema;
+    if (!parsed.slides || parsed.slides.length === 0) {
+      parsed.slides = INITIAL_SLIDES;
+      saveData(parsed);
+    }
+    return parsed;
   } catch (error) {
     console.error('Error reading DB file, using initial data:', error);
     return {
@@ -454,6 +503,7 @@ function ensureDataFile(): DatabaseSchema {
       products: INITIAL_PRODUCTS,
       blogs: INITIAL_BLOGS,
       enquiries: INITIAL_ENQUIRIES,
+      slides: INITIAL_SLIDES,
     };
   }
 }
@@ -703,11 +753,14 @@ export const db = {
   // Overview Stats
   getStats() {
     const data = ensureDataFile();
+    const slides = data.slides || INITIAL_SLIDES;
     return {
       totalProducts: data.products.length,
       totalCategories: data.categories.length,
       totalBlogs: data.blogs.length,
       totalEnquiries: data.enquiries.length,
+      totalSlides: slides.length,
+      activeSlides: slides.filter((s) => s.isActive).length,
       newEnquiriesCount: data.enquiries.filter((e) => e.status === 'NEW').length,
     };
   },
@@ -715,7 +768,14 @@ export const db = {
   // Site Settings & Logo
   getSettings(): SiteSettings {
     const data = ensureDataFile();
-    return data.settings || INITIAL_SETTINGS;
+    const settings = data.settings || INITIAL_SETTINGS;
+    // Auto-clean old relative /uploads/ paths that break in Cloud Run static server
+    if (settings.logoUrl && settings.logoUrl.startsWith('/uploads/')) {
+      settings.logoUrl = '';
+      data.settings = settings;
+      saveData(data);
+    }
+    return settings;
   },
   updateSettings(newSettings: Partial<SiteSettings>): SiteSettings {
     const data = ensureDataFile();
@@ -728,5 +788,82 @@ export const db = {
     data.settings = updated;
     saveData(data);
     return updated;
+  },
+
+  // Hero Slides
+  getSlides(activeOnly = false): HeroSlide[] {
+    const data = ensureDataFile();
+    let slides = data.slides || INITIAL_SLIDES;
+    if (activeOnly) {
+      slides = slides.filter((s) => s.isActive);
+    }
+    return slides.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  },
+
+  getSlideById(id: string): HeroSlide | null {
+    const data = ensureDataFile();
+    const slides = data.slides || INITIAL_SLIDES;
+    return slides.find((s) => s.id === id) || null;
+  },
+
+  createSlide(slideData: Omit<HeroSlide, 'id' | 'createdAt' | 'updatedAt'>): HeroSlide {
+    const data = ensureDataFile();
+    const slides = data.slides || INITIAL_SLIDES;
+    const maxOrder = slides.reduce((max, s) => Math.max(max, s.displayOrder || 0), 0);
+    const newSlide: HeroSlide = {
+      id: `slide-${Date.now()}`,
+      ...slideData,
+      displayOrder: slideData.displayOrder !== undefined ? slideData.displayOrder : maxOrder + 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    slides.push(newSlide);
+    data.slides = slides;
+    saveData(data);
+    return newSlide;
+  },
+
+  updateSlide(id: string, updates: Partial<Omit<HeroSlide, 'id' | 'createdAt'>>): HeroSlide | null {
+    const data = ensureDataFile();
+    const slides = data.slides || INITIAL_SLIDES;
+    const index = slides.findIndex((s) => s.id === id);
+    if (index === -1) return null;
+
+    const updated: HeroSlide = {
+      ...slides[index],
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    slides[index] = updated;
+    data.slides = slides;
+    saveData(data);
+    return updated;
+  },
+
+  deleteSlide(id: string): boolean {
+    const data = ensureDataFile();
+    const slides = data.slides || INITIAL_SLIDES;
+    const filtered = slides.filter((s) => s.id !== id);
+    if (filtered.length !== slides.length) {
+      data.slides = filtered;
+      saveData(data);
+      return true;
+    }
+    return false;
+  },
+
+  reorderSlides(slideOrders: { id: string; displayOrder: number }[]): boolean {
+    const data = ensureDataFile();
+    const slides = data.slides || INITIAL_SLIDES;
+    const orderMap = new Map(slideOrders.map((item) => [item.id, item.displayOrder]));
+    slides.forEach((slide) => {
+      if (orderMap.has(slide.id)) {
+        slide.displayOrder = orderMap.get(slide.id)!;
+        slide.updatedAt = new Date().toISOString();
+      }
+    });
+    data.slides = slides;
+    saveData(data);
+    return true;
   },
 };

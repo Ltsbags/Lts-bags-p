@@ -12,11 +12,12 @@ import {
   LayoutDashboard,
   ExternalLink,
   ShieldCheck,
-  Settings
+  Settings,
+  Sliders
 } from 'lucide-react';
 import Logo from './Logo';
 
-export default function AdminHeader() {
+export default function AdminHeader({ activeTab }: { activeTab?: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const [adminEmail, setAdminEmail] = useState('');
@@ -35,12 +36,13 @@ export default function AdminHeader() {
   };
 
   const navItems = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Products', href: '/admin/products', icon: Package },
-    { name: 'Categories', href: '/admin/categories', icon: Layers },
-    { name: 'Blog Posts', href: '/admin/blogs', icon: FileText },
-    { name: 'Quote Enquiries', href: '/admin/enquiries', icon: MessageSquare },
-    { name: 'Logo & Settings', href: '/admin/settings', icon: Settings },
+    { id: 'dashboard', name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+    { id: 'slides', name: 'Hero Slider', href: '/admin/slides', icon: Sliders },
+    { id: 'products', name: 'Products', href: '/admin/products', icon: Package },
+    { id: 'categories', name: 'Categories', href: '/admin/categories', icon: Layers },
+    { id: 'blogs', name: 'Blog Posts', href: '/admin/blogs', icon: FileText },
+    { id: 'enquiries', name: 'Quote Enquiries', href: '/admin/enquiries', icon: MessageSquare },
+    { id: 'settings', name: 'Logo & Settings', href: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -61,14 +63,14 @@ export default function AdminHeader() {
             <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href;
+                const isActive = pathname === item.href || activeTab === item.id;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
                       isActive
-                        ? 'bg-amber-600 text-white'
+                        ? 'bg-sky-500 text-slate-950 font-black shadow-md shadow-sky-500/20'
                         : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                     }`}
                   >
@@ -108,13 +110,13 @@ export default function AdminHeader() {
         <div className="md:hidden flex items-center gap-1 overflow-x-auto py-2 border-t border-slate-800/80 scrollbar-none">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || activeTab === item.id;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shrink-0 ${
-                  isActive ? 'bg-amber-600 text-white' : 'text-slate-400'
+                  isActive ? 'bg-sky-500 text-slate-950 font-black' : 'text-slate-400'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />

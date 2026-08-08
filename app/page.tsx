@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import HeroSlider from '@/components/HeroSlider';
 import ProductCard from '@/components/ProductCard';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ManufacturingProcess from '@/components/ManufacturingProcess';
@@ -37,6 +38,7 @@ export default function HomePage() {
   const categories = db.getCategories();
   const featuredProducts = db.getProducts().filter((p) => p.isFeatured || p.moq <= 100).slice(0, 6);
   const latestBlogs = db.getBlogs().slice(0, 3);
+  const slides = db.getSlides(true);
   const orgSchema = generateOrganizationSchema();
 
   return (
@@ -46,105 +48,8 @@ export default function HomePage() {
 
       <main className="flex-1">
         
-        {/* HERO SECTION */}
-        <section className="relative bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 text-white pt-12 pb-24 lg:pt-20 lg:pb-32 overflow-hidden">
-          
-          {/* Subtle Background Pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              
-              {/* Left Column Text & CTAs */}
-              <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-                
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 font-mono text-xs uppercase tracking-widest font-bold">
-                  <Award className="w-4 h-4 text-sky-400" />
-                  <span>ISO 9001:2015 Certified OEM / ODM Plant</span>
-                </div>
-
-                {/* Main Headline */}
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-serif leading-[1.15]">
-                  Premium Custom <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-sky-300 to-blue-500">Bag Manufacturing</span> For Corporate Brands
-                </h1>
-
-                {/* Subheading */}
-                <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  Direct factory supply of executive laptop bags, corporate tech backpacks, heavy travel duffels, and eco canvas totes. Engineered with precision stitching, custom 3D embroidery, and guaranteed on-time delivery.
-                </p>
-
-                {/* Key USPs list */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-xs font-semibold text-slate-300 max-w-lg mx-auto lg:mx-0">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Low MOQ (from 50 units)</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Custom Logo Printing</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>10,000+ Daily Capacity</span>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                  <Link
-                    href="/contact"
-                    className="w-full sm:w-auto bg-sky-600 hover:bg-sky-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-sky-600/25 hover:shadow-sky-500/40 transition-all flex items-center justify-center gap-2 text-base"
-                  >
-                    <Send className="w-5 h-5" />
-                    <span>Request Bulk Wholesale Quote</span>
-                  </Link>
-
-                  <Link
-                    href="/products"
-                    className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-4 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-base"
-                  >
-                    <span>Explore Products</span>
-                    <ArrowRight className="w-4 h-4 text-sky-400" />
-                  </Link>
-                </div>
-
-              </div>
-
-              {/* Right Column Visual Showcase */}
-              <div className="lg:col-span-5 relative">
-                <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
-                  <img
-                    src="https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&q=80&w=1000"
-                    alt="LTS BAGS Custom Bag Manufacturing Facility & Executive Laptop Bags"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                  />
-                  
-                  {/* Floating Overlay Card */}
-                  <div className="absolute bottom-4 left-4 right-4 bg-slate-950/90 backdrop-blur-md p-4 rounded-xl border border-slate-800 shadow-xl space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sky-400 text-xs font-bold uppercase tracking-wider font-mono">
-                        Direct Factory Production
-                      </span>
-                      <span className="text-emerald-400 text-xs font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/50">
-                        Active Bulk Batch
-                      </span>
-                    </div>
-                    <p className="text-white text-sm font-bold font-serif">
-                      1680D Executive Ballistic Nylon Laptop Backpack
-                    </p>
-                    <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-                      <span>Daily Output: 10,000+ Bags</span>
-                      <span className="text-sky-300 font-semibold">100% Quality Inspected</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
+        {/* HOMEPAGE HERO IMAGE SLIDER */}
+        <HeroSlider initialSlides={slides} autoplayInterval={5000} />
 
         {/* STATS STRIP */}
         <section className="bg-sky-600 dark:bg-sky-700 text-white py-8 border-y border-sky-700 dark:border-sky-800 shadow-inner transition-colors duration-200">

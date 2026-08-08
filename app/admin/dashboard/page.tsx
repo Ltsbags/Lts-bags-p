@@ -16,7 +16,8 @@ import {
   ArrowRight, 
   CheckCircle2, 
   Clock, 
-  Clock3
+  Clock3,
+  Sliders
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -25,6 +26,8 @@ export default function AdminDashboardPage() {
     totalCategories: 0,
     totalBlogs: 0,
     totalEnquiries: 0,
+    totalSlides: 0,
+    activeSlides: 0,
     newEnquiriesCount: 0,
   });
 
@@ -64,7 +67,14 @@ export default function AdminDashboardPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                href="/admin/slides"
+                className="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-sm"
+              >
+                <Sliders className="w-3.5 h-3.5" />
+                <span>Manage Hero Slider</span>
+              </Link>
               <Link
                 href="/admin/settings"
                 className="bg-slate-800 hover:bg-slate-900 text-slate-200 font-bold px-4 py-2 rounded-lg text-xs transition-colors flex items-center gap-1.5 shadow-sm"
@@ -82,7 +92,21 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Metric Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+            
+            {/* Hero Slides */}
+            <div className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-xs flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Hero Slides</p>
+                <p className="text-3xl font-black text-slate-900 font-serif mt-1">{stats.totalSlides || 3}</p>
+                <Link href="/admin/slides" className="text-[11px] text-sky-600 font-bold hover:underline mt-2 inline-block">
+                  Manage Slides →
+                </Link>
+              </div>
+              <div className="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 border border-sky-200 flex items-center justify-center shrink-0">
+                <Sliders className="w-5 h-5" />
+              </div>
+            </div>
             
             {/* Total Products */}
             <div className="bg-white rounded-xl p-6 border border-slate-200/90 shadow-xs flex items-center justify-between">

@@ -5,6 +5,20 @@ export interface SiteSettings {
   updatedAt?: string;
 }
 
+export interface HeroSlide {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  buttonText: string;
+  buttonUrl: string;
+  displayOrder: number;
+  isActive: boolean;
+  badgeText?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Category {
   id: string;
   name: string;
