@@ -1,7 +1,7 @@
 import 'server-only';
 import fs from 'fs';
 import path from 'path';
-import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide } from './types';
+import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide, Quotation, Payment, MediaAsset } from './types';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
@@ -13,6 +13,9 @@ interface DatabaseSchema {
   enquiries: Enquiry[];
   settings?: SiteSettings;
   slides?: HeroSlide[];
+  quotations?: Quotation[];
+  payments?: Payment[];
+  media?: MediaAsset[];
 }
 
 const INITIAL_SETTINGS: SiteSettings = {
@@ -652,6 +655,151 @@ const INITIAL_ENQUIRIES: Enquiry[] = [
   },
 ];
 
+const INITIAL_QUOTATIONS: Quotation[] = [
+  {
+    id: 'quote-101',
+    quoteNumber: 'QT-2026-101',
+    enquiryId: 'enq-101',
+    clientName: 'Rajesh Sharma',
+    companyName: 'Infosys Talent Engagement',
+    clientEmail: 'r.sharma@infosys-example.com',
+    clientMobile: '+91 98765 43210',
+    items: [
+      {
+        id: 'item-1',
+        productName: 'Apex Pro Tech 15.6 Inch Executive Laptop Backpack',
+        description: '1680D Ballistic Nylon, 3D Embroidered Company Logo, Custom Zipper Pullers',
+        quantity: 1200,
+        unitPrice: 850,
+        gstPercent: 18,
+        amount: 1020000,
+      },
+    ],
+    subtotal: 1020000,
+    gstAmount: 183600,
+    discount: 20000,
+    totalAmount: 1183600,
+    termsAndConditions: '1. 50% Advance with Purchase Order, balance 50% prior to dispatch.\n2. Delivery timeline: 12-15 days from sample sign-off.\n3. Price includes custom logo embroidery and individual polybag packing.',
+    notes: 'Sample approved by client on 02 August 2026.',
+    validUntil: '2026-08-31',
+    status: 'SENT',
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: 'quote-102',
+    quoteNumber: 'QT-2026-102',
+    enquiryId: 'enq-102',
+    clientName: 'Sarah Jenkins',
+    companyName: 'Apex Logistics & Freight',
+    clientEmail: 's.jenkins@apexlogistics-example.com',
+    clientMobile: '+1 415 555 0192',
+    items: [
+      {
+        id: 'item-2',
+        productName: 'Apex Voyager Leatherette Weekender Duffel Bag',
+        description: 'Debossed Corporate Logo, Brass Finish Hardware, Shoe Compartment',
+        quantity: 300,
+        unitPrice: 1250,
+        gstPercent: 18,
+        amount: 375000,
+      },
+    ],
+    subtotal: 375000,
+    gstAmount: 67500,
+    discount: 10000,
+    totalAmount: 432500,
+    termsAndConditions: '1. 50% Advance payment required for production start.\n2. Express air freight extra as per actuals.',
+    notes: 'Client requested debossed logo proof before mass cutting.',
+    validUntil: '2026-08-25',
+    status: 'ACCEPTED',
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+  },
+];
+
+const INITIAL_PAYMENTS: Payment[] = [
+  {
+    id: 'pay-101',
+    paymentNumber: 'PAY-2026-001',
+    quotationId: 'quote-102',
+    quoteNumber: 'QT-2026-102',
+    clientName: 'Sarah Jenkins',
+    companyName: 'Apex Logistics & Freight',
+    amount: 216250,
+    paymentMethod: 'BANK_TRANSFER',
+    transactionRef: 'UTR9823148123',
+    paymentDate: '2026-08-05',
+    status: 'VERIFIED',
+    notes: '50% advance deposit received via NEFT/RTGS.',
+    createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
+  },
+];
+
+const INITIAL_MEDIA: MediaAsset[] = [
+  {
+    id: 'med-1',
+    title: 'Apex Pro Tech Laptop Backpack - Front View',
+    url: 'https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&q=80&w=1000',
+    category: 'PRODUCTS',
+    fileSize: '1.2 MB',
+    dimensions: '1920x1080',
+    altText: 'Pro tech laptop backpack image',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'med-2',
+    title: 'Apex Voyager Leatherette Duffel Bag - Studio Shot',
+    url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=1000',
+    category: 'PRODUCTS',
+    fileSize: '1.5 MB',
+    dimensions: '1920x1080',
+    altText: 'Leatherette weekender duffel bag image',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'med-3',
+    title: 'EcoGuard Organic Cotton Canvas Tote - Eco Series',
+    url: 'https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&q=80&w=1000',
+    category: 'PRODUCTS',
+    fileSize: '950 KB',
+    dimensions: '1600x1200',
+    altText: 'Organic canvas tote bag image',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'med-4',
+    title: 'LTS Factory CNC Pattern Cutting Machine',
+    url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000',
+    category: 'FACTORY',
+    fileSize: '2.1 MB',
+    dimensions: '1920x1200',
+    altText: 'CNC pattern cutting machine at LTS BAGS plant',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'med-5',
+    title: 'Hero Banner - Corporate Custom Bag Lineup',
+    url: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&q=80&w=1600',
+    category: 'HERO',
+    fileSize: '2.8 MB',
+    dimensions: '1920x1080',
+    altText: 'Hero slider banner for corporate custom bags',
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'med-6',
+    title: 'ISO 9001:2015 Quality Certificate Seal',
+    url: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800',
+    category: 'CERTIFICATES',
+    fileSize: '450 KB',
+    dimensions: '800x800',
+    altText: 'ISO 9001 certification seal image',
+    createdAt: new Date().toISOString(),
+  },
+];
+
 function ensureDataFile(): DatabaseSchema {
   try {
     if (!fs.existsSync(DATA_DIR)) {
@@ -665,14 +813,33 @@ function ensureDataFile(): DatabaseSchema {
         enquiries: INITIAL_ENQUIRIES,
         settings: INITIAL_SETTINGS,
         slides: INITIAL_SLIDES,
+        quotations: INITIAL_QUOTATIONS,
+        payments: INITIAL_PAYMENTS,
+        media: INITIAL_MEDIA,
       };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
       return initialData;
     }
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
     const parsed = JSON.parse(raw) as DatabaseSchema;
+    let dirty = false;
     if (!parsed.slides || parsed.slides.length === 0) {
       parsed.slides = INITIAL_SLIDES;
+      dirty = true;
+    }
+    if (!parsed.quotations || parsed.quotations.length === 0) {
+      parsed.quotations = INITIAL_QUOTATIONS;
+      dirty = true;
+    }
+    if (!parsed.payments || parsed.payments.length === 0) {
+      parsed.payments = INITIAL_PAYMENTS;
+      dirty = true;
+    }
+    if (!parsed.media || parsed.media.length === 0) {
+      parsed.media = INITIAL_MEDIA;
+      dirty = true;
+    }
+    if (dirty) {
       saveData(parsed);
     }
     return parsed;
@@ -684,6 +851,9 @@ function ensureDataFile(): DatabaseSchema {
       blogs: INITIAL_BLOGS,
       enquiries: INITIAL_ENQUIRIES,
       slides: INITIAL_SLIDES,
+      quotations: INITIAL_QUOTATIONS,
+      payments: INITIAL_PAYMENTS,
+      media: INITIAL_MEDIA,
     };
   }
 }
@@ -1064,5 +1234,174 @@ export const db = {
     data.slides = slides;
     saveData(data);
     return true;
+  },
+
+  // Quotations
+  getQuotations(): Quotation[] {
+    const data = ensureDataFile();
+    return data.quotations || INITIAL_QUOTATIONS;
+  },
+  getQuotationById(id: string): Quotation | undefined {
+    const data = ensureDataFile();
+    const quotes = data.quotations || INITIAL_QUOTATIONS;
+    return quotes.find((q) => q.id === id);
+  },
+  saveQuotation(quote: Partial<Quotation> & { clientName: string; totalAmount: number }): Quotation {
+    const data = ensureDataFile();
+    const quotes = data.quotations || INITIAL_QUOTATIONS;
+    const index = quote.id ? quotes.findIndex((q) => q.id === quote.id) : -1;
+    const now = new Date().toISOString();
+
+    if (index >= 0) {
+      const updated: Quotation = {
+        ...quotes[index],
+        ...quote,
+        updatedAt: now,
+      };
+      quotes[index] = updated;
+      data.quotations = quotes;
+      saveData(data);
+      return updated;
+    } else {
+      const newQuote: Quotation = {
+        id: 'quote-' + Date.now(),
+        quoteNumber: quote.quoteNumber || 'QT-2026-' + (quotes.length + 101),
+        enquiryId: quote.enquiryId,
+        clientName: quote.clientName,
+        companyName: quote.companyName || '',
+        clientEmail: quote.clientEmail || '',
+        clientMobile: quote.clientMobile || '',
+        items: quote.items || [],
+        subtotal: quote.subtotal || 0,
+        gstAmount: quote.gstAmount || 0,
+        discount: quote.discount || 0,
+        totalAmount: quote.totalAmount,
+        termsAndConditions: quote.termsAndConditions || 'Standard 50% advance, balance on dispatch.',
+        notes: quote.notes || '',
+        validUntil: quote.validUntil || new Date(Date.now() + 86400000 * 30).toISOString().split('T')[0],
+        status: quote.status || 'DRAFT',
+        createdAt: now,
+        updatedAt: now,
+      };
+      quotes.unshift(newQuote);
+      data.quotations = quotes;
+      saveData(data);
+      return newQuote;
+    }
+  },
+  deleteQuotation(id: string): boolean {
+    const data = ensureDataFile();
+    const quotes = data.quotations || INITIAL_QUOTATIONS;
+    const filtered = quotes.filter((q) => q.id !== id);
+    if (filtered.length !== quotes.length) {
+      data.quotations = filtered;
+      saveData(data);
+      return true;
+    }
+    return false;
+  },
+
+  // Payments
+  getPayments(): Payment[] {
+    const data = ensureDataFile();
+    return data.payments || INITIAL_PAYMENTS;
+  },
+  savePayment(payment: Partial<Payment> & { clientName: string; amount: number }): Payment {
+    const data = ensureDataFile();
+    const payments = data.payments || INITIAL_PAYMENTS;
+    const index = payment.id ? payments.findIndex((p) => p.id === payment.id) : -1;
+    const now = new Date().toISOString();
+
+    if (index >= 0) {
+      const updated: Payment = {
+        ...payments[index],
+        ...payment,
+        updatedAt: now,
+      };
+      payments[index] = updated;
+      data.payments = payments;
+      saveData(data);
+      return updated;
+    } else {
+      const newPay: Payment = {
+        id: 'pay-' + Date.now(),
+        paymentNumber: payment.paymentNumber || 'PAY-2026-' + String(payments.length + 1).padStart(3, '0'),
+        quotationId: payment.quotationId,
+        quoteNumber: payment.quoteNumber,
+        clientName: payment.clientName,
+        companyName: payment.companyName || '',
+        amount: payment.amount,
+        paymentMethod: payment.paymentMethod || 'BANK_TRANSFER',
+        transactionRef: payment.transactionRef || 'N/A',
+        paymentDate: payment.paymentDate || new Date().toISOString().split('T')[0],
+        status: payment.status || 'VERIFIED',
+        notes: payment.notes || '',
+        createdAt: now,
+        updatedAt: now,
+      };
+      payments.unshift(newPay);
+      data.payments = payments;
+      saveData(data);
+      return newPay;
+    }
+  },
+  deletePayment(id: string): boolean {
+    const data = ensureDataFile();
+    const payments = data.payments || INITIAL_PAYMENTS;
+    const filtered = payments.filter((p) => p.id !== id);
+    if (filtered.length !== payments.length) {
+      data.payments = filtered;
+      saveData(data);
+      return true;
+    }
+    return false;
+  },
+
+  // Media
+  getMedia(): MediaAsset[] {
+    const data = ensureDataFile();
+    return data.media || INITIAL_MEDIA;
+  },
+  saveMedia(asset: Partial<MediaAsset> & { title: string; url: string }): MediaAsset {
+    const data = ensureDataFile();
+    const media = data.media || INITIAL_MEDIA;
+    const index = asset.id ? media.findIndex((m) => m.id === asset.id) : -1;
+
+    if (index >= 0) {
+      const updated: MediaAsset = {
+        ...media[index],
+        ...asset,
+      };
+      media[index] = updated;
+      data.media = media;
+      saveData(data);
+      return updated;
+    } else {
+      const newMedia: MediaAsset = {
+        id: 'med-' + Date.now(),
+        title: asset.title,
+        url: asset.url,
+        category: asset.category || 'PRODUCTS',
+        fileSize: asset.fileSize || '1.0 MB',
+        dimensions: asset.dimensions || '1920x1080',
+        altText: asset.altText || asset.title,
+        createdAt: new Date().toISOString(),
+      };
+      media.unshift(newMedia);
+      data.media = media;
+      saveData(data);
+      return newMedia;
+    }
+  },
+  deleteMedia(id: string): boolean {
+    const data = ensureDataFile();
+    const media = data.media || INITIAL_MEDIA;
+    const filtered = media.filter((m) => m.id !== id);
+    if (filtered.length !== media.length) {
+      data.media = filtered;
+      saveData(data);
+      return true;
+    }
+    return false;
   },
 };

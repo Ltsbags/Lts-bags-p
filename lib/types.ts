@@ -1,3 +1,13 @@
+export interface BankDetails {
+  accountName?: string;
+  bankName?: string;
+  accountNumber?: string;
+  ifscCode?: string;
+  branchName?: string;
+  upiId?: string;
+  upiQrCodeUrl?: string;
+}
+
 export interface CompanyContactInfo {
   companyName?: string;
   tagline?: string;
@@ -16,6 +26,7 @@ export interface CompanyContactInfo {
   socialInstagram?: string;
   socialYoutube?: string;
   socialWhatsapp?: string;
+  bankDetails?: BankDetails;
 }
 
 export interface StatItem {
@@ -204,4 +215,63 @@ export interface Enquiry {
   source?: 'FORM' | 'AI_CHATBOT';
   createdAt: string;
   updatedAt: string;
+}
+
+export interface QuotationItem {
+  id: string;
+  productName: string;
+  description?: string;
+  quantity: number;
+  unitPrice: number;
+  gstPercent: number; // e.g. 18
+  amount: number;
+}
+
+export interface Quotation {
+  id: string;
+  quoteNumber: string; // e.g., QT-2026-101
+  enquiryId?: string;
+  clientName: string;
+  companyName: string;
+  clientEmail: string;
+  clientMobile: string;
+  items: QuotationItem[];
+  subtotal: number;
+  gstAmount: number;
+  discount: number;
+  totalAmount: number;
+  termsAndConditions?: string;
+  notes?: string;
+  validUntil: string;
+  status: 'DRAFT' | 'SENT' | 'ACCEPTED' | 'REJECTED' | 'PAID';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Payment {
+  id: string;
+  paymentNumber: string; // e.g. PAY-2026-001
+  quotationId?: string;
+  quoteNumber?: string;
+  clientName: string;
+  companyName: string;
+  amount: number;
+  paymentMethod: 'BANK_TRANSFER' | 'UPI' | 'CHEQUE' | 'CREDIT_CARD' | 'CASH';
+  transactionRef: string; // UTR or Cheque No or Txn ID
+  paymentDate: string;
+  status: 'PENDING' | 'VERIFIED' | 'FAILED';
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MediaAsset {
+  id: string;
+  title: string;
+  url: string;
+  category: 'PRODUCTS' | 'HERO' | 'FACTORY' | 'CERTIFICATES' | 'LOGOS' | 'GENERAL';
+  fileSize?: string;
+  dimensions?: string;
+  altText?: string;
+  createdAt: string;
 }

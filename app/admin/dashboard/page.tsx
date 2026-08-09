@@ -17,7 +17,12 @@ import {
   CheckCircle2, 
   Clock, 
   Clock3,
-  Sliders
+  Sliders,
+  Image as ImageIcon,
+  FileSpreadsheet,
+  CreditCard,
+  Globe,
+  Settings
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -91,86 +96,45 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Metric Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
-            
-            {/* Hero Slides */}
-            <div className="bg-white rounded-xl p-5 border border-slate-200/90 shadow-xs flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Hero Slides</p>
-                <p className="text-3xl font-black text-slate-900 font-serif mt-1">{stats.totalSlides || 3}</p>
-                <Link href="/admin/slides" className="text-[11px] text-sky-600 font-bold hover:underline mt-2 inline-block">
-                  Manage Slides →
-                </Link>
-              </div>
-              <div className="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 border border-sky-200 flex items-center justify-center shrink-0">
-                <Sliders className="w-5 h-5" />
-              </div>
+          {/* All 11 Admin Panel Modules Quick Access Grid */}
+          <div>
+            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wider font-mono mb-3">
+              Admin Panel Quick Navigation
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {[
+                { name: 'Products', href: '/admin/products', icon: Package, desc: 'Catalog & Specs', color: 'bg-amber-500/10 text-amber-600 border-amber-200' },
+                { name: 'Categories', href: '/admin/categories', icon: Layers, desc: 'Bag Categories', color: 'bg-blue-500/10 text-blue-600 border-blue-200' },
+                { name: 'Blog', href: '/admin/blogs', icon: FileText, desc: 'B2B Insights', color: 'bg-purple-500/10 text-purple-600 border-purple-200' },
+                { name: 'Homepage Slider', href: '/admin/slides', icon: Sliders, desc: 'Hero Banners', color: 'bg-sky-500/10 text-sky-600 border-sky-200' },
+                { name: 'Gallery / Media', href: '/admin/gallery', icon: ImageIcon, desc: 'Image Library', color: 'bg-indigo-500/10 text-indigo-600 border-indigo-200' },
+                { name: 'Enquiries', href: '/admin/enquiries', icon: MessageSquare, desc: 'Quote Leads', color: 'bg-emerald-500/10 text-emerald-600 border-emerald-200' },
+                { name: 'Quotations', href: '/admin/quotations', icon: FileSpreadsheet, desc: 'Proforma Invoices', color: 'bg-teal-500/10 text-teal-600 border-teal-200' },
+                { name: 'Payments', href: '/admin/payments', icon: CreditCard, desc: 'Collections & UTR', color: 'bg-green-500/10 text-green-600 border-green-200' },
+                { name: 'Website Content', href: '/admin/content', icon: Globe, desc: 'About, FAQ & CMS', color: 'bg-rose-500/10 text-rose-600 border-rose-200' },
+                { name: 'Website Settings', href: '/admin/settings', icon: Settings, desc: 'Company & Branding', color: 'bg-slate-500/10 text-slate-700 border-slate-200' },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="p-3.5 bg-white rounded-xl border border-slate-200 hover:border-sky-500 hover:shadow-md transition-all group flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className={`p-2 rounded-lg border ${item.color}`}>
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-slate-900 group-hover:text-sky-600 transition-colors">{item.name}</h3>
+                      <p className="text-[10px] text-slate-500 mt-0.5">{item.desc}</p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-            
-            {/* Total Products */}
-            <div className="bg-white rounded-xl p-6 border border-slate-200/90 shadow-xs flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Total Products</p>
-                <p className="text-3xl font-black text-slate-900 font-serif mt-1">{stats.totalProducts}</p>
-                <Link href="/admin/products" className="text-[11px] text-amber-700 font-bold hover:underline mt-2 inline-block">
-                  Manage Products →
-                </Link>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center shrink-0">
-                <Package className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* Total Categories */}
-            <div className="bg-white rounded-xl p-6 border border-slate-200/90 shadow-xs flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Bag Categories</p>
-                <p className="text-3xl font-black text-slate-900 font-serif mt-1">{stats.totalCategories}</p>
-                <Link href="/admin/categories" className="text-[11px] text-amber-700 font-bold hover:underline mt-2 inline-block">
-                  Manage Categories →
-                </Link>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center shrink-0">
-                <Layers className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* Total Blogs */}
-            <div className="bg-white rounded-xl p-6 border border-slate-200/90 shadow-xs flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Blog Posts</p>
-                <p className="text-3xl font-black text-slate-900 font-serif mt-1">{stats.totalBlogs}</p>
-                <Link href="/admin/blogs" className="text-[11px] text-amber-700 font-bold hover:underline mt-2 inline-block">
-                  Manage B2B Blogs →
-                </Link>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 border border-purple-200 flex items-center justify-center shrink-0">
-                <FileText className="w-6 h-6" />
-              </div>
-            </div>
-
-            {/* Total Enquiries */}
-            <div className="bg-white rounded-xl p-6 border border-slate-200/90 shadow-xs flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Client Enquiries</p>
-                <p className="text-3xl font-black text-slate-900 font-serif mt-1">
-                  {stats.totalEnquiries}
-                  {stats.newEnquiriesCount > 0 && (
-                    <span className="ml-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                      {stats.newEnquiriesCount} New
-                    </span>
-                  )}
-                </p>
-                <Link href="/admin/enquiries" className="text-[11px] text-amber-700 font-bold hover:underline mt-2 inline-block">
-                  View All Enquiries →
-                </Link>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
-                <MessageSquare className="w-6 h-6" />
-              </div>
-            </div>
-
           </div>
 
           {/* Recent Enquiries Section */}

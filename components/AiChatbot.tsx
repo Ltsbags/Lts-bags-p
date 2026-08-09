@@ -13,7 +13,8 @@ import {
   FileText, 
   Sparkles, 
   CheckCircle2, 
-  RefreshCw
+  RefreshCw,
+  PhoneCall
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -27,18 +28,18 @@ interface ChatMessage {
 }
 
 const SUGGESTED_QUESTIONS = [
-  '📦 What is your Minimum Order Quantity (MOQ)?',
-  '🎨 Custom logo printing & embroidery options?',
-  '🎒 Explore Executive & Laptop Backpacks',
-  '🏭 Where is your factory located?',
-  '📑 Request a Bulk Quotation',
-  '✈ Global export & shipping process?'
+  'Show me your products',
+  'I need a bulk order',
+  'Do you manufacture custom bags?',
+  'I need a quotation',
+  'What is your MOQ?',
+  'I want to contact your sales team',
 ];
 
 const INITIAL_WELCOME_MSG: ChatMessage = {
   id: 'welcome-1',
   sender: 'bot',
-  text: 'Hello! 👋 Welcome to LTS BAGS PRIVATE LIMITED. I am your AI Factory Assistant.\n\nI can help you with product catalog specs, custom logo branding, MOQs, materials, and wholesale quotations. How can I assist your business today?',
+  text: 'Hello! 👋 Welcome to **LTS BAGS PRIVATE LIMITED**.\n\nI am your official AI Factory Specialist. I can answer questions about our bag catalog, specifications, materials, custom logo branding, MOQs, and bulk factory orders. How can I assist your business today?',
   timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
 };
 
@@ -55,7 +56,7 @@ export default function AiChatbot() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
 
-  // Lazy state initialization to satisfy ESLint set-state-in-effect rule
+  // Lazy state initialization
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -67,7 +68,7 @@ export default function AiChatbot() {
           }
         }
       } catch {
-        // Ignore fallback
+        // Fallback to default
       }
     }
     return [INITIAL_WELCOME_MSG];
@@ -77,23 +78,23 @@ export default function AiChatbot() {
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [contactPhone, setContactPhone] = useState('+919833598338');
 
-  // Lead Form State
+  // Lead Form State (Collects: Name, Company Name, Mobile Number, Email, Product, Required Quantity, Requirement)
   const [leadName, setLeadName] = useState('');
   const [leadCompany, setLeadCompany] = useState('');
-  const [leadEmail, setLeadEmail] = useState('');
   const [leadMobile, setLeadMobile] = useState('');
+  const [leadEmail, setLeadEmail] = useState('');
   const [leadProduct, setLeadProduct] = useState('');
   const [leadQuantity, setLeadQuantity] = useState('200');
-  const [leadMessage, setLeadMessage] = useState('');
+  const [leadRequirement, setLeadRequirement] = useState('');
   const [submittingLead, setSubmittingLead] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch contact settings for WhatsApp link
+  // Fetch settings for WhatsApp contact phone
   useEffect(() => {
     fetch('/api/settings')
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data?.contactInfo?.socialWhatsapp || data?.contactInfo?.phone1) {
           const ph = data.contactInfo.socialWhatsapp || data.contactInfo.phone1;
           setContactPhone(ph.replace(/[^\d+]/g, ''));
@@ -108,18 +109,19 @@ export default function AiChatbot() {
       try {
         localStorage.setItem('lts_bags_ai_chat_messages', JSON.stringify(messages));
       } catch {
-        // Ignore
+        // Ignore storage errors
       }
     }
   }, [messages]);
 
-  // Scroll to bottom
+  // Auto-scroll to bottom
   useEffect(() => {
     if (isOpen && !isMinimized) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen, isMinimized, showLeadForm, loading]);
 
+  // Don't render on Admin Panel routes
   if (pathname?.startsWith('/admin')) {
     return null;
   }
@@ -142,7 +144,7 @@ export default function AiChatbot() {
     setLoading(true);
 
     try {
-      const apiMessages = newHistory.map(m => ({
+      const apiMessages = newHistory.map((m) => ({
         role: m.sender === 'user' ? 'user' : 'model',
         content: m.text,
       }));
@@ -157,7 +159,9 @@ export default function AiChatbot() {
       });
 
       const data = await res.json();
-      const replyText = data.reply || 'Thank you! For urgent quotation requirements, please contact direct sales at +91 98335 98338.';
+      const replyText =
+        data.reply ||
+        'Thank you! For direct sales assistance, please call our team at +91 98335 98338 or click "Request Quote" above.';
 
       const botMsg: ChatMessage = {
         id: generateUniqueId('bot'),
@@ -166,26 +170,27 @@ export default function AiChatbot() {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 
-      setMessages(prev => [...prev, botMsg]);
+      setMessages((prev) => [...prev, botMsg]);
 
-      // Trigger lead form if user asks for quote or price
+      // Automatically pop quote drawer if query asks for quotation/price/order
       const lower = textToSend.toLowerCase();
       if (
-        lower.includes('quote') || 
-        lower.includes('order') || 
+        lower.includes('quote') ||
+        lower.includes('order') ||
         lower.includes('sample') ||
-        lower.includes('price')
+        lower.includes('price') ||
+        lower.includes('quotation')
       ) {
         setShowLeadForm(true);
       }
     } catch (err) {
-      console.error('Chat submit error:', err);
-      setMessages(prev => [
+      console.error('Chat error:', err);
+      setMessages((prev) => [
         ...prev,
         {
           id: generateUniqueId('err'),
           sender: 'bot',
-          text: 'I am experiencing a temporary connection issue. You can click "Request Quote" above to leave your details or reach our sales team directly on WhatsApp!',
+          text: 'I encountered a brief connection issue. You can click "Request Quote" above to leave your details or message our team directly on WhatsApp!',
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
@@ -197,7 +202,7 @@ export default function AiChatbot() {
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!leadName || (!leadEmail && !leadMobile)) {
-      alert('Please provide your Name and at least Email or Mobile Number.');
+      alert('Please enter your Name and at least Email or Mobile Number.');
       return;
     }
 
@@ -211,11 +216,11 @@ export default function AiChatbot() {
           lead: {
             name: leadName,
             company: leadCompany,
-            email: leadEmail,
             mobile: leadMobile,
+            email: leadEmail,
             productRequirement: leadProduct || 'Custom Bulk Bag Enquiry',
             quantity: leadQuantity,
-            message: leadMessage || 'Submitted via AI Support Chatbot',
+            message: leadRequirement || 'Submitted via LTS BAGS AI Chatbot',
           },
         }),
       });
@@ -225,25 +230,25 @@ export default function AiChatbot() {
       if (data.success) {
         const leadRef = data.enquiryId || 'LTS-' + (Date.now() % 10000);
         setShowLeadForm(false);
-        
+
         // Reset form
         setLeadName('');
         setLeadCompany('');
-        setLeadEmail('');
         setLeadMobile('');
+        setLeadEmail('');
         setLeadProduct('');
-        setLeadMessage('');
+        setLeadRequirement('');
 
-        // Append confirmation to chat
+        // Append confirmation message into chat history
         const confirmMsg: ChatMessage = {
           id: generateUniqueId('lead-confirm'),
           sender: 'bot',
-          text: `✅ **Thank You! Your Quotation Request has been saved.**\n\n- **Reference ID:** \`${leadRef}\`\n- **Product Requirement:** ${leadProduct || 'Bulk Custom Bags'}\n- **Target Volume:** ${leadQuantity} units\n\nOur sales engineering team will review your specs and email/call you within 24 hours with custom factory pricing!`,
+          text: `✅ **Thank You! Your Quotation Request has been saved to our database.**\n\n• **Enquiry Ref:** \`${leadRef}\`\n• **Product:** ${leadProduct || 'Bulk Custom Bags'}\n• **Target Volume:** ${leadQuantity} units\n\nOur sales engineering team will review your specifications and get back to you within 24 hours with custom factory pricing!`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           leadSuccess: true,
           leadRefId: leadRef,
         };
-        setMessages(prev => [...prev, confirmMsg]);
+        setMessages((prev) => [...prev, confirmMsg]);
       } else {
         alert(data.error || 'Failed to submit quote request. Please try again.');
       }
@@ -256,12 +261,12 @@ export default function AiChatbot() {
   };
 
   const handleClearChat = () => {
-    if (confirm('Clear entire chat conversation history?')) {
+    if (confirm('Clear chat history?')) {
       const initial: ChatMessage[] = [
         {
           id: generateUniqueId('welcome-reset'),
           sender: 'bot',
-          text: 'Chat cleared. 👋 How can LTS BAGS AI Support assist your factory order today?',
+          text: 'Chat history cleared. 👋 How can LTS BAGS AI Support help you today?',
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
       ];
@@ -277,15 +282,15 @@ export default function AiChatbot() {
   )}`;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 pointer-events-auto print:hidden font-sans">
+    <div className="fixed bottom-5 right-5 z-50 pointer-events-auto print:hidden font-sans">
       
       {/* Expanded Chat Dialog Window */}
       {isOpen && (
         <div 
           className={`bg-slate-900 border border-slate-700 text-slate-100 rounded-3xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
             isMinimized 
-              ? 'w-80 h-16 mb-3' 
-              : 'w-full sm:w-[420px] h-[600px] max-h-[85vh] mb-3'
+              ? 'w-80 h-16 mb-2' 
+              : 'w-full sm:w-[420px] h-[610px] max-h-[85vh] mb-2'
           }`}
         >
           {/* Header */}
@@ -301,25 +306,25 @@ export default function AiChatbot() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-white text-sm tracking-tight font-serif">LTS BAGS AI Support</h3>
+                  <h3 className="font-bold text-white text-sm tracking-tight font-serif">LTS BAGS AI Assistant</h3>
                   <span className="bg-sky-500/20 text-sky-300 border border-sky-500/30 text-[10px] font-mono font-bold px-1.5 py-0.2 rounded uppercase">
-                    Factory AI
+                    Gemini AI
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-400 flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-amber-400" />
-                  <span>Instant Database Answers & Bulk Quotes</span>
+                  <span>Real Factory Catalog & Instant Quotes</span>
                 </p>
               </div>
             </div>
 
-            {/* Header Controls */}
+            {/* Header Action Controls */}
             <div className="flex items-center gap-1">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Open WhatsApp Support"
+                title="WhatsApp Support"
                 className="p-1.5 hover:bg-emerald-600/20 text-emerald-400 hover:text-emerald-300 rounded-lg transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
@@ -327,7 +332,7 @@ export default function AiChatbot() {
 
               <button
                 onClick={() => setShowLeadForm(!showLeadForm)}
-                title="Request Bulk Quote"
+                title="Request Quotation"
                 className={`px-2 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
                   showLeadForm
                     ? 'bg-amber-500 text-slate-950 shadow-md'
@@ -340,7 +345,7 @@ export default function AiChatbot() {
 
               <button
                 onClick={handleClearChat}
-                title="Clear Chat History"
+                title="Clear History"
                 className="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
@@ -366,7 +371,7 @@ export default function AiChatbot() {
 
           {!isMinimized && (
             <>
-              {/* Main Body */}
+              {/* Main Chat Stream */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs scrollbar-thin scrollbar-thumb-slate-800">
                 
                 {/* Messages Stream */}
@@ -380,7 +385,7 @@ export default function AiChatbot() {
                         msg.sender === 'user'
                           ? 'bg-sky-600 text-white rounded-br-none'
                           : msg.leadSuccess
-                          ? 'bg-emerald-950/80 border border-emerald-500/40 text-emerald-100 rounded-bl-none'
+                          ? 'bg-emerald-950/90 border border-emerald-500/40 text-emerald-100 rounded-bl-none'
                           : 'bg-slate-800/90 border border-slate-700/80 text-slate-200 rounded-bl-none'
                       }`}
                     >
@@ -396,23 +401,23 @@ export default function AiChatbot() {
                   </div>
                 ))}
 
-                {/* Loading Indicator */}
+                {/* Loading / Typing Indicator */}
                 {loading && (
                   <div className="flex justify-start">
                     <div className="bg-slate-800 border border-slate-700 rounded-2xl p-3.5 rounded-bl-none flex items-center gap-2 text-slate-400">
                       <RefreshCw className="w-3.5 h-3.5 animate-spin text-sky-400" />
-                      <span className="text-xs font-mono">Searching factory catalog database...</span>
+                      <span className="text-xs font-mono">Gemini AI searching factory catalog...</span>
                     </div>
                   </div>
                 )}
 
-                {/* In-Chat Interactive Lead Collector Form Drawer */}
+                {/* In-Chat Request Quotation Form Drawer */}
                 {showLeadForm && (
-                  <div className="bg-slate-950/90 border border-amber-500/40 rounded-2xl p-4 shadow-xl space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                  <div className="bg-slate-950/95 border border-amber-500/40 rounded-2xl p-4 shadow-xl space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                       <div className="flex items-center gap-2 text-amber-400 font-bold">
                         <FileText className="w-4 h-4" />
-                        <span className="font-serif text-sm">Submit Wholesale Quote Lead</span>
+                        <span className="font-serif text-sm">Request Wholesale Quotation</span>
                       </div>
                       <button
                         onClick={() => setShowLeadForm(false)}
@@ -422,15 +427,15 @@ export default function AiChatbot() {
                       </button>
                     </div>
 
-                    <form onSubmit={handleLeadSubmit} className="space-y-2.5 text-xs">
+                    <form onSubmit={handleLeadSubmit} className="space-y-2 text-xs">
                       <div>
                         <label className="block text-[11px] font-semibold text-slate-400 mb-0.5">
-                          Customer Name *
+                          Name *
                         </label>
                         <input
                           type="text"
                           required
-                          placeholder="e.g. Rahul Verma"
+                          placeholder="Your Name"
                           value={leadName}
                           onChange={(e) => setLeadName(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none focus:border-amber-400"
@@ -444,7 +449,7 @@ export default function AiChatbot() {
                           </label>
                           <input
                             type="text"
-                            placeholder="e.g. Infosys / TCS"
+                            placeholder="Company / Brand"
                             value={leadCompany}
                             onChange={(e) => setLeadCompany(e.target.value)}
                             className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none focus:border-amber-400"
@@ -457,7 +462,7 @@ export default function AiChatbot() {
                           <input
                             type="tel"
                             required
-                            placeholder="+91 98765 43210"
+                            placeholder="+91 Mobile No"
                             value={leadMobile}
                             onChange={(e) => setLeadMobile(e.target.value)}
                             className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none focus:border-amber-400"
@@ -468,12 +473,12 @@ export default function AiChatbot() {
                       <div className="grid grid-cols-2 gap-2">
                         <div>
                           <label className="block text-[11px] font-semibold text-slate-400 mb-0.5">
-                            Email Address *
+                            Email *
                           </label>
                           <input
                             type="email"
                             required
-                            placeholder="rahul@company.com"
+                            placeholder="email@company.com"
                             value={leadEmail}
                             onChange={(e) => setLeadEmail(e.target.value)}
                             className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none focus:border-amber-400"
@@ -481,7 +486,7 @@ export default function AiChatbot() {
                         </div>
                         <div>
                           <label className="block text-[11px] font-semibold text-slate-400 mb-0.5">
-                            Target Quantity
+                            Required Quantity
                           </label>
                           <input
                             type="number"
@@ -496,11 +501,11 @@ export default function AiChatbot() {
 
                       <div>
                         <label className="block text-[11px] font-semibold text-slate-400 mb-0.5">
-                          Product Interested In
+                          Product
                         </label>
                         <input
                           type="text"
-                          placeholder="e.g. 1680D Executive Laptop Backpack / Leatherette Briefcase"
+                          placeholder="e.g. Laptop Backpack / Duffel Bag / Corporate Tote"
                           value={leadProduct}
                           onChange={(e) => setLeadProduct(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none focus:border-amber-400"
@@ -509,13 +514,13 @@ export default function AiChatbot() {
 
                       <div>
                         <label className="block text-[11px] font-semibold text-slate-400 mb-0.5">
-                          Custom Message / Branding Specs
+                          Requirement / Branding Details
                         </label>
                         <textarea
                           rows={2}
-                          placeholder="Specific fabric, logo embroidery, or target budget details..."
-                          value={leadMessage}
-                          onChange={(e) => setLeadMessage(e.target.value)}
+                          placeholder="Logo embroidery, specific fabric density, target budget..."
+                          value={leadRequirement}
+                          onChange={(e) => setLeadRequirement(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white outline-none focus:border-amber-400"
                         />
                       </div>
@@ -533,7 +538,7 @@ export default function AiChatbot() {
                         ) : (
                           <>
                             <CheckCircle2 className="w-4 h-4" />
-                            <span>Submit Factory Quote Request</span>
+                            <span>Submit Quotation Lead</span>
                           </>
                         )}
                       </button>
@@ -547,12 +552,12 @@ export default function AiChatbot() {
                     <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">
                       Suggested Questions:
                     </p>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                       {SUGGESTED_QUESTIONS.map((q, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleSendMessage(q)}
-                          className="bg-slate-800/80 hover:bg-sky-600/30 text-sky-300 hover:text-sky-100 border border-sky-500/20 hover:border-sky-400/50 rounded-xl px-2.5 py-1.5 text-[11px] font-medium transition-all text-left"
+                          className="bg-slate-800/80 hover:bg-sky-600/30 text-sky-300 hover:text-sky-100 border border-sky-500/20 hover:border-sky-400/50 rounded-xl px-2.5 py-1.5 text-[11px] font-medium transition-all text-left truncate"
                         >
                           {q}
                         </button>
@@ -564,7 +569,7 @@ export default function AiChatbot() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Bottom Quick Action Bar & Input */}
+              {/* Bottom Actions & Input Bar */}
               <div className="bg-slate-950 border-t border-slate-800 p-3 space-y-2 shrink-0">
                 <div className="flex items-center justify-between text-[11px] px-1">
                   <button
@@ -572,8 +577,9 @@ export default function AiChatbot() {
                     className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-semibold"
                   >
                     <FileText className="w-3.5 h-3.5" />
-                    <span>Request Bulk Quote</span>
+                    <span>Request Quote</span>
                   </button>
+
                   <a
                     href={whatsappUrl}
                     target="_blank"
@@ -583,12 +589,20 @@ export default function AiChatbot() {
                     <MessageCircle className="w-3.5 h-3.5" />
                     <span>WhatsApp Sales</span>
                   </a>
+
+                  <a
+                    href="tel:+919833598338"
+                    className="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold"
+                  >
+                    <PhoneCall className="w-3 h-3" />
+                    <span>Call Sales</span>
+                  </a>
                 </div>
 
                 <div className="flex items-center gap-2 bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-1.5 focus-within:border-sky-400 transition-colors">
                   <input
                     type="text"
-                    placeholder="Ask about bag specs, MOQs, materials..."
+                    placeholder="Ask about bag specs, MOQs, custom logo printing..."
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
@@ -609,7 +623,7 @@ export default function AiChatbot() {
         </div>
       )}
 
-      {/* Floating Trigger Button (Bottom Right) */}
+      {/* Floating Chat Trigger Button */}
       {!isOpen && (
         <button
           onClick={() => {
@@ -617,24 +631,24 @@ export default function AiChatbot() {
             setIsMinimized(false);
           }}
           aria-label="Open LTS BAGS AI Customer Support Chatbot"
-          className="group relative flex items-center gap-2 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white pl-4 pr-5 py-3 rounded-full shadow-2xl hover:scale-105 border-2 border-sky-400/40 hover:border-amber-400 transition-all duration-300 shadow-sky-500/20"
+          className="group relative flex items-center gap-2 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white pl-3.5 pr-4 py-2.5 rounded-full shadow-2xl hover:scale-105 border-2 border-sky-400/40 hover:border-amber-400 transition-all duration-300 shadow-sky-500/20"
         >
           <div className="relative">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-amber-500 p-0.5 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-500 to-amber-500 p-0.5 flex items-center justify-center">
               <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
-                <Bot className="w-5 h-5 text-sky-400 group-hover:text-amber-400 transition-colors" />
+                <Bot className="w-4 h-4 text-sky-400 group-hover:text-amber-400 transition-colors" />
               </div>
             </div>
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full animate-pulse" />
           </div>
 
           <div className="text-left">
             <span className="block font-serif font-bold text-xs text-white tracking-tight">
               AI Support & Quotes
             </span>
-            <span className="block text-[10px] text-sky-300 font-mono flex items-center gap-1">
+            <span className="block text-[10px] text-sky-300 font-mono flex items-center gap-0.5">
               <Sparkles className="w-2.5 h-2.5 text-amber-400" />
-              <span>Instant AI Catalog Help</span>
+              <span>Instant Catalog Answers</span>
             </span>
           </div>
 
