@@ -14,6 +14,7 @@ import {
 import QuoteModal from './QuoteModal';
 import Logo from './Logo';
 import ThemeToggle from './ThemeToggle';
+import ThemeSelectorModal from './ThemeSelectorModal';
 import LanguageSelector from './LanguageSelector';
 import { useLanguage } from './LanguageProvider';
 import { CompanyContactInfo } from '@/lib/types';
@@ -118,15 +119,16 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* CTA Button & Theme Toggle */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* CTA Button & Theme Selector & Toggle */}
+            <div className="hidden md:flex items-center gap-2.5">
+              <ThemeSelectorModal variant="button" />
               <ThemeToggle />
               <button
                 onClick={() => {
                   setSelectedProductForQuote('');
                   setQuoteModalOpen(true);
                 }}
-                className="bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center gap-2"
+                className="bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center gap-2 cursor-pointer"
               >
                 <Send className="w-4 h-4" />
                 <span>{t('nav.getQuote', 'Request Bulk Quote')}</span>
@@ -134,7 +136,8 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Controls */}
-            <div className="flex md:hidden items-center gap-2">
+            <div className="flex md:hidden items-center gap-1.5">
+              <ThemeSelectorModal variant="button" />
               <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

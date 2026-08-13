@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import FloatingContactButtons from '@/components/FloatingContactButtons';
 import AiChatbot from '@/components/AiChatbot';
+import ThemeSelectorModal from '@/components/ThemeSelectorModal';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/components/LanguageProvider';
 
@@ -18,6 +19,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           <LanguageProvider>
             {children}
             <FloatingContactButtons />
+            <ThemeSelectorModal variant="floating" />
             <AiChatbot />
           </LanguageProvider>
         </ThemeProvider>
