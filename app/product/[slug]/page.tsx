@@ -37,7 +37,7 @@ export default async function SingleProductPage({ params }: { params: Promise<{ 
 
   const productSchema = generateProductSchema(product);
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Products Catalog', url: '/products' },
+    { name: 'Products', url: '/products' },
     { name: category ? category.name : 'Category', url: category ? `/category/${category.slug}` : '/products' },
     { name: product.name, url: `/product/${product.slug}` },
   ]);
@@ -51,7 +51,7 @@ export default async function SingleProductPage({ params }: { params: Promise<{ 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
-              { name: 'Products Catalog', url: '/products' },
+              { name: 'Products', url: '/products' },
               { name: category ? category.name : 'Category', url: category ? `/category/${category.slug}` : '/products' },
               { name: product.name, url: `/product/${product.slug}` },
             ]}

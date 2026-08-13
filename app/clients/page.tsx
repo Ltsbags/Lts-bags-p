@@ -183,7 +183,7 @@ export default function ClientsPage() {
                 href="/products"
                 className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-6 py-3.5 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-sm"
               >
-                <span>Explore Products Catalog</span>
+                <span>Explore Products</span>
                 <ChevronRight className="w-4 h-4 text-sky-400" />
               </Link>
             </div>

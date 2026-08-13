@@ -100,12 +100,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/products" className="hover:text-sky-400 transition-colors flex items-center gap-2 text-slate-300 hover:translate-x-1 transform duration-200">
-                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0" /> Products Catalog
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-sky-400 transition-colors flex items-center gap-2 text-slate-300 hover:translate-x-1 transform duration-200">
-                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0" /> Manufacturing Blog
+                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0" /> Products
                 </Link>
               </li>
               <li>

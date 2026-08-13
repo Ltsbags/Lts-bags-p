@@ -10,7 +10,7 @@ export interface LanguageTranslationsMap {
 export const DEFAULT_TRANSLATIONS: TranslationDictionary = {
   // Navigation
   'nav.home': 'Home',
-  'nav.products': 'Products & Catalog',
+  'nav.products': 'Products',
   'nav.categories': 'Categories',
   'nav.about': 'About Factory',
   'nav.manufacturing': 'Manufacturing',

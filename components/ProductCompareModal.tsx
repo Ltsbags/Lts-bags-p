@@ -193,7 +193,7 @@ export default function ProductCompareModal({
                 onClick={onClose}
                 className="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition-colors inline-flex items-center gap-2"
               >
-                <span>Browse Products Catalog</span>
+                <span>Browse Products</span>
               </button>
             </div>
           ) : (

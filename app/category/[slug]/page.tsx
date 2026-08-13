@@ -35,7 +35,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   const products = db.getProductsByCategory(category.id);
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Products Catalog', url: '/products' },
+    { name: 'Products', url: '/products' },
     { name: category.name, url: `/category/${category.slug}` },
   ]);
 
@@ -51,7 +51,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <Breadcrumbs
               items={[
-                { name: 'Products Catalog', url: '/products' },
+                { name: 'Products', url: '/products' },
                 { name: category.name, url: `/category/${category.slug}` },
               ]}
             />

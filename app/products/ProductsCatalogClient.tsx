@@ -125,7 +125,7 @@ export default function ProductsCatalogClient({ allProducts, categories }: Produ
         {/* Banner */}
         <section className="bg-slate-900 text-white py-12 border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Breadcrumbs items={[{ name: 'Products Catalog', url: '/products' }]} />
+            <Breadcrumbs items={[{ name: 'Products', url: '/products' }]} />
             <div className="mt-3 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="max-w-3xl space-y-2">
                 <span className="text-sky-400 font-bold text-xs uppercase tracking-widest font-mono bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20">

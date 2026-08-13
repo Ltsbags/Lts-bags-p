@@ -17,7 +17,7 @@ export default function ProductsCatalogPage() {
   const categories = db.getCategories();
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Products Catalog', url: '/products' },
+    { name: 'Products', url: '/products' },
   ]);
 
   return (

@@ -499,7 +499,7 @@ export default function AdminLanguagesPage() {
             }`}
           >
             <Package className="w-4 h-4" />
-            <span>Products & Catalog Translations</span>
+            <span>Products Translations</span>
           </button>
         </div>
 
