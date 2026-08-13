@@ -13,8 +13,6 @@ import {
 } from 'lucide-react';
 import QuoteModal from './QuoteModal';
 import Logo from './Logo';
-import ThemeToggle from './ThemeToggle';
-import ThemeSelectorModal from './ThemeSelectorModal';
 import LanguageSelector from './LanguageSelector';
 import { useLanguage } from './LanguageProvider';
 import { CompanyContactInfo } from '@/lib/types';
@@ -119,10 +117,8 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* CTA Button & Theme Selector & Toggle */}
+            {/* CTA Button */}
             <div className="hidden md:flex items-center gap-2.5">
-              <ThemeSelectorModal variant="button" />
-              <ThemeToggle />
               <button
                 onClick={() => {
                   setSelectedProductForQuote('');
@@ -137,8 +133,6 @@ export default function Navbar() {
 
             {/* Mobile Controls */}
             <div className="flex md:hidden items-center gap-1.5">
-              <ThemeSelectorModal variant="button" />
-              <ThemeToggle />
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
