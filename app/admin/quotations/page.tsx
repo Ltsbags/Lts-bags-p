@@ -45,7 +45,7 @@ export default function AdminQuotationsPage() {
     clientEmail: '',
     clientMobile: '',
     status: 'DRAFT' as Quotation['status'],
-    validUntil: new Date(Date.now() + 86400000 * 30).toISOString().split('T')[0],
+    validUntil: '',
     termsAndConditions: '1. 50% Advance along with Purchase Order, balance 50% prior to dispatch.\n2. Delivery timeline: 12-15 days after physical sample approval.\n3. Goods once sold will not be returned.',
     notes: '',
     discount: 0,
@@ -78,13 +78,16 @@ export default function AdminQuotationsPage() {
   }, []);
 
   useEffect(() => {
-    let active = true;
-    if (active) {
-      fetchQuotations();
-    }
-    return () => {
-      active = false;
-    };
+    fetchQuotations();
+    setFormData((prev) => {
+      if (!prev.validUntil) {
+        return {
+          ...prev,
+          validUntil: new Date(Date.now() + 86400000 * 30).toISOString().split('T')[0],
+        };
+      }
+      return prev;
+    });
   }, [fetchQuotations]);
 
   const handleDelete = async (id: string, num: string) => {

@@ -3,6 +3,7 @@ import './globals.css';
 import FloatingContactButtons from '@/components/FloatingContactButtons';
 import AiChatbot from '@/components/AiChatbot';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { LanguageProvider } from '@/components/LanguageProvider';
 
 export const metadata: Metadata = {
   title: 'LTS BAGS PRIVATE LIMITED - Custom B2B Bag Manufacturer & Wholesale Supplier',
@@ -14,13 +15,16 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning className="relative antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
         <ThemeProvider>
-          {children}
-          <FloatingContactButtons />
-          <AiChatbot />
+          <LanguageProvider>
+            {children}
+            <FloatingContactButtons />
+            <AiChatbot />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
 
 

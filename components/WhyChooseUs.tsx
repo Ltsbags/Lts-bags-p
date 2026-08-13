@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useLanguage } from '@/components/LanguageProvider';
 import { 
   Building2, 
   DollarSign, 
@@ -18,6 +19,7 @@ interface WhyChooseUsProps {
 }
 
 export default function WhyChooseUs({ initialFeatures, title: customTitle, subtitle: customSubtitle }: WhyChooseUsProps) {
+  const { t } = useLanguage();
   const [features, setFeatures] = useState<HomepageFeature[]>(initialFeatures || [
     {
       title: 'Direct Factory Pricing',
@@ -51,8 +53,8 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
     },
   ]);
 
-  const [title, setTitle] = useState(customTitle || 'Built for Corporate Excellence & Wholesale Scalability');
-  const [subtitle, setSubtitle] = useState(customSubtitle || 'We empower corporate buyers, event managers, educational institutions, and brand distributors with high-spec custom bags manufactured to exacting international standards.');
+  const [title, setTitle] = useState(customTitle || '');
+  const [subtitle, setSubtitle] = useState(customSubtitle || '');
 
   useEffect(() => {
     if (!initialFeatures) {
@@ -72,6 +74,9 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
         .catch((err) => console.error('Error fetching features in WhyChooseUs:', err));
     }
   }, [initialFeatures]);
+
+  const displayTitle = title || t('home.whyChooseTitle', 'Built for Corporate Excellence & Wholesale Scalability');
+  const displaySubtitle = subtitle || t('home.whyChooseSubtitle', 'We empower corporate buyers, event managers, educational institutions, and brand distributors with high-spec custom bags manufactured to exacting international standards.');
 
   const getIcon = (iconName?: string, index: number = 0) => {
     const icons = [DollarSign, Sparkles, Zap, Layers, ShieldCheck, Building2];
@@ -103,13 +108,13 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <span className="text-sky-700 dark:text-sky-300 font-bold text-xs uppercase tracking-widest font-mono bg-sky-100/80 dark:bg-sky-950/80 px-3 py-1 rounded-full border border-sky-300 dark:border-sky-800">
-            Why LTS BAGS PRIVATE LIMITED
+            {t('home.whyChooseBadge', 'Why LTS BAGS PRIVATE LIMITED')}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 font-serif">
-            {title}
+            {displayTitle}
           </h2>
           <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
-            {subtitle}
+            {displaySubtitle}
           </p>
         </div>
 
@@ -141,3 +146,4 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
     </section>
   );
 }
+

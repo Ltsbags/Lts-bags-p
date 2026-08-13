@@ -45,8 +45,8 @@ export default function Logo({
   }, [overrideLogoUrl]);
 
   const logoUrl = overrideLogoUrl !== undefined ? overrideLogoUrl : (fetchedSettings?.logoUrl || '');
-  const logoText = overrideLogoText !== undefined ? overrideLogoText : (fetchedSettings?.logoText || 'LTS BAGS');
-  const logoSubtitle = overrideLogoSubtitle !== undefined ? overrideLogoSubtitle : (fetchedSettings?.logoSubtitle || 'PRIVATE LIMITED');
+  const logoText = overrideLogoText !== undefined ? overrideLogoText : (fetchedSettings?.logoText ?? '');
+  const logoSubtitle = overrideLogoSubtitle !== undefined ? overrideLogoSubtitle : (fetchedSettings?.logoSubtitle ?? '');
 
   // Image height mapping
   const imgHeights = {
@@ -96,10 +96,10 @@ export default function Logo({
     bPathClass = 'fill-sky-500';
   }
 
-  // Split logoText if it contains spaces (e.g., "LTS BAGS")
-  const textParts = logoText.trim().split(' ');
-  const firstPart = textParts[0] || 'LTS';
-  const restPart = textParts.slice(1).join(' ') || 'BAGS';
+  // Split logoText if it contains spaces
+  const textParts = logoText.trim() ? logoText.trim().split(' ') : [];
+  const firstPart = textParts[0] || '';
+  const restPart = textParts.slice(1).join(' ');
 
   return (
     <div className={`inline-flex items-center gap-2.5 sm:gap-3 group ${className}`}>
@@ -139,7 +139,7 @@ export default function Logo({
             </div>
           )}
 
-          {variant !== 'icon-only' && (
+          {variant !== 'icon-only' && firstPart && (
             <div className="flex flex-col justify-center leading-none">
               <div className="flex items-start font-black font-sans tracking-tight">
                 <span className={`${titleSizes[size]} ${ltsTextColor} tracking-wider font-extrabold transition-colors duration-200`}>

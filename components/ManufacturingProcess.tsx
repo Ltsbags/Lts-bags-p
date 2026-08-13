@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useLanguage } from '@/components/LanguageProvider';
 import { 
   FileText, 
   Ruler, 
@@ -20,6 +21,7 @@ interface ManufacturingProcessProps {
 }
 
 export default function ManufacturingProcess({ initialSteps, title: customTitle, subtitle: customSubtitle }: ManufacturingProcessProps) {
+  const { t } = useLanguage();
   const [steps, setSteps] = useState<HomepageProcessStep[]>(initialSteps || [
     {
       stepNumber: '01',
@@ -43,8 +45,8 @@ export default function ManufacturingProcess({ initialSteps, title: customTitle,
     },
   ]);
 
-  const [title, setTitle] = useState(customTitle || '6-Step Precision OEM/ODM Production Workflow');
-  const [subtitle, setSubtitle] = useState(customSubtitle || 'From initial CAD design rendering to final container loading, every step in our bag factory is monitored for zero-defect compliance.');
+  const [title, setTitle] = useState(customTitle || '');
+  const [subtitle, setSubtitle] = useState(customSubtitle || '');
 
   useEffect(() => {
     if (!initialSteps) {
@@ -65,6 +67,9 @@ export default function ManufacturingProcess({ initialSteps, title: customTitle,
     }
   }, [initialSteps]);
 
+  const displayTitle = title || t('home.processTitle', '4-Step Precision OEM/ODM Production Workflow');
+  const displaySubtitle = subtitle || t('home.processSubtitle', 'From initial CAD design rendering to final container loading, every step in our bag factory is monitored for zero-defect compliance.');
+
   const getStepIcon = (index: number) => {
     const icons = [FileText, Ruler, Scissors, Layers, ShieldCheck, Truck];
     return icons[index % icons.length];
@@ -80,13 +85,13 @@ export default function ManufacturingProcess({ initialSteps, title: customTitle,
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <span className="text-amber-400 font-bold text-xs uppercase tracking-widest font-mono bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-            Manufacturing Standard Operating Procedure
+            {t('home.processBadge', 'Manufacturing Standard Operating Procedure')}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-serif">
-            {title}
+            {displayTitle}
           </h2>
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            {subtitle}
+            {displaySubtitle}
           </p>
         </div>
 
@@ -124,3 +129,4 @@ export default function ManufacturingProcess({ initialSteps, title: customTitle,
     </section>
   );
 }
+

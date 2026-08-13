@@ -14,17 +14,30 @@ export function generatePageMetadata({
   description,
   keywords,
   path = '',
+  lang = 'en',
   image = 'https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&q=80&w=1200',
 }: {
   title?: string;
   description?: string;
   keywords?: string;
   path?: string;
+  lang?: string;
   image?: string;
 }): Metadata {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
   const fullDesc = description || DEFAULT_DESC;
-  const canonicalUrl = `${SITE_URL}${path}`;
+  const langPrefix = lang && lang !== 'en' ? `?lang=${lang}` : '';
+  const canonicalUrl = `${SITE_URL}${path}${langPrefix}`;
+
+  // Generate hreflang tags for all initial supported languages
+  const languageCodes = ['en', 'hi', 'ar', 'bn', 'mr', 'gu', 'ta', 'te', 'kn', 'ml', 'pa', 'ur', 'fr', 'de', 'es', 'pt', 'it', 'nl', 'ru', 'tr', 'zh', 'ja', 'ko'];
+  const languageAlternates: Record<string, string> = {
+    'x-default': `${SITE_URL}${path}`,
+  };
+
+  languageCodes.forEach((code) => {
+    languageAlternates[code] = code === 'en' ? `${SITE_URL}${path}` : `${SITE_URL}${path}?lang=${code}`;
+  });
 
   return {
     title: fullTitle,
@@ -32,6 +45,7 @@ export function generatePageMetadata({
     keywords: keywords || 'LTS BAGS PRIVATE LIMITED, bag manufacturer, B2B custom bags, wholesale corporate backpacks, OEM bag supplier, laptop bag factory',
     alternates: {
       canonical: canonicalUrl,
+      languages: languageAlternates,
     },
     openGraph: {
       title: fullTitle,
@@ -46,7 +60,7 @@ export function generatePageMetadata({
           alt: fullTitle,
         },
       ],
-      locale: 'en_US',
+      locale: lang === 'en' ? 'en_US' : lang,
       type: 'website',
     },
     twitter: {

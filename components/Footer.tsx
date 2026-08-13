@@ -13,9 +13,12 @@ import {
   Globe
 } from 'lucide-react';
 import Logo from './Logo';
+import LanguageSelector from './LanguageSelector';
+import { useLanguage } from './LanguageProvider';
 import { CompanyContactInfo, FooterContent } from '@/lib/types';
 
 export default function Footer() {
+  const { t } = useLanguage();
   const [contact, setContact] = useState<Partial<CompanyContactInfo>>({
     companyName: 'LTS BAGS PRIVATE LIMITED',
     phone1: '+91 98335 98338',
@@ -203,13 +206,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} <strong className="text-slate-200">{contact.companyName || 'LTS BAGS PRIVATE LIMITED'}</strong>. {footerContent.copyrightText || 'All Rights Reserved.'}</p>
-          <div className="flex items-center gap-6">
+          <p>© {new Date().getFullYear()} <strong className="text-slate-200">{contact.companyName || 'LTS BAGS PRIVATE LIMITED'}</strong>. {t('footer.copyright', 'All Rights Reserved.')}</p>
+          <div className="flex flex-wrap items-center gap-6">
+            <LanguageSelector variant="footer" />
             <Link href="/privacy-policy" className="hover:text-sky-400 transition-colors">
-              Privacy Policy
+              {t('footer.privacyPolicy', 'Privacy Policy')}
             </Link>
             <Link href="/terms" className="hover:text-sky-400 transition-colors">
-              Terms & Conditions
+              {t('footer.termsConditions', 'Terms & Conditions')}
             </Link>
             <Link href="/sitemap.xml" target="_blank" className="hover:text-sky-400 transition-colors">
               XML Sitemap

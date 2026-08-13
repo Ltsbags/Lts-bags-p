@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { action, messages, lead } = body;
+    const { action, messages, lead, langCode, langName } = body;
 
     // Action 1: Submit a chatbot lead/enquiry directly
     if (action === 'submit_lead') {
@@ -177,7 +177,11 @@ Export Enquiries: Full export documentation, door-to-door freight, containerized
 === QUOTATION LEAD INSTRUCTIONS ===
 Whenever the customer requests a price quote, wants to order in bulk, requests a physical sample, or asks to contact sales:
 Inform them:
-"You can request an instant quotation right here in this chat window by clicking the 'Request Quote' button, or provide your Name, Company Name, Mobile Number, Email, Bag Type, and Quantity!"`;
+"You can request an instant quotation right here in this chat window by clicking the 'Request Quote' button, or provide your Name, Company Name, Mobile Number, Email, Bag Type, and Quantity!"
+
+=== LANGUAGE INSTRUCTION ===
+The customer is browsing the website in language: ${langName || langCode || 'English'} (${langCode || 'en'}).
+You MUST reply in ${langName || 'English'} natively. Keep brand names, technical model terms, and phone numbers clear and readable.`;
 
     // Extract user messages history & last prompt
     const lastUserMessage = userMessages[userMessages.length - 1];

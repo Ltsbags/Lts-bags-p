@@ -1,7 +1,9 @@
 import 'server-only';
 import fs from 'fs';
 import path from 'path';
-import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide, Quotation, Payment, MediaAsset } from './types';
+import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide, Quotation, Payment, MediaAsset, Client, LanguageConfig, EntityTranslation, LanguageSettings } from './types';
+import { INITIAL_LANGUAGES } from './i18n/languages';
+import { INITIAL_TRANSLATIONS_MAP } from './i18n/translations';
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
@@ -16,6 +18,9 @@ interface DatabaseSchema {
   quotations?: Quotation[];
   payments?: Payment[];
   media?: MediaAsset[];
+  clients?: Client[];
+  languageSettings?: LanguageSettings;
+  entityTranslations?: EntityTranslation[];
 }
 
 const INITIAL_SETTINGS: SiteSettings = {
@@ -1404,4 +1409,334 @@ export const db = {
     }
     return false;
   },
+
+  // Clients
+  getClients(onlyActive = false): Client[] {
+    const data = ensureDataFile();
+    const clients = data.clients || INITIAL_CLIENTS;
+    const list = onlyActive ? clients.filter((c) => c.isActive) : clients;
+    return [...list].sort((a, b) => a.displayOrder - b.displayOrder);
+  },
+
+  getClientById(id: string): Client | undefined {
+    const data = ensureDataFile();
+    const clients = data.clients || INITIAL_CLIENTS;
+    return clients.find((c) => c.id === id);
+  },
+
+  saveClient(clientData: Partial<Client> & { name: string; logoUrl: string }): Client {
+    const data = ensureDataFile();
+    const clients = data.clients || INITIAL_CLIENTS;
+    const now = new Date().toISOString();
+    const index = clientData.id ? clients.findIndex((c) => c.id === clientData.id) : -1;
+
+    if (index >= 0) {
+      const updated: Client = {
+        ...clients[index],
+        ...clientData,
+        updatedAt: now,
+      };
+      clients[index] = updated;
+      data.clients = clients;
+      saveData(data);
+      return updated;
+    } else {
+      const maxOrder = clients.reduce((max, c) => (c.displayOrder > max ? c.displayOrder : max), 0);
+      const newClient: Client = {
+        id: 'client-' + Date.now(),
+        name: clientData.name,
+        logoUrl: clientData.logoUrl,
+        websiteUrl: clientData.websiteUrl || '',
+        displayOrder: clientData.displayOrder !== undefined ? clientData.displayOrder : maxOrder + 1,
+        isActive: clientData.isActive !== undefined ? clientData.isActive : true,
+        createdAt: now,
+        updatedAt: now,
+      };
+      clients.push(newClient);
+      data.clients = clients;
+      saveData(data);
+      return newClient;
+    }
+  },
+
+  deleteClient(id: string): boolean {
+    const data = ensureDataFile();
+    const clients = data.clients || INITIAL_CLIENTS;
+    const filtered = clients.filter((c) => c.id !== id);
+    if (filtered.length !== clients.length) {
+      data.clients = filtered;
+      saveData(data);
+      return true;
+    }
+    return false;
+  },
+
+  reorderClients(orders: { id: string; displayOrder: number }[]): boolean {
+    const data = ensureDataFile();
+    const clients = data.clients || INITIAL_CLIENTS;
+    const orderMap = new Map(orders.map((o) => [o.id, o.displayOrder]));
+
+    clients.forEach((c) => {
+      if (orderMap.has(c.id)) {
+        c.displayOrder = orderMap.get(c.id)!;
+        c.updatedAt = new Date().toISOString();
+      }
+    });
+
+    data.clients = clients;
+    saveData(data);
+    return true;
+  },
 };
+
+const INITIAL_CLIENTS: Client[] = [
+  {
+    id: 'client-1',
+    name: 'Infosys Limited',
+    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    websiteUrl: 'https://www.infosys.com',
+    displayOrder: 1,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'client-2',
+    name: 'Tata Consultancy Services (TCS)',
+    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    websiteUrl: 'https://www.tcs.com',
+    displayOrder: 2,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'client-3',
+    name: 'Wipro Technologies',
+    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    websiteUrl: 'https://www.wipro.com',
+    displayOrder: 3,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'client-4',
+    name: 'Reliance Industries Limited',
+    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    websiteUrl: 'https://www.ril.com',
+    displayOrder: 4,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'client-5',
+    name: 'HDFC Bank Limited',
+    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    websiteUrl: 'https://www.hdfcbank.com',
+    displayOrder: 5,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'client-6',
+    name: 'Mahindra & Mahindra',
+    logoUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400',
+    websiteUrl: 'https://www.mahindra.com',
+    displayOrder: 6,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+// Language & Translation Database Helper Methods
+export function getLanguageSettings(): LanguageSettings {
+  const db = ensureDataFile();
+  if (!db.languageSettings) {
+    db.languageSettings = {
+      languages: INITIAL_LANGUAGES,
+      defaultLanguage: 'en',
+      uiTranslations: INITIAL_TRANSLATIONS_MAP,
+    };
+    saveData(db);
+  }
+  return db.languageSettings;
+}
+
+export function updateLanguageSettings(settings: Partial<LanguageSettings>): LanguageSettings {
+  const db = ensureDataFile();
+  const current = getLanguageSettings();
+  db.languageSettings = {
+    ...current,
+    ...settings,
+  };
+  saveData(db);
+  return db.languageSettings;
+}
+
+export function saveUiTranslation(langCode: string, key: string, value: string): void {
+  const db = ensureDataFile();
+  const current = getLanguageSettings();
+  const lang = langCode.toLowerCase();
+  
+  if (!current.uiTranslations) {
+    current.uiTranslations = { ...INITIAL_TRANSLATIONS_MAP };
+  }
+  if (!current.uiTranslations[lang]) {
+    current.uiTranslations[lang] = {};
+  }
+  
+  current.uiTranslations[lang][key] = value;
+  db.languageSettings = current;
+  saveData(db);
+}
+
+export function saveBatchUiTranslations(langCode: string, translations: Record<string, string>): void {
+  const db = ensureDataFile();
+  const current = getLanguageSettings();
+  const lang = langCode.toLowerCase();
+
+  if (!current.uiTranslations) {
+    current.uiTranslations = { ...INITIAL_TRANSLATIONS_MAP };
+  }
+  if (!current.uiTranslations[lang]) {
+    current.uiTranslations[lang] = {};
+  }
+
+  current.uiTranslations[lang] = {
+    ...current.uiTranslations[lang],
+    ...translations,
+  };
+
+  db.languageSettings = current;
+  saveData(db);
+}
+
+export function getEntityTranslations(entityType?: string, entityId?: string, langCode?: string): EntityTranslation[] {
+  const db = ensureDataFile();
+  let list = db.entityTranslations || [];
+
+  if (entityType) {
+    list = list.filter((t) => t.entityType === entityType);
+  }
+  if (entityId) {
+    list = list.filter((t) => t.entityId === entityId);
+  }
+  if (langCode) {
+    list = list.filter((t) => t.langCode.toLowerCase() === langCode.toLowerCase());
+  }
+
+  return list;
+}
+
+export function getEntityTranslation(entityType: 'product' | 'category' | 'blog' | 'slide', entityId: string, langCode: string): EntityTranslation | undefined {
+  const db = ensureDataFile();
+  const list = db.entityTranslations || [];
+  return list.find(
+    (t) =>
+      t.entityType === entityType &&
+      t.entityId === entityId &&
+      t.langCode.toLowerCase() === langCode.toLowerCase()
+  );
+}
+
+export function saveEntityTranslation(translation: Partial<EntityTranslation> & { entityType: 'product' | 'category' | 'blog' | 'slide'; entityId: string; langCode: string }): EntityTranslation {
+  const db = ensureDataFile();
+  if (!db.entityTranslations) {
+    db.entityTranslations = [];
+  }
+
+  const existingIndex = db.entityTranslations.findIndex(
+    (t) =>
+      t.entityType === translation.entityType &&
+      t.entityId === translation.entityId &&
+      t.langCode.toLowerCase() === translation.langCode.toLowerCase()
+  );
+
+  const updated: EntityTranslation = {
+    id: existingIndex >= 0 ? db.entityTranslations[existingIndex].id : `trans-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    entityType: translation.entityType,
+    entityId: translation.entityId,
+    langCode: translation.langCode.toLowerCase(),
+    title: translation.title,
+    name: translation.name,
+    shortDesc: translation.shortDesc,
+    fullDesc: translation.fullDesc,
+    content: translation.content,
+    excerpt: translation.excerpt,
+    materials: translation.materials,
+    metaTitle: translation.metaTitle,
+    metaDescription: translation.metaDescription,
+    metaKeywords: translation.metaKeywords,
+    slug: translation.slug,
+    specifications: translation.specifications,
+    features: translation.features,
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (existingIndex >= 0) {
+    db.entityTranslations[existingIndex] = updated;
+  } else {
+    db.entityTranslations.push(updated);
+  }
+
+  saveData(db);
+  return updated;
+}
+
+export function getTranslatedProduct(product: Product, langCode: string): Product {
+  if (!langCode || langCode.toLowerCase() === 'en') return product;
+  const trans = getEntityTranslation('product', product.id, langCode);
+  if (!trans) return product;
+
+  return {
+    ...product,
+    name: trans.name || trans.title || product.name,
+    shortDesc: trans.shortDesc || product.shortDesc,
+    fullDesc: trans.fullDesc || product.fullDesc,
+    materials: trans.materials || product.materials,
+    metaTitle: trans.metaTitle || product.metaTitle,
+    metaDescription: trans.metaDescription || product.metaDescription,
+    metaKeywords: trans.metaKeywords || product.metaKeywords,
+    slug: trans.slug || product.slug,
+    specifications: trans.specifications && trans.specifications.length > 0 ? trans.specifications : product.specifications,
+    features: trans.features && trans.features.length > 0 ? trans.features : product.features,
+  };
+}
+
+export function getTranslatedCategory(category: Category, langCode: string): Category {
+  if (!langCode || langCode.toLowerCase() === 'en') return category;
+  const trans = getEntityTranslation('category', category.id, langCode);
+  if (!trans) return category;
+
+  return {
+    ...category,
+    name: trans.name || trans.title || category.name,
+    description: trans.shortDesc || trans.fullDesc || category.description,
+    metaTitle: trans.metaTitle || category.metaTitle,
+    metaDescription: trans.metaDescription || category.metaDescription,
+    metaKeywords: trans.metaKeywords || category.metaKeywords,
+    slug: trans.slug || category.slug,
+  };
+}
+
+export function getTranslatedBlog(blog: Blog, langCode: string): Blog {
+  if (!langCode || langCode.toLowerCase() === 'en') return blog;
+  const trans = getEntityTranslation('blog', blog.id, langCode);
+  if (!trans) return blog;
+
+  return {
+    ...blog,
+    title: trans.title || trans.name || blog.title,
+    excerpt: trans.excerpt || trans.shortDesc || blog.excerpt,
+    content: trans.content || trans.fullDesc || blog.content,
+    metaTitle: trans.metaTitle || blog.metaTitle,
+    metaDescription: trans.metaDescription || blog.metaDescription,
+    metaKeywords: trans.metaKeywords || blog.metaKeywords,
+    slug: trans.slug || blog.slug,
+  };
+}
+

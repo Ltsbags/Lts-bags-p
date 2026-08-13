@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { useLanguage } from './LanguageProvider';
 import { 
   Bot, 
   Send, 
@@ -52,6 +53,7 @@ const generateUniqueId = (prefix: string) => {
 
 export default function AiChatbot() {
   const pathname = usePathname();
+  const { currentLanguage, languages, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
@@ -155,6 +157,8 @@ export default function AiChatbot() {
         body: JSON.stringify({
           action: 'chat',
           messages: apiMessages,
+          langCode: currentLanguage.code,
+          langName: currentLanguage.name,
         }),
       });
 

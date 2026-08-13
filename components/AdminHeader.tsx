@@ -17,7 +17,9 @@ import {
   Image,
   FileSpreadsheet,
   CreditCard,
-  Globe
+  Globe,
+  Building2,
+  Languages
 } from 'lucide-react';
 import Logo from './Logo';
 
@@ -45,6 +47,8 @@ export default function AdminHeader({ activeTab }: { activeTab?: string }) {
     { id: 'categories', name: 'Categories', href: '/admin/categories', icon: Layers },
     { id: 'blogs', name: 'Blog', href: '/admin/blogs', icon: FileText },
     { id: 'slides', name: 'Homepage Slider', href: '/admin/slides', icon: Sliders },
+    { id: 'languages', name: 'Languages & i18n', href: '/admin/languages', icon: Languages },
+    { id: 'clients', name: 'Our Clients', href: '/admin/clients', icon: Building2 },
     { id: 'gallery', name: 'Gallery / Media', href: '/admin/gallery', icon: Image },
     { id: 'enquiries', name: 'Enquiries', href: '/admin/enquiries', icon: MessageSquare },
     { id: 'quotations', name: 'Quotations', href: '/admin/quotations', icon: FileSpreadsheet },

@@ -14,10 +14,13 @@ import {
 import QuoteModal from './QuoteModal';
 import Logo from './Logo';
 import ThemeToggle from './ThemeToggle';
+import LanguageSelector from './LanguageSelector';
+import { useLanguage } from './LanguageProvider';
 import { CompanyContactInfo } from '@/lib/types';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [selectedProductForQuote, setSelectedProductForQuote] = useState<string>('');
@@ -39,11 +42,12 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
-    { name: 'Products Catalog', href: '/products' },
-    { name: 'B2B Blog', href: '/blog' },
-    { name: 'Contact Us', href: '/contact' },
+    { name: t('nav.home', 'Home'), href: '/' },
+    { name: t('nav.about', 'About Us'), href: '/about' },
+    { name: t('nav.products', 'Products Catalog'), href: '/products' },
+    { name: t('nav.clients', 'Our Clients'), href: '/clients' },
+    { name: t('nav.blog', 'B2B Blog'), href: '/blog' },
+    { name: t('nav.contact', 'Contact Us'), href: '/contact' },
   ];
 
   return (
@@ -72,10 +76,13 @@ export default function Navbar() {
             )}
           </div>
           <div className="flex items-center gap-4 text-slate-400">
-            <span className="flex items-center gap-1 text-emerald-400 font-medium">
+            <span className="hidden sm:flex items-center gap-1 text-emerald-400 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              Direct Factory Bulk Rates & Low MOQ
+              ISO 9001:2015 Certified Factory
             </span>
+            <div className="shrink-0">
+              <LanguageSelector variant="header" />
+            </div>
           </div>
         </div>
       </div>
@@ -86,7 +93,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/">
-              <Logo size="md" theme="auto" showIcon={true} />
+              <Logo size="md" theme="auto" showIcon={false} overrideLogoText="" overrideLogoSubtitle="" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -123,7 +130,7 @@ export default function Navbar() {
                 className="bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center gap-2"
               >
                 <Send className="w-4 h-4" />
-                <span>Request Bulk Quote</span>
+                <span>{t('nav.getQuote', 'Request Bulk Quote')}</span>
               </button>
             </div>
 
@@ -143,7 +150,11 @@ export default function Navbar() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-6 space-y-3 shadow-lg">
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-6 space-y-4 shadow-lg">
+            <div className="pb-2 border-b border-slate-100 dark:border-slate-800">
+              <LanguageSelector variant="mobile" />
+            </div>
+
             <div className="flex flex-col space-y-2">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
@@ -173,7 +184,7 @@ export default function Navbar() {
                 className="w-full bg-sky-600 dark:bg-sky-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm"
               >
                 <Send className="w-4 h-4" />
-                <span>Get Instant Wholesale Quote</span>
+                <span>{t('nav.getQuote', 'Get Wholesale Quote')}</span>
               </button>
             </div>
           </div>

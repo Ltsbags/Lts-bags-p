@@ -58,13 +58,7 @@ export default function AdminPaymentsPage() {
   }, []);
 
   useEffect(() => {
-    let active = true;
-    if (active) {
-      fetchPayments();
-    }
-    return () => {
-      active = false;
-    };
+    fetchPayments();
   }, [fetchPayments]);
 
   const handleDelete = async (id: string, num: string) => {

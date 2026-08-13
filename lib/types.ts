@@ -68,6 +68,17 @@ export interface ClientLogoItem {
   logoUrl: string;
 }
 
+export interface Client {
+  id: string;
+  name: string;
+  logoUrl: string;
+  websiteUrl?: string;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface HomepageContent {
   stats?: StatItem[];
   categoriesTitle?: string;
@@ -275,3 +286,41 @@ export interface MediaAsset {
   altText?: string;
   createdAt: string;
 }
+
+export interface LanguageConfig {
+  code: string;
+  name: string;
+  nativeName: string;
+  flag: string;
+  dir: 'ltr' | 'rtl';
+  enabled: boolean;
+  isDefault?: boolean;
+}
+
+export interface EntityTranslation {
+  id: string;
+  entityType: 'product' | 'category' | 'blog' | 'slide';
+  entityId: string;
+  langCode: string;
+  title?: string;
+  name?: string;
+  shortDesc?: string;
+  fullDesc?: string;
+  content?: string;
+  excerpt?: string;
+  materials?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  slug?: string;
+  specifications?: ProductSpecification[];
+  features?: string[];
+  updatedAt?: string;
+}
+
+export interface LanguageSettings {
+  languages: LanguageConfig[];
+  defaultLanguage: string;
+  uiTranslations: Record<string, Record<string, string>>;
+}
+

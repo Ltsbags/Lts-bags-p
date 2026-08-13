@@ -176,29 +176,6 @@ export default function HomePage() {
         {/* MANUFACTURING PROCESS */}
         <ManufacturingProcess />
 
-        {/* CLIENT TRUST LOGOS */}
-        <section className="py-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-            <p className="text-xs font-mono font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">
-              Trusted Wholesale Supplier For Top Corporate Brands & Organizations
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-8 opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
-                <Building2 className="w-6 h-6 text-sky-600 dark:text-sky-400" /> TECHCORP GLOBAL
-              </div>
-              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
-                <ShieldCheck className="w-6 h-6 text-sky-600 dark:text-sky-400" /> INFOSERVE INC
-              </div>
-              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
-                <Award className="w-6 h-6 text-sky-600 dark:text-sky-400" /> METRO LOGISTICS
-              </div>
-              <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-black text-lg tracking-wider font-mono">
-                <Briefcase className="w-6 h-6 text-sky-600 dark:text-sky-400" /> GLOBAL SPORTING
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* LATEST BLOGS */}
         <section className="py-20 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
