@@ -2,69 +2,25 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-lts-blue: #67B0DF;
+  --color-lts-blue-hover: #529ecf;
+  --color-lts-gray: #A7A7A7;
+  --color-lts-dark: #333333;
+  --color-lts-light-blue: #F2F8FC;
+}
+
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-family: var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
   }
 }
 
-/* ==========================================
-   5 PREMIUM THEME PRESET OVERRIDES
-   ========================================== */
-
-/* 1. Corporate Sky Blue (Default) */
-[data-preset-theme="corporate-sky"] {
-  --color-sky-300: #7dd3fc;
-  --color-sky-400: #38bdf8;
-  --color-sky-500: #0ea5e9;
-  --color-sky-600: #0284c7;
-  --color-sky-700: #0369a1;
-  --color-sky-800: #075985;
-  --theme-accent-gradient: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-}
-
-/* 2. Royal Sapphire & Gold (Luxury) */
-[data-preset-theme="royal-sapphire"] {
-  --color-sky-300: #93c5fd;
-  --color-sky-400: #60a5fa;
-  --color-sky-500: #3b82f6;
-  --color-sky-600: #2563eb;
-  --color-sky-700: #1d4ed8;
-  --color-sky-800: #1e40af;
-  --theme-accent-gradient: linear-gradient(135deg, #2563eb 0%, #f59e0b 100%);
-}
-
-/* 3. Emerald Eco Industrial (Sustainable) */
-[data-preset-theme="emerald-eco"] {
-  --color-sky-300: #6ee7b7;
-  --color-sky-400: #34d399;
-  --color-sky-500: #10b981;
-  --color-sky-600: #059669;
-  --color-sky-700: #047857;
-  --color-sky-800: #065f46;
-  --theme-accent-gradient: linear-gradient(135deg, #059669 0%, #34d399 100%);
-}
-
-/* 4. Crimson Onyx Red (Bold Executive) */
-[data-preset-theme="crimson-bold"] {
-  --color-sky-300: #fca5a5;
-  --color-sky-400: #f87171;
-  --color-sky-500: #ef4444;
-  --color-sky-600: #dc2626;
-  --color-sky-700: #b91c1c;
-  --color-sky-800: #991b1b;
-  --theme-accent-gradient: linear-gradient(135deg, #dc2626 0%, #f87171 100%);
-}
-
-/* 5. Obsidian Amber Gold (Bespoke Craft) */
-[data-preset-theme="obsidian-gold"] {
-  --color-sky-300: #fde047;
-  --color-sky-400: #fbbf24;
-  --color-sky-500: #f59e0b;
-  --color-sky-600: #d97706;
-  --color-sky-700: #b45309;
-  --color-sky-800: #92400e;
-  --theme-accent-gradient: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+/* RTL layout support for Arabic */
+[dir="rtl"] {
+  text-align: right;
 }
 
 /* Hide Google Translate Banner and Frame */
@@ -78,14 +34,12 @@ body {
   top: 0px !important;
 }
 
-.goog-te-gadget,
-#google_translate_element {
+/* Hide Google Translate top bar attribution */
+.skiptranslate {
   display: none !important;
-  visibility: hidden !important;
 }
 
 .goog-text-highlight {
   background-color: transparent !important;
   box-shadow: none !important;
 }
-

@@ -105,8 +105,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
           applyLanguageDirection(matched);
         }
       })
-      .catch((err) => {
-        console.error('Error loading language settings:', err);
+      .catch(() => {
         const matched = getLanguageByCode(savedLangCode, INITIAL_LANGUAGES);
         setCurrentLanguageState(matched);
         applyLanguageDirection(matched);

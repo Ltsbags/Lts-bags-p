@@ -59,7 +59,10 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
   useEffect(() => {
     if (!initialFeatures) {
       fetch('/api/settings')
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) return null;
+          return res.json();
+        })
         .then((data) => {
           if (data?.homepage?.features && data.homepage.features.length > 0) {
             setFeatures(data.homepage.features);
@@ -71,7 +74,9 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
             setSubtitle(data.homepage.featuresSubtitle);
           }
         })
-        .catch((err) => console.error('Error fetching features in WhyChooseUs:', err));
+        .catch(() => {
+          // Silently retain defaults
+        });
     }
   }, [initialFeatures]);
 

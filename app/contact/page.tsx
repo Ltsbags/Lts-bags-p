@@ -274,13 +274,18 @@ export default function ContactPage() {
 
   useEffect(() => {
     fetch('/api/settings')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then((data) => {
         if (data?.contactInfo) {
-          setContact(data.contactInfo);
+          setContact((prev) => ({ ...prev, ...data.contactInfo }));
         }
       })
-      .catch((err) => console.error('Error fetching settings in contact page:', err));
+      .catch(() => {
+        // Silently retain defaults
+      });
   }, []);
 
   return (

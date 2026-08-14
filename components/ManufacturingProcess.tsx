@@ -1,119 +1,103 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useLanguage } from '@/components/LanguageProvider';
+import React from 'react';
 import { 
-  FileText, 
-  Ruler, 
-  Scissors, 
-  CheckCircle2, 
-  Truck, 
+  PencilRuler, 
   Layers, 
-  ShieldCheck,
-  Award
+  Scissors, 
+  Printer, 
+  ShieldCheck, 
+  Package, 
+  Truck,
+  Factory
 } from 'lucide-react';
-import { HomepageProcessStep } from '@/lib/types';
 
-interface ManufacturingProcessProps {
-  initialSteps?: HomepageProcessStep[];
-  title?: string;
-  subtitle?: string;
-}
-
-export default function ManufacturingProcess({ initialSteps, title: customTitle, subtitle: customSubtitle }: ManufacturingProcessProps) {
-  const { t } = useLanguage();
-  const [steps, setSteps] = useState<HomepageProcessStep[]>(initialSteps || [
+export default function ManufacturingProcess() {
+  const steps = [
     {
       stepNumber: '01',
-      title: 'Specification & CAD Design',
-      description: 'Client submits target bag dimensions, fabric density (1680D/600D/Canvas), pocket arrangements, and branding specs.',
+      title: 'Design',
+      description: 'Tech-pack preparation, CAD pattern drafting, and pre-production golden sample approval.',
+      icon: PencilRuler,
     },
     {
       stepNumber: '02',
-      title: 'Golden Sample Prototyping',
-      description: 'Our sample master craftsmen construct a physical pre-production prototype for touch, feel, load test, and client approval.',
+      title: 'Material Selection',
+      description: 'Sourcing 1680D nylon, organic canvas, PU leatherette, YKK zippers, and alloy buckles.',
+      icon: Layers,
     },
     {
       stepNumber: '03',
-      title: 'Precision Automated Cutting & Stitching',
-      description: 'Heavy fabric rolls undergo computer-guided pattern cutting and reinforced bar-tack joints on shoulder straps and handle anchors.',
+      title: 'Cutting',
+      description: 'Precision automated CNC fabric laser cutting ensuring exact dimensional consistency across batch runs.',
+      icon: Scissors,
     },
     {
       stepNumber: '04',
-      title: '100% Quality Inspection & Dispatch',
-      description: 'Strict AQL 2.5 quality control checks for zipper durability, seam strength, custom logo alignment, and global freight delivery.',
+      title: 'Stitching',
+      description: 'Heavy-duty bar-tack sewing, reinforced strap anchors, and high seam-density stitching.',
+      icon: Factory,
     },
-  ]);
-
-  const [title, setTitle] = useState(customTitle || '');
-  const [subtitle, setSubtitle] = useState(customSubtitle || '');
-
-  useEffect(() => {
-    if (!initialSteps) {
-      fetch('/api/settings')
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.homepage?.processSteps && data.homepage.processSteps.length > 0) {
-            setSteps(data.homepage.processSteps);
-          }
-          if (data?.homepage?.processTitle) {
-            setTitle(data.homepage.processTitle);
-          }
-          if (data?.homepage?.processSubtitle) {
-            setSubtitle(data.homepage.processSubtitle);
-          }
-        })
-        .catch((err) => console.error('Error fetching process steps:', err));
-    }
-  }, [initialSteps]);
-
-  const displayTitle = title || t('home.processTitle', '4-Step Precision OEM/ODM Production Workflow');
-  const displaySubtitle = subtitle || t('home.processSubtitle', 'From initial CAD design rendering to final container loading, every step in our bag factory is monitored for zero-defect compliance.');
-
-  const getStepIcon = (index: number) => {
-    const icons = [FileText, Ruler, Scissors, Layers, ShieldCheck, Truck];
-    return icons[index % icons.length];
-  };
+    {
+      stepNumber: '05',
+      title: 'Printing',
+      description: '3D puff embroidery, water-based screen printing, debossed logos, and metallic badge riveting.',
+      icon: Printer,
+    },
+    {
+      stepNumber: '06',
+      title: 'Quality Control',
+      description: '100% inspection for seam strength, zipper action, stress load drops, and alignment accuracy.',
+      icon: ShieldCheck,
+    },
+    {
+      stepNumber: '07',
+      title: 'Packaging',
+      description: 'Dust-proof poly wrap, custom hangtag attachment, silica desiccants, and heavy corrugated master boxes.',
+      icon: Package,
+    },
+    {
+      stepNumber: '08',
+      title: 'Dispatch',
+      description: 'Fast domestic logistics and worldwide sea/air export freight with live consignment tracking.',
+      icon: Truck,
+    },
+  ];
 
   return (
-    <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
-      {/* Background Subtle Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-sky-950/40 via-slate-900 to-slate-950 pointer-events-none" />
-
+    <section className="py-20 bg-[#333333] text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <span className="text-amber-400 font-bold text-xs uppercase tracking-widest font-mono bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-            {t('home.processBadge', 'Manufacturing Standard Operating Procedure')}
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#67B0DF]/20 text-[#67B0DF] font-mono text-xs uppercase tracking-widest font-bold border border-[#67B0DF]/40">
+            <Factory className="w-4 h-4 text-[#67B0DF]" />
+            OUR MANUFACTURING PROCESS
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-serif">
-            {displayTitle}
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-sans">
+            END-TO-END FACTORY PRODUCTION WORKFLOW
           </h2>
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            {displaySubtitle}
+            Every LTS BAGS product passes through our 8-step quality-controlled manufacturing process in Mumbai, India.
           </p>
         </div>
 
-        {/* Process Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {steps.map((s, i) => {
-            const Icon = getStepIcon(i);
+            const Icon = s.icon;
             return (
               <div
                 key={i}
-                className="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 hover:border-amber-500/50 transition-all duration-300 space-y-4 relative group"
+                className="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 hover:border-[#67B0DF] transition-all duration-300 space-y-4 relative group hover:shadow-lg"
               >
                 <div className="flex items-center justify-between border-b border-slate-700/60 pb-3">
-                  <span className="text-2xl font-black font-mono text-amber-400">
-                    {s.stepNumber || `0${i + 1}`}
+                  <span className="text-2xl font-black font-mono text-[#67B0DF]">
+                    {s.stepNumber}
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-amber-400 border border-slate-700 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-[#67B0DF] border border-slate-700 group-hover:bg-[#67B0DF] group-hover:text-white transition-colors">
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
 
-                <h3 className="text-lg font-bold text-white font-serif group-hover:text-amber-300 transition-colors">
+                <h3 className="text-lg font-bold text-white font-sans group-hover:text-[#67B0DF] transition-colors">
                   {s.title}
                 </h3>
 
@@ -124,9 +108,7 @@ export default function ManufacturingProcess({ initialSteps, title: customTitle,
             );
           })}
         </div>
-
       </div>
     </section>
   );
 }
-

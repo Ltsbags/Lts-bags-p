@@ -25,13 +25,16 @@ export default function ProductsCatalogClient({ allProducts, categories }: Produ
   useEffect(() => {
     let active = true;
     fetch('/api/products')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then((data) => {
         if (active && Array.isArray(data) && data.length > 0) {
           setProductsList(data);
         }
       })
-      .catch((err) => console.error(err));
+      .catch(() => {});
     return () => {
       active = false;
     };

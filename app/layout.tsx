@@ -4,6 +4,7 @@ import FloatingContactButtons from '@/components/FloatingContactButtons';
 import AiChatbot from '@/components/AiChatbot';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/components/LanguageProvider';
+import MetricoolTracker from '@/components/MetricoolTracker';
 
 export const metadata: Metadata = {
   title: 'LTS BAGS PRIVATE LIMITED - Custom B2B Bag Manufacturer & Wholesale Supplier',
@@ -19,6 +20,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             {children}
             <FloatingContactButtons />
             <AiChatbot />
+            <MetricoolTracker />
           </LanguageProvider>
         </ThemeProvider>
       </body>

@@ -32,21 +32,26 @@ export default function Logo({
     if (overrideLogoUrl !== undefined) return;
     let active = true;
     fetch('/api/settings')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then((data) => {
-        if (active && data) {
+        if (active && data && !data.error) {
           setFetchedSettings(data);
         }
       })
-      .catch((err) => console.error('Error fetching logo settings:', err));
+      .catch(() => {
+        // Silently retain defaults
+      });
     return () => {
       active = false;
     };
   }, [overrideLogoUrl]);
 
   const logoUrl = overrideLogoUrl !== undefined ? overrideLogoUrl : (fetchedSettings?.logoUrl || '');
-  const logoText = overrideLogoText !== undefined ? overrideLogoText : (fetchedSettings?.logoText ?? '');
-  const logoSubtitle = overrideLogoSubtitle !== undefined ? overrideLogoSubtitle : (fetchedSettings?.logoSubtitle ?? '');
+  const logoText = overrideLogoText !== undefined ? overrideLogoText : (fetchedSettings?.logoText || 'LTS BAGS');
+  const logoSubtitle = overrideLogoSubtitle !== undefined ? overrideLogoSubtitle : (fetchedSettings?.logoSubtitle || 'PRIVATE LIMITED');
 
   // Image height mapping
   const imgHeights = {
@@ -72,90 +77,79 @@ export default function Logo({
   };
 
   const subtitleSizes = {
-    sm: 'text-[7px]',
+    sm: 'text-[8px]',
     md: 'text-[9px]',
     lg: 'text-[11px]',
     xl: 'text-xs',
   };
 
-  // Determine classes based on theme
-  let ltsTextColor = 'text-slate-600 dark:text-slate-100';
-  let subtitleColor = 'text-slate-500 dark:text-sky-400/90';
-  let lPathClass = 'fill-slate-600 dark:fill-slate-300';
-  let bPathClass = 'fill-sky-500 dark:fill-sky-400';
+  let ltsTextColor = 'text-[#333333] dark:text-white';
+  let subtitleColor = 'text-[#A7A7A7] dark:text-slate-300';
 
   if (theme === 'dark') {
-    ltsTextColor = 'text-slate-100';
-    subtitleColor = 'text-sky-400/90';
-    lPathClass = 'fill-slate-300';
-    bPathClass = 'fill-sky-400';
+    ltsTextColor = 'text-white';
+    subtitleColor = 'text-[#A7A7A7]';
   } else if (theme === 'light') {
-    ltsTextColor = 'text-slate-700';
-    subtitleColor = 'text-slate-500';
-    lPathClass = 'fill-slate-600';
-    bPathClass = 'fill-sky-500';
+    ltsTextColor = 'text-[#333333]';
+    subtitleColor = 'text-[#A7A7A7]';
   }
 
-  // Split logoText if it contains spaces
-  const textParts = logoText.trim() ? logoText.trim().split(' ') : [];
-  const firstPart = textParts[0] || '';
-  const restPart = textParts.slice(1).join(' ');
+  // Split logoText
+  const textParts = logoText.trim() ? logoText.trim().split(' ') : ['LTS', 'BAGS'];
+  const firstPart = textParts[0] || 'LTS';
+  const restPart = textParts.slice(1).join(' ') || 'BAGS';
 
   return (
     <div className={`inline-flex items-center gap-2.5 sm:gap-3 group ${className}`}>
       {logoUrl && !imgError ? (
         <div className="flex items-center gap-3">
-          {/* Custom Uploaded Image Logo */}
           <img
             key={logoUrl}
             src={logoUrl}
-            alt={logoText || 'Company Logo'}
+            alt={logoText || 'LTS BAGS PRIVATE LIMITED'}
             className={`${imgHeights[size]} object-contain transition-transform group-hover:scale-105`}
             onError={() => setImgError(true)}
           />
         </div>
       ) : (
         <>
-          {/* High-Precision SVG Monogram Emblem (L + B) */}
           {showIcon && (
             <div className={`relative shrink-0 ${iconSizes[size]} flex items-center justify-center transition-transform group-hover:scale-105`}>
               <svg
                 viewBox="0 0 160 180"
-                className="w-full h-full drop-shadow-xs transition-colors duration-200"
+                className="w-full h-full drop-shadow-xs"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* L in Steel Grey */}
                 <path
                   d="M 12 12 L 52 12 L 52 132 L 80 132 L 80 168 L 12 168 Z"
-                  className={`${lPathClass} transition-colors duration-200`}
+                  fill="#333333"
                 />
-                {/* B in Sky Blue */}
                 <path
                   d="M 52 12 L 112 12 C 140 12 156 28 156 52 C 156 68 146 80 132 86 C 150 92 160 108 160 128 C 160 156 140 168 112 168 L 80 168 L 80 132 L 110 132 C 124 132 130 124 130 112 C 130 100 122 92 106 92 L 52 92 Z M 52 48 L 106 48 C 120 48 126 54 126 64 C 126 74 120 80 106 80 L 52 80 Z"
-                  className={`${bPathClass} transition-colors duration-200`}
+                  fill="#67B0DF"
                 />
               </svg>
             </div>
           )}
 
-          {variant !== 'icon-only' && firstPart && (
+          {variant !== 'icon-only' && (
             <div className="flex flex-col justify-center leading-none">
-              <div className="flex items-start font-black font-sans tracking-tight">
-                <span className={`${titleSizes[size]} ${ltsTextColor} tracking-wider font-extrabold transition-colors duration-200`}>
+              <div className="flex items-baseline font-black font-sans tracking-tight">
+                <span className={`${titleSizes[size]} ${ltsTextColor} tracking-wider font-extrabold`}>
                   {firstPart}
                 </span>
                 {restPart && (
-                  <span className="text-sky-500 dark:text-sky-400 tracking-wider font-extrabold ml-1.5 transition-colors duration-200">
+                  <span className="text-[#67B0DF] tracking-wider font-extrabold ml-1.5">
                     {restPart}
                   </span>
                 )}
-                <span className="text-[9px] sm:text-[10px] text-sky-500 dark:text-sky-400 font-extrabold -mt-0.5 ml-0.5 border border-sky-500 dark:border-sky-400 rounded-full w-3.5 h-3.5 inline-flex items-center justify-center leading-none transition-colors duration-200">
-                  R
+                <span className="text-[9px] sm:text-[10px] text-[#67B0DF] font-extrabold -mt-0.5 ml-1 border border-[#67B0DF] rounded-full w-3.5 h-3.5 inline-flex items-center justify-center leading-none">
+                  ®
                 </span>
               </div>
               {showSubtitle && logoSubtitle && (
-                <span className={`${subtitleSizes[size]} uppercase tracking-widest font-extrabold ${subtitleColor} mt-1 transition-colors duration-200`}>
+                <span className={`${subtitleSizes[size]} uppercase tracking-widest font-extrabold ${subtitleColor} mt-1`}>
                   {logoSubtitle}
                 </span>
               )}

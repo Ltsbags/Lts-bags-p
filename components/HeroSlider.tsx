@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, Send, ArrowRight, Award, Pause, Play } from 'lucide-react';
 import { HeroSlide } from '@/lib/types';
+import QuoteModal from './QuoteModal';
 
 interface HeroSliderProps {
   initialSlides?: HeroSlide[];
@@ -23,12 +24,10 @@ export default function HeroSlider({
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(initialSlides.length === 0);
+  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
 
-  // Fetch active slides if none provided
   useEffect(() => {
-    if (initialSlides.length > 0) {
-      return;
-    }
+    if (initialSlides.length > 0) return;
 
     async function fetchSlides() {
       try {
@@ -39,8 +38,8 @@ export default function HeroSlider({
             setSlides(data);
           }
         }
-      } catch (err) {
-        console.error('Failed to load slides:', err);
+      } catch {
+        // Silently retain defaults
       } finally {
         setIsLoading(false);
       }
@@ -51,7 +50,6 @@ export default function HeroSlider({
 
   const activeSlides = slides.filter((s) => s.isActive);
 
-  // Navigation handlers
   const goToNext = useCallback(() => {
     if (activeSlides.length === 0) return;
     setCurrentIndex((prev) => (prev + 1) % activeSlides.length);
@@ -66,7 +64,6 @@ export default function HeroSlider({
     setCurrentIndex(index);
   };
 
-  // Autoplay timer
   useEffect(() => {
     if (activeSlides.length <= 1 || isPaused || isHovered) return;
 
@@ -77,28 +74,23 @@ export default function HeroSlider({
     return () => clearInterval(timer);
   }, [activeSlides.length, isPaused, isHovered, autoplayInterval, goToNext]);
 
-  // Keyboard navigation support (ArrowLeft / ArrowRight)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore key events if typing in an input or textarea
       if (
         document.activeElement?.tagName === 'INPUT' ||
         document.activeElement?.tagName === 'TEXTAREA'
       ) {
         return;
       }
-      if (e.key === 'ArrowLeft') {
-        goToPrev();
-      } else if (e.key === 'ArrowRight') {
-        goToNext();
-      }
+      if (e.key === 'ArrowLeft') goToPrev();
+      else if (e.key === 'ArrowRight') goToNext();
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [goToNext, goToPrev]);
 
-  // Touch Swipe Handlers for mobile
+  // Touch Swipe Handlers
   const minSwipeDistance = 50;
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -113,203 +105,210 @@ export default function HeroSlider({
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      goToNext();
-    } else if (isRightSwipe) {
-      goToPrev();
-    }
+    if (distance > minSwipeDistance) goToNext();
+    else if (distance < -minSwipeDistance) goToPrev();
   };
 
-  // Skeleton fallback or empty state
+  // Title formatting helper to highlight keywords like MANUFACTURER in #67B0DF
+  const renderFormattedTitle = (title: string) => {
+    const keywords = ['MANUFACTURER', 'MANUFACTURING', 'EXCLUSIVE', 'CUSTOM', 'EXECUTIVE', 'WHOLESALE', 'EXPORT'];
+    let formatted = title;
+    
+    // Check if title contains any keyword
+    const upperTitle = title.toUpperCase();
+    const foundKeyword = keywords.find(k => upperTitle.includes(k));
+
+    if (foundKeyword) {
+      const parts = title.split(new RegExp(`(${foundKeyword})`, 'i'));
+      return (
+        <span>
+          {parts.map((part, i) => 
+            part.toUpperCase() === foundKeyword ? (
+              <span key={i} className="text-[#67B0DF] underline decoration-[#67B0DF]/30 underline-offset-8">
+                {part}
+              </span>
+            ) : (
+              <span key={i}>{part}</span>
+            )
+          )}
+        </span>
+      );
+    }
+    return title;
+  };
+
   if (isLoading) {
     return (
-      <div className="w-full h-[520px] sm:h-[600px] lg:h-[650px] bg-slate-900 animate-pulse flex items-center justify-center text-slate-500">
+      <div className="w-full h-[520px] sm:h-[600px] lg:h-[650px] bg-[#333333] animate-pulse flex items-center justify-center text-slate-400">
         <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-sm font-medium">Loading hero slides...</p>
+          <div className="w-12 h-12 border-4 border-[#67B0DF] border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-sm font-medium">Loading LTS BAGS slides...</p>
         </div>
       </div>
     );
   }
 
-  if (activeSlides.length === 0) {
-    return null;
-  }
-
-  const currentSlide = activeSlides[currentIndex] || activeSlides[0];
+  if (activeSlides.length === 0) return null;
 
   return (
-    <section
-      className="relative w-full h-[540px] sm:h-[600px] lg:h-[650px] bg-slate-950 overflow-hidden text-white select-none"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      aria-label="Homepage Featured Highlights"
-    >
-      {/* Slide Images Container */}
-      <div className="relative w-full h-full">
-        {activeSlides.map((slide, index) => {
-          const isActive = index === currentIndex;
-          return (
-            <div
-              key={slide.id}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
-              }`}
-              aria-hidden={!isActive}
-            >
-              {/* Background Image with optimized rendering */}
-              <img
-                src={slide.imageUrl}
-                alt={slide.title || 'LTS BAGS Slide'}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover object-center filter brightness-[0.65] transform scale-100 transition-transform duration-1000"
-              />
+    <>
+      <section
+        className="relative w-full h-[540px] sm:h-[600px] lg:h-[650px] bg-[#1a1a1a] overflow-hidden text-white select-none"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        aria-label="LTS BAGS B2B Hero Slider"
+      >
+        {/* Subtle Background Monogram Branding */}
+        <div className="absolute inset-0 pointer-events-none opacity-5 flex items-center justify-center overflow-hidden z-0">
+          <div className="text-[28vw] font-black text-white font-sans tracking-widest select-none">
+            LTS BAGS
+          </div>
+        </div>
 
-              {/* Dark Gradient Overlay for optimal legibility */}
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/40" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/30" />
+        {/* Slide Images Container */}
+        <div className="relative w-full h-full">
+          {activeSlides.map((slide, index) => {
+            const isActive = index === currentIndex;
+            return (
+              <div
+                key={slide.id}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                  isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
+                }`}
+                aria-hidden={!isActive}
+              >
+                {/* Background Image */}
+                <img
+                  src={slide.imageUrl}
+                  alt={slide.title || 'LTS BAGS Custom Bag Manufacturing'}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover object-center filter brightness-[0.55] scale-100 transition-transform duration-1000"
+                />
 
-              {/* Grid line subtle accent pattern */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#33415510_1px,transparent_1px),linear-gradient(to_bottom,#33415510_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
+                {/* Dark Gradient Overlay for Maximum Readability */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/95 via-[#1a1a1a]/85 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-[#1a1a1a]/40" />
 
-              {/* Slide Content */}
-              <div className="absolute inset-0 flex items-center">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                  <div className="max-w-2xl space-y-4 sm:space-y-6">
-                    {/* Badge */}
-                    {slide.badgeText && (
-                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 font-mono text-xs uppercase tracking-widest font-semibold shadow-sm backdrop-blur-sm">
-                        <Award className="w-4 h-4 text-sky-400 shrink-0" />
-                        <span>{slide.badgeText}</span>
-                      </div>
-                    )}
-
-                    {/* Main Slide Title */}
-                    <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-serif leading-[1.12] drop-shadow-md">
-                      {slide.title}
-                    </h2>
-
-                    {/* Description */}
-                    {slide.description && (
-                      <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed line-clamp-3 max-w-xl">
-                        {slide.description}
-                      </p>
-                    )}
-
-                    {/* CTAs */}
-                    <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
-                      {slide.buttonText && slide.buttonUrl && (
-                        <Link
-                          href={slide.buttonUrl}
-                          className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl shadow-lg shadow-sky-500/25 hover:shadow-sky-400/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2 text-sm sm:text-base"
-                        >
-                          <Send className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950" />
-                          <span>{slide.buttonText}</span>
-                        </Link>
+                {/* Slide Content */}
+                <div className="absolute inset-0 flex items-center">
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div className="max-w-2xl space-y-4 sm:space-y-6">
+                      {/* Badge */}
+                      {slide.badgeText && (
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#67B0DF]/15 border border-[#67B0DF]/40 text-[#67B0DF] font-mono text-xs uppercase tracking-widest font-bold shadow-sm backdrop-blur-sm">
+                          <Award className="w-4 h-4 text-[#67B0DF] shrink-0" />
+                          <span>{slide.badgeText}</span>
+                        </div>
                       )}
 
-                      <Link
-                        href="/products"
-                        className="bg-slate-900/80 hover:bg-slate-800/90 text-white font-semibold px-5 py-3.5 sm:px-6 sm:py-4 rounded-xl border border-slate-700/80 backdrop-blur-md transition-all flex items-center gap-2 text-sm sm:text-base"
-                      >
-                        <span>Explore Catalog</span>
-                        <ArrowRight className="w-4 h-4 text-sky-400" />
-                      </Link>
+                      {/* Main Slide Title */}
+                      <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white font-sans leading-[1.12]">
+                        {renderFormattedTitle(slide.title)}
+                      </h2>
+
+                      {/* Description */}
+                      {slide.description && (
+                        <p className="text-slate-200 text-sm sm:text-base lg:text-lg leading-relaxed line-clamp-3 max-w-xl font-normal">
+                          {slide.description}
+                        </p>
+                      )}
+
+                      {/* CTAs */}
+                      <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
+                        <Link
+                          href="/products"
+                          className="bg-[#67B0DF] hover:bg-[#529ecf] text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl shadow-lg transition-all flex items-center gap-2 text-sm sm:text-base cursor-pointer"
+                        >
+                          <span>EXPLORE PRODUCTS</span>
+                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                        </Link>
+
+                        <button
+                          onClick={() => setQuoteModalOpen(true)}
+                          className="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 sm:px-7 sm:py-4 rounded-xl border border-white/30 backdrop-blur-md transition-all flex items-center gap-2 text-sm sm:text-base cursor-pointer"
+                        >
+                          <Send className="w-4 h-4 text-[#67B0DF]" />
+                          <span>REQUEST A QUOTE</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Navigation Arrows (Desktop & Tablet) */}
-      {activeSlides.length > 1 && (
-        <>
-          <button
-            onClick={goToPrev}
-            type="button"
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-950/70 hover:bg-sky-500 text-white hover:text-slate-950 border border-slate-700/60 transition-all shadow-xl backdrop-blur-md group focus:outline-none focus:ring-2 focus:ring-sky-400"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="w-6 h-6 transform group-hover:-translate-x-0.5 transition-transform" />
-          </button>
-
-          <button
-            onClick={goToNext}
-            type="button"
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-950/70 hover:bg-sky-500 text-white hover:text-slate-950 border border-slate-700/60 transition-all shadow-xl backdrop-blur-md group focus:outline-none focus:ring-2 focus:ring-sky-400"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="w-6 h-6 transform group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </>
-      )}
-
-      {/* Bottom Controls: Dot Indicators & Play/Pause */}
-      <div className="absolute bottom-6 left-0 right-0 z-20 flex items-center justify-between px-4 sm:px-8 max-w-7xl mx-auto pointer-events-none">
-        
-        {/* Play/Pause Autoplay Control */}
-        <div className="pointer-events-auto">
-          <button
-            onClick={() => setIsPaused(!isPaused)}
-            type="button"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/60 text-xs font-mono text-slate-300 hover:text-white hover:bg-slate-800 transition-colors backdrop-blur-md shadow"
-            title={isPaused ? 'Resume autoplay' : 'Pause autoplay'}
-          >
-            {isPaused ? (
-              <>
-                <Play className="w-3.5 h-3.5 text-sky-400 fill-sky-400" />
-                <span className="hidden sm:inline">Autoplay Paused</span>
-              </>
-            ) : (
-              <>
-                <Pause className="w-3.5 h-3.5 text-slate-400" />
-                <span className="hidden sm:inline">Playing</span>
-              </>
-            )}
-          </button>
+            );
+          })}
         </div>
 
-        {/* Dot Indicators */}
+        {/* Navigation Arrows */}
         {activeSlides.length > 1 && (
-          <div className="flex items-center gap-2 pointer-events-auto bg-slate-950/60 backdrop-blur-md px-3.5 py-2 rounded-full border border-slate-800 shadow-lg">
-            {activeSlides.map((slide, idx) => {
-              const isActive = idx === currentIndex;
-              return (
+          <>
+            <button
+              onClick={goToPrev}
+              type="button"
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-[#67B0DF] text-white transition-all shadow-xl backdrop-blur-md group focus:outline-none"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+
+            <button
+              onClick={goToNext}
+              type="button"
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-[#67B0DF] text-white transition-all shadow-xl backdrop-blur-md group focus:outline-none"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </>
+        )}
+
+        {/* Bottom Dot Indicators */}
+        <div className="absolute bottom-6 left-0 right-0 z-20 flex items-center justify-between px-4 sm:px-8 max-w-7xl mx-auto pointer-events-none">
+          <div className="pointer-events-auto">
+            <button
+              onClick={() => setIsPaused(!isPaused)}
+              type="button"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-slate-700/60 text-xs font-mono text-slate-300 hover:text-white transition-colors backdrop-blur-md"
+            >
+              {isPaused ? <Play className="w-3.5 h-3.5 text-[#67B0DF]" /> : <Pause className="w-3.5 h-3.5 text-slate-400" />}
+              <span className="hidden sm:inline">{isPaused ? 'Paused' : 'Playing'}</span>
+            </button>
+          </div>
+
+          {activeSlides.length > 1 && (
+            <div className="flex items-center gap-2 pointer-events-auto bg-black/60 backdrop-blur-md px-3.5 py-2 rounded-full border border-slate-800 shadow-lg">
+              {activeSlides.map((slide, idx) => (
                 <button
                   key={slide.id}
                   onClick={() => goToSlide(idx)}
                   type="button"
-                  className={`transition-all duration-300 rounded-full focus:outline-none ${
-                    isActive
-                      ? 'w-8 h-2.5 bg-sky-400 shadow-sm shadow-sky-400/50'
+                  className={`transition-all duration-300 rounded-full ${
+                    idx === currentIndex
+                      ? 'w-8 h-2.5 bg-[#67B0DF]'
                       : 'w-2.5 h-2.5 bg-slate-600 hover:bg-slate-400'
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
-                  aria-current={isActive ? 'true' : 'false'}
                 />
-              );
-            })}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        {/* Slide Counter */}
-        <div className="pointer-events-auto hidden sm:block">
-          <div className="text-xs font-mono text-slate-400 bg-slate-900/80 border border-slate-700/60 px-3 py-1.5 rounded-full backdrop-blur-md">
-            <span className="text-sky-400 font-bold">{currentIndex + 1}</span> / {activeSlides.length}
+          <div className="pointer-events-auto hidden sm:block">
+            <div className="text-xs font-mono text-slate-400 bg-black/60 border border-slate-700/60 px-3 py-1.5 rounded-full backdrop-blur-md">
+              <span className="text-[#67B0DF] font-bold">{currentIndex + 1}</span> / {activeSlides.length}
+            </div>
           </div>
         </div>
+      </section>
 
-      </div>
-    </section>
+      <QuoteModal
+        isOpen={quoteModalOpen}
+        onClose={() => setQuoteModalOpen(false)}
+      />
+    </>
   );
 }

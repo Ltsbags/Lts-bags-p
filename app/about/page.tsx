@@ -43,16 +43,21 @@ export default function AboutPage() {
 
   useEffect(() => {
     fetch('/api/settings')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
       .then((data) => {
         if (data?.about) {
-          setAbout(data.about);
+          setAbout((prev) => ({ ...prev, ...data.about }));
         }
         if (data?.contactInfo) {
-          setContact(data.contactInfo);
+          setContact((prev) => ({ ...prev, ...data.contactInfo }));
         }
       })
-      .catch((err) => console.error('Error fetching settings in about page:', err));
+      .catch(() => {
+        // Silently retain defaults
+      });
   }, []);
 
   return (
