@@ -47,19 +47,37 @@ export async function POST(req: NextRequest) {
       const ai = new GoogleGenAI({ apiKey });
       const prompt = `You are a B2B bag manufacturing translation system. Translate the given object fields into target language code "${targetLang}". Return ONLY a valid JSON object matching the input keys without markdown backticks or commentary.\n\nInput Object to translate:\n${JSON.stringify(sourceEntity, null, 2)}`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
+      let rawText = '{}';
+      const candidateModels = ['gemini-2.5-flash', 'gemini-2.5-pro'];
 
-      let rawText = response.text?.trim() || '{}';
+      for (const model of candidateModels) {
+        try {
+          const response = await ai.models.generateContent({
+            model: model,
+            contents: prompt,
+          });
+
+          if (response.text?.trim()) {
+            rawText = response.text.trim();
+            break;
+          }
+        } catch {
+          continue;
+        }
+      }
+
       if (rawText.startsWith('```json')) {
         rawText = rawText.replace(/^```json\s*/, '').replace(/\s*```$/, '');
       } else if (rawText.startsWith('```')) {
         rawText = rawText.replace(/^```\s*/, '').replace(/\s*```$/, '');
       }
 
-      const translatedObj = JSON.parse(rawText);
+      let translatedObj: any = {};
+      try {
+        translatedObj = JSON.parse(rawText);
+      } catch {
+        translatedObj = {};
+      }
 
       const saved = saveEntityTranslation({
         entityType,

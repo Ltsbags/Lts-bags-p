@@ -52,12 +52,24 @@ export async function POST(req: NextRequest) {
       const ai = new GoogleGenAI({ apiKey });
       const prompt = `You are a professional B2B corporate bag manufacturing translator. Translate the following text into target language code "${targetLang}". Return ONLY the translated string without quotes or conversational text.\n\nText to translate:\n${text}`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-      });
+      let translatedText = text;
+      const models = ['gemini-2.5-flash', 'gemini-2.5-pro'];
 
-      const translatedText = response.text?.trim() || text;
+      for (const model of models) {
+        try {
+          const response = await ai.models.generateContent({
+            model: model,
+            contents: prompt,
+          });
+          if (response.text?.trim()) {
+            translatedText = response.text.trim();
+            break;
+          }
+        } catch {
+          continue;
+        }
+      }
+
       return NextResponse.json({ success: true, translatedText });
     }
 
