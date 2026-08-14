@@ -126,6 +126,7 @@ export default function Footer() {
               <li><Link href="/customization" className="hover:text-[#72AFDB] transition-colors">Customization</Link></li>
               <li><Link href="/manufacturing" className="hover:text-[#72AFDB] transition-colors">Manufacturing</Link></li>
               <li><Link href="/clients" className="hover:text-[#72AFDB] transition-colors">Our Clients</Link></li>
+              <li><Link href="/payment" className="text-[#72AFDB] hover:text-white transition-colors font-semibold flex items-center gap-1">Pay Advance / Online</Link></li>
               <li><Link href="/blog" className="hover:text-[#72AFDB] transition-colors">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-[#72AFDB] transition-colors">Contact Us</Link></li>
             </ul>

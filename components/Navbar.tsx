@@ -14,7 +14,8 @@ import {
   Linkedin,
   Facebook,
   Instagram,
-  Youtube
+  Youtube,
+  CreditCard
 } from 'lucide-react';
 import QuoteModal from './QuoteModal';
 import Logo from './Logo';
@@ -164,14 +165,23 @@ export default function Navbar() {
             </nav>
 
             {/* Right Side Controls */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2.5">
+              {/* Pay Online Link (Razorpay) */}
+              <Link
+                href="/payment"
+                className="border border-[#72AFDB]/50 hover:bg-[#72AFDB]/10 text-[#72AFDB] font-bold text-xs uppercase tracking-wider px-3.5 py-3 rounded-xl transition-all flex items-center gap-1.5 shrink-0"
+              >
+                <CreditCard className="w-3.5 h-3.5" />
+                <span>Pay Online</span>
+              </Link>
+
               {/* Request A Quote Button */}
               <button
                 onClick={() => {
                   setSelectedProductForQuote('');
                   setQuoteModalOpen(true);
                 }}
-                className="bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all shadow-sm hover:shadow-md flex items-center gap-2 shrink-0 cursor-pointer"
+                className="bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-bold text-xs uppercase tracking-wider px-4.5 py-3 rounded-xl transition-all shadow-sm hover:shadow-md flex items-center gap-2 shrink-0 cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Request a Quote</span>
