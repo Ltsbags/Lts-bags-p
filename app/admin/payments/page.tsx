@@ -195,9 +195,9 @@ export default function AdminPaymentsPage() {
             </h4>
             <div className="text-xs text-slate-300 space-y-1 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800">
               <div><span className="text-slate-500">Account Name:</span> LTS BAGS PRIVATE LIMITED</div>
-              <div><span className="text-slate-500">Bank Name:</span> HDFC Bank Ltd (MIDC Navi Mumbai Branch)</div>
-              <div><span className="text-slate-500">Current A/C #:</span> 50200088991122</div>
-              <div><span className="text-slate-500">IFSC Code:</span> HDFC0000123</div>
+              <div><span className="text-slate-500">Bank Name:</span> Yes Bank (Lower Parel, Mumbai Branch)</div>
+              <div><span className="text-slate-500">Current A/C #:</span> 041961900001163</div>
+              <div><span className="text-slate-500">IFSC Code:</span> YESB0000419</div>
             </div>
           </div>
 
@@ -206,7 +206,7 @@ export default function AdminPaymentsPage() {
               <QrCode className="w-4 h-4" /> Merchant UPI QR & Tax ID
             </h4>
             <div className="text-xs text-slate-300 space-y-1 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800">
-              <div><span className="text-slate-500">UPI ID:</span> ltsbags@hdfcbank</div>
+              <div><span className="text-slate-500">UPI ID:</span> ltsbags@yesbank</div>
               <div><span className="text-slate-500">GSTIN:</span> 27AABCL9876Q1Z5</div>
               <div><span className="text-slate-500">PAN Card:</span> AABCL9876Q</div>
               <div><span className="text-slate-500">Tax Residency:</span> Maharashtra, India</div>
