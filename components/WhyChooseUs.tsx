@@ -96,12 +96,12 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
 
   const getIconColor = (index: number) => {
     const colors = [
-      'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
-      'bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-800',
-      'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800',
-      'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800',
-      'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800',
-      'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800',
+      'bg-[#72AFDB]/10 text-[#72AFDB] border-[#72AFDB]/30',
+      'bg-[#72AFDB]/15 text-[#5C9BC7] border-[#72AFDB]/40',
+      'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-700',
+      'bg-[#72AFDB]/10 text-[#72AFDB] border-[#72AFDB]/30',
+      'bg-[#72AFDB]/15 text-[#5C9BC7] border-[#72AFDB]/40',
+      'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-700',
     ];
     return colors[index % colors.length];
   };
@@ -112,13 +112,13 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <span className="text-sky-700 dark:text-sky-300 font-bold text-xs uppercase tracking-widest font-mono bg-sky-100/80 dark:bg-sky-950/80 px-3 py-1 rounded-full border border-sky-300 dark:border-sky-800">
+          <span className="text-[#72AFDB] font-bold text-xs uppercase tracking-widest font-mono bg-[#72AFDB]/10 px-3.5 py-1 rounded-full border border-[#72AFDB]/30">
             {t('home.whyChooseBadge', 'Why LTS BAGS PRIVATE LIMITED')}
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 font-serif">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-100 font-sans">
             {displayTitle}
           </h2>
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-[#A5A5A5] text-sm sm:text-base leading-relaxed">
             {displaySubtitle}
           </p>
         </div>
@@ -131,12 +131,12 @@ export default function WhyChooseUs({ initialFeatures, title: customTitle, subti
             return (
               <div
                 key={i}
-                className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs hover:shadow-md transition-all duration-200 space-y-4"
+                className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs hover:shadow-lg hover:border-[#72AFDB]/50 transition-all duration-300 space-y-4 group"
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${colorClass}`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${colorClass} group-hover:scale-105 transition-transform`}>
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 font-serif">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 font-sans group-hover:text-[#72AFDB] transition-colors">
                   {f.title}
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300 text-xs leading-relaxed">

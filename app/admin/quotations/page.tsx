@@ -38,14 +38,14 @@ export default function AdminQuotationsPage() {
   const [saving, setSaving] = useState(false);
   const [activeQuoteId, setActiveQuoteId] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => ({
     quoteNumber: '',
     clientName: '',
     companyName: '',
     clientEmail: '',
     clientMobile: '',
     status: 'DRAFT' as Quotation['status'],
-    validUntil: '',
+    validUntil: new Date(Date.now() + 86400000 * 30).toISOString().split('T')[0],
     termsAndConditions: '1. 50% Advance along with Purchase Order, balance 50% prior to dispatch.\n2. Delivery timeline: 12-15 days after physical sample approval.\n3. Goods once sold will not be returned.',
     notes: '',
     discount: 0,
@@ -60,11 +60,10 @@ export default function AdminQuotationsPage() {
         amount: 425000,
       },
     ] as QuotationItem[],
-  });
+  }));
 
   const fetchQuotations = useCallback(async () => {
     try {
-      setLoading(true);
       const res = await fetch('/api/quotations');
       if (res.ok) {
         const data = await res.json();
@@ -78,17 +77,27 @@ export default function AdminQuotationsPage() {
   }, []);
 
   useEffect(() => {
-    fetchQuotations();
-    setFormData((prev) => {
-      if (!prev.validUntil) {
-        return {
-          ...prev,
-          validUntil: new Date(Date.now() + 86400000 * 30).toISOString().split('T')[0],
-        };
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/quotations');
+        if (res.ok) {
+          const data = await res.json();
+          if (!ignore) {
+            setQuotations(data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch quotations:', err);
+      } finally {
+        if (!ignore) setLoading(false);
       }
-      return prev;
-    });
-  }, [fetchQuotations]);
+    };
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleDelete = async (id: string, num: string) => {
     if (!confirm(`Are you sure you want to delete quotation ${num}?`)) return;

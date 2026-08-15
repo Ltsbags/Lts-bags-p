@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import ImageUploader from '@/components/ImageUploader';
 import { Client } from '@/lib/types';
@@ -40,8 +40,7 @@ export default function AdminClientsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
 
-  const fetchClients = async () => {
-    setLoading(true);
+  const fetchClients = useCallback(async () => {
     try {
       const res = await fetch('/api/clients');
       const data = await res.json();
@@ -53,10 +52,27 @@ export default function AdminClientsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchClients();
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/clients');
+        const data = await res.json();
+        if (!ignore && Array.isArray(data)) {
+          setClients(data);
+        }
+      } catch (err) {
+        console.error('Error fetching clients:', err);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleOpenAddModal = () => {

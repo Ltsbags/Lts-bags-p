@@ -65,17 +65,17 @@ export default function ManufacturingProcess() {
   ];
 
   return (
-    <section className="py-20 bg-[#333333] text-white relative overflow-hidden">
+    <section className="py-20 bg-[#1E293B] text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#67B0DF]/20 text-[#67B0DF] font-mono text-xs uppercase tracking-widest font-bold border border-[#67B0DF]/40">
-            <Factory className="w-4 h-4 text-[#67B0DF]" />
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#72AFDB]/15 text-[#72AFDB] font-mono text-xs uppercase tracking-widest font-bold border border-[#72AFDB]/30">
+            <Factory className="w-4 h-4 text-[#72AFDB]" />
             OUR MANUFACTURING PROCESS
           </span>
           <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white font-sans">
             END-TO-END FACTORY PRODUCTION WORKFLOW
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-[#A5A5A5] text-sm sm:text-base leading-relaxed">
             Every LTS BAGS product passes through our 8-step quality-controlled manufacturing process in Mumbai, India.
           </p>
         </div>
@@ -86,22 +86,22 @@ export default function ManufacturingProcess() {
             return (
               <div
                 key={i}
-                className="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 hover:border-[#67B0DF] transition-all duration-300 space-y-4 relative group hover:shadow-lg"
+                className="bg-slate-900/90 rounded-2xl p-6 border border-slate-800 hover:border-[#72AFDB] transition-all duration-300 space-y-4 relative group hover:shadow-xl hover:shadow-[#72AFDB]/10"
               >
-                <div className="flex items-center justify-between border-b border-slate-700/60 pb-3">
-                  <span className="text-2xl font-black font-mono text-[#67B0DF]">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <span className="text-2xl font-black font-mono text-[#72AFDB]">
                     {s.stepNumber}
                   </span>
-                  <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-[#67B0DF] border border-slate-700 group-hover:bg-[#67B0DF] group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-slate-950 flex items-center justify-center text-[#72AFDB] border border-slate-800 group-hover:bg-[#72AFDB] group-hover:text-white transition-colors">
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
 
-                <h3 className="text-lg font-bold text-white font-sans group-hover:text-[#67B0DF] transition-colors">
+                <h3 className="text-lg font-bold text-white font-sans group-hover:text-[#72AFDB] transition-colors">
                   {s.title}
                 </h3>
 
-                <p className="text-slate-300 text-xs leading-relaxed">
+                <p className="text-[#A5A5A5] text-xs leading-relaxed">
                   {s.description}
                 </p>
               </div>

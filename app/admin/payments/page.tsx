@@ -44,7 +44,6 @@ export default function AdminPaymentsPage() {
 
   const fetchPayments = useCallback(async () => {
     try {
-      setLoading(true);
       const res = await fetch('/api/payments');
       if (res.ok) {
         const data = await res.json();
@@ -58,8 +57,27 @@ export default function AdminPaymentsPage() {
   }, []);
 
   useEffect(() => {
-    fetchPayments();
-  }, [fetchPayments]);
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/payments');
+        if (res.ok) {
+          const data = await res.json();
+          if (!ignore) {
+            setPayments(data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load payments:', err);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleDelete = async (id: string, num: string) => {
     if (!confirm(`Are you sure you want to delete payment record ${num}?`)) return;

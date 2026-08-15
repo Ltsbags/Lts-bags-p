@@ -49,9 +49,9 @@ export default function FloatingContactButtons() {
       
       {/* Expanded Phone Numbers Popover */}
       {showPhoneMenu && (
-        <div className="bg-[#333333] text-white p-4 rounded-2xl shadow-2xl border border-slate-700 w-64 space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="bg-[#1E293B] text-white p-4 rounded-2xl shadow-2xl border border-slate-700 w-64 space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-center justify-between border-b border-slate-700 pb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#67B0DF] font-mono">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#72AFDB] font-mono">
               Call Direct Sales
             </span>
             <button
@@ -64,20 +64,20 @@ export default function FloatingContactButtons() {
           <div className="space-y-2 text-xs">
             <a
               href={`tel:${primaryPhoneClean}`}
-              className="flex items-center gap-2 p-2.5 bg-slate-800 hover:bg-[#67B0DF] rounded-xl transition-colors font-bold text-slate-100"
+              className="flex items-center gap-2 p-2.5 bg-slate-800 hover:bg-[#72AFDB] rounded-xl transition-colors font-bold text-slate-100 group/btn"
             >
-              <Phone className="w-4 h-4 text-[#67B0DF]" />
+              <Phone className="w-4 h-4 text-[#72AFDB] group-hover/btn:text-white" />
               <span>{primaryPhoneDisplay}</span>
             </a>
             <a
               href={`tel:${secondaryPhoneClean}`}
-              className="flex items-center gap-2 p-2.5 bg-slate-800 hover:bg-[#67B0DF] rounded-xl transition-colors font-bold text-slate-100"
+              className="flex items-center gap-2 p-2.5 bg-slate-800 hover:bg-[#72AFDB] rounded-xl transition-colors font-bold text-slate-100 group/btn"
             >
-              <Phone className="w-4 h-4 text-[#67B0DF]" />
+              <Phone className="w-4 h-4 text-[#72AFDB] group-hover/btn:text-white" />
               <span>{secondaryPhoneDisplay}</span>
             </a>
           </div>
-          <p className="text-[10px] text-slate-400 text-center">
+          <p className="text-[10px] text-[#A5A5A5] text-center">
             LTS BAGS PRIVATE LIMITED Helpline
           </p>
         </div>
@@ -89,10 +89,10 @@ export default function FloatingContactButtons() {
         <button
           onClick={() => setShowPhoneMenu(!showPhoneMenu)}
           aria-label="Call LTS BAGS PRIVATE LIMITED"
-          className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-[#67B0DF] hover:bg-[#529ecf] text-white shadow-lg hover:scale-105 transition-all duration-300 border-2 border-white/20 cursor-pointer"
+          className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-[#72AFDB] hover:bg-[#5C9BC7] text-white shadow-lg hover:scale-105 transition-all duration-300 border-2 border-white/20 cursor-pointer shadow-[#72AFDB]/30"
         >
           <Phone className="w-5 h-5 text-white" />
-          <span className="absolute right-full mr-3 px-3 py-1.5 bg-[#333333] text-white text-xs font-bold rounded-lg shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+          <span className="absolute right-full mr-3 px-3 py-1.5 bg-[#1E293B] text-white text-xs font-bold rounded-lg shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-slate-700">
             Call Us: +91 9833598338
           </span>
         </button>

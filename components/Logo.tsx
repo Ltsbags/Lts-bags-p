@@ -83,15 +83,15 @@ export default function Logo({
     xl: 'text-xs',
   };
 
-  let ltsTextColor = 'text-[#333333] dark:text-white';
-  let subtitleColor = 'text-[#A7A7A7] dark:text-slate-300';
+  let ltsTextColor = 'text-[#1E293B] dark:text-white';
+  let subtitleColor = 'text-[#A5A5A5] dark:text-slate-300';
 
   if (theme === 'dark') {
     ltsTextColor = 'text-white';
-    subtitleColor = 'text-[#A7A7A7]';
+    subtitleColor = 'text-[#A5A5A5]';
   } else if (theme === 'light') {
-    ltsTextColor = 'text-[#333333]';
-    subtitleColor = 'text-[#A7A7A7]';
+    ltsTextColor = 'text-[#1E293B]';
+    subtitleColor = 'text-[#A5A5A5]';
   }
 
   // Split logoText
@@ -123,11 +123,11 @@ export default function Logo({
               >
                 <path
                   d="M 12 12 L 52 12 L 52 132 L 80 132 L 80 168 L 12 168 Z"
-                  fill="#333333"
+                  fill="#1E293B"
                 />
                 <path
                   d="M 52 12 L 112 12 C 140 12 156 28 156 52 C 156 68 146 80 132 86 C 150 92 160 108 160 128 C 160 156 140 168 112 168 L 80 168 L 80 132 L 110 132 C 124 132 130 124 130 112 C 130 100 122 92 106 92 L 52 92 Z M 52 48 L 106 48 C 120 48 126 54 126 64 C 126 74 120 80 106 80 L 52 80 Z"
-                  fill="#67B0DF"
+                  fill="#72AFDB"
                 />
               </svg>
             </div>
@@ -140,11 +140,11 @@ export default function Logo({
                   {firstPart}
                 </span>
                 {restPart && (
-                  <span className="text-[#67B0DF] tracking-wider font-extrabold ml-1.5">
+                  <span className="text-[#72AFDB] tracking-wider font-extrabold ml-1.5">
                     {restPart}
                   </span>
                 )}
-                <span className="text-[9px] sm:text-[10px] text-[#67B0DF] font-extrabold -mt-0.5 ml-1 border border-[#67B0DF] rounded-full w-3.5 h-3.5 inline-flex items-center justify-center leading-none">
+                <span className="text-[9px] sm:text-[10px] text-[#72AFDB] font-extrabold -mt-0.5 ml-1 border border-[#72AFDB] rounded-full w-3.5 h-3.5 inline-flex items-center justify-center leading-none">
                   ®
                 </span>
               </div>

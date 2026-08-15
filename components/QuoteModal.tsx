@@ -67,18 +67,18 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
       <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-amber-900 px-6 py-5 text-white flex items-center justify-between">
+        <div className="bg-[#1E293B] px-6 py-5 text-white flex items-center justify-between border-b border-slate-700/80">
           <div>
-            <span className="text-amber-400 font-bold text-xs uppercase tracking-wider font-mono">
+            <span className="text-[#72AFDB] font-bold text-xs uppercase tracking-wider font-mono">
               B2B Factory Wholesale
             </span>
-            <h2 className="text-xl font-black tracking-tight font-serif">
+            <h2 className="text-xl font-black tracking-tight font-sans">
               Request Instant Quote
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -128,7 +128,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                       placeholder="e.g. Rahul Verma"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none"
                     />
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                       placeholder="e.g. Acme Corp Ltd"
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none"
                     />
                   </div>
                 </div>
@@ -165,7 +165,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                       placeholder="name@company.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none"
                     />
                   </div>
                 </div>
@@ -183,7 +183,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                       placeholder="+91 9876543210"
                       value={formData.mobile}
                       onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none"
                     />
                   </div>
                 </div>
@@ -203,7 +203,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                       placeholder="e.g. Corporate Backpack / Laptop Bag"
                       value={formData.productRequirement}
                       onChange={(e) => setFormData({ ...formData, productRequirement: e.target.value })}
-                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none"
                     />
                   </div>
                 </div>
@@ -219,7 +219,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                     placeholder="100"
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none"
                   />
                 </div>
               </div>
@@ -235,7 +235,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
                   placeholder="Mention target dimensions, fabric preferences (e.g. 1680D nylon, canvas), custom logo type (embroidery, rubber badge), and delivery deadline..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none text-xs"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#72AFDB] focus:border-[#72AFDB] outline-none text-xs"
                 />
               </div>
 
@@ -243,7 +243,7 @@ export default function QuoteModal({ isOpen, onClose, preselectedProduct = '' }:
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-md disabled:opacity-50"
+                className="w-full bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-[#72AFDB]/20 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span>Submitting Specifications...</span>

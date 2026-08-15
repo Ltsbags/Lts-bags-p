@@ -15,11 +15,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) {
-      setQuery('');
-      setResults({ products: [], categories: [] });
-      return;
-    }
+    if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -30,7 +26,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   useEffect(() => {
     if (!query.trim()) {
-      setResults({ products: [], categories: [] });
       return;
     }
 
@@ -56,6 +51,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   if (!isOpen) return null;
 
+  const currentProducts = query.trim() ? results.products : [];
+  const currentCategories = query.trim() ? results.categories : [];
+
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
@@ -66,7 +64,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden z-10 flex flex-col max-h-[80vh]">
         {/* Search Input Bar */}
         <div className="flex items-center px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
-          <Search className="w-5 h-5 text-[#67B0DF] shrink-0 mr-3" />
+          <Search className="w-5 h-5 text-[#72AFDB] shrink-0 mr-3" />
           <input
             type="text"
             value={query}
@@ -77,7 +75,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           />
           {query && (
             <button
-              onClick={() => setQuery('')}
+              onClick={() => {
+                setQuery('');
+                setResults({ products: [], categories: [] });
+              }}
               className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 mr-2"
             >
               <X className="w-4 h-4" />
@@ -85,7 +86,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           )}
           <button
             onClick={onClose}
-            className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300"
+            className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-300 cursor-pointer"
           >
             ESC
           </button>
@@ -99,7 +100,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </div>
           )}
 
-          {!loading && query && results.products.length === 0 && results.categories.length === 0 && (
+          {!loading && query && currentProducts.length === 0 && currentCategories.length === 0 && (
             <div className="py-8 text-center text-slate-500 text-sm space-y-2">
               <p className="font-semibold text-slate-700 dark:text-slate-300">No matching bag models found for &quot;{query}&quot;</p>
               <p className="text-xs">Try searching for &quot;laptop&quot;, &quot;backpack&quot;, &quot;duffle&quot;, &quot;jute&quot;, or &quot;corporate&quot;</p>
@@ -107,29 +108,29 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           )}
 
           {/* Category Matches */}
-          {results.categories.length > 0 && (
+          {currentCategories.length > 0 && (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#67B0DF]">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#72AFDB]">
                 <Layers className="w-4 h-4" />
                 <span>Categories</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {results.categories.map((cat) => (
+                {currentCategories.map((cat) => (
                   <Link
                     key={cat.id}
                     href={`/category/${cat.slug}`}
                     onClick={onClose}
-                    className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-[#F2F8FC] dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 group transition-colors"
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-[#F0F7FC] dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 group transition-colors"
                   >
                     {cat.image ? (
                       <img src={cat.image} alt={cat.name} className="w-10 h-10 object-cover rounded-lg shrink-0" />
                     ) : (
-                      <div className="w-10 h-10 rounded-lg bg-[#F2F8FC] dark:bg-slate-700 flex items-center justify-center shrink-0">
-                        <Layers className="w-5 h-5 text-[#67B0DF]" />
+                      <div className="w-10 h-10 rounded-lg bg-[#F0F7FC] dark:bg-slate-700 flex items-center justify-center shrink-0">
+                        <Layers className="w-5 h-5 text-[#72AFDB]" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#67B0DF] truncate">
+                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#72AFDB] transition-colors truncate">
                         {cat.name}
                       </p>
                       <p className="text-xs text-slate-500 truncate">{cat.description}</p>
@@ -141,28 +142,28 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           )}
 
           {/* Product Matches */}
-          {results.products.length > 0 && (
+          {currentProducts.length > 0 && (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#67B0DF]">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#72AFDB]">
                 <Package className="w-4 h-4" />
                 <span>Products</span>
               </div>
               <div className="space-y-2">
-                {results.products.map((prod) => (
+                {currentProducts.map((prod) => (
                   <Link
                     key={prod.id}
                     href={`/product/${prod.slug}`}
                     onClick={onClose}
-                    className="flex items-center gap-3.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-[#F2F8FC] dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 group transition-colors"
+                    className="flex items-center gap-3.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-[#F0F7FC] dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 group transition-colors"
                   >
                     <img src={prod.featuredImage || prod.images?.[0]} alt={prod.name} className="w-12 h-12 object-cover rounded-lg shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#67B0DF] truncate">
+                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-[#72AFDB] transition-colors truncate">
                         {prod.name}
                       </p>
                       <p className="text-xs text-slate-500 truncate">{prod.shortDesc || prod.categoryName}</p>
                     </div>
-                    <div className="shrink-0 text-xs font-semibold text-[#67B0DF] flex items-center gap-1">
+                    <div className="shrink-0 text-xs font-semibold text-[#72AFDB] flex items-center gap-1">
                       <span>View</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -180,7 +181,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <button
                     key={term}
                     onClick={() => setQuery(term)}
-                    className="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-[#F2F8FC] hover:text-[#67B0DF] transition-colors"
+                    className="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-[#F0F7FC] hover:text-[#72AFDB] transition-colors cursor-pointer"
                   >
                     {term}
                   </button>

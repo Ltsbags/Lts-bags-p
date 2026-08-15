@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminHeader from '@/components/AdminHeader';
 import { 
   Languages as LanguagesIcon, 
@@ -65,49 +65,25 @@ export default function AdminLanguagesPage() {
 
   const [loading, setLoading] = useState(true);
 
-  // Load language settings on mount
-  useEffect(() => {
-    fetchLanguageSettings();
-  }, []);
-
-  const fetchLanguageSettings = async () => {
-    setLoading(true);
+  const fetchLanguageSettings = useCallback(async () => {
     try {
       const res = await fetch('/api/languages');
       const data = await res.json();
       if (data.success && data.settings) {
         setLanguages(data.settings.languages || []);
         setDefaultLanguage(data.settings.defaultLanguage || 'en');
-        setUiTranslationsMap(data.settings.uiTranslations || INITIAL_TRANSLATIONS_MAP);
+        const transMap = data.settings.uiTranslations || INITIAL_TRANSLATIONS_MAP;
+        setUiTranslationsMap(transMap);
+        setEditingUiStrings({ ...(transMap[selectedUiLang.toLowerCase()] || {}) });
       }
     } catch (err) {
       console.error('Error fetching language settings:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedUiLang]);
 
-  // Load UI editing strings whenever target UI language or map updates
-  useEffect(() => {
-    if (selectedUiLang && uiTranslationsMap) {
-      const langMap = uiTranslationsMap[selectedUiLang.toLowerCase()] || {};
-      setEditingUiStrings({ ...langMap });
-    }
-  }, [selectedUiLang, uiTranslationsMap]);
-
-  // Load Entity list whenever EntityType changes
-  useEffect(() => {
-    fetchEntityItems(selectedEntityType);
-  }, [selectedEntityType]);
-
-  // Load specific Entity Translation whenever entityId or target lang changes
-  useEffect(() => {
-    if (selectedEntityId && selectedEntityLang) {
-      fetchSpecificEntityTranslation();
-    }
-  }, [selectedEntityId, selectedEntityLang, selectedEntityType]);
-
-  const fetchEntityItems = async (type: string) => {
+  const fetchEntityItems = useCallback(async (type: string) => {
     try {
       let endpoint = '/api/products';
       if (type === 'category') endpoint = '/api/categories';
@@ -124,9 +100,9 @@ export default function AdminLanguagesPage() {
     } catch (err) {
       console.error('Error fetching entity items:', err);
     }
-  };
+  }, [selectedEntityId]);
 
-  const fetchSpecificEntityTranslation = async () => {
+  const fetchSpecificEntityTranslation = useCallback(async () => {
     if (!selectedEntityId) return;
     setEntityLoading(true);
     try {
@@ -159,7 +135,113 @@ export default function AdminLanguagesPage() {
     } finally {
       setEntityLoading(false);
     }
+  }, [selectedEntityId, selectedEntityType, selectedEntityLang, entityItems]);
+
+  // Load language settings on mount
+  useEffect(() => {
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/languages');
+        const data = await res.json();
+        if (!ignore && data.success && data.settings) {
+          setLanguages(data.settings.languages || []);
+          setDefaultLanguage(data.settings.defaultLanguage || 'en');
+          const transMap = data.settings.uiTranslations || INITIAL_TRANSLATIONS_MAP;
+          setUiTranslationsMap(transMap);
+          setEditingUiStrings({ ...(transMap[selectedUiLang.toLowerCase()] || {}) });
+        }
+      } catch (err) {
+        console.error('Error fetching language settings:', err);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, [selectedUiLang]);
+
+  // Handle changing UI target language
+  const handleSelectUiLang = (lang: string) => {
+    setSelectedUiLang(lang);
+    const langMap = uiTranslationsMap[lang.toLowerCase()] || {};
+    setEditingUiStrings({ ...langMap });
   };
+
+  // Load Entity list whenever EntityType changes
+  useEffect(() => {
+    let ignore = false;
+    const loadItems = async () => {
+      try {
+        let endpoint = '/api/products';
+        if (selectedEntityType === 'category') endpoint = '/api/categories';
+        if (selectedEntityType === 'blog') endpoint = '/api/blogs';
+        if (selectedEntityType === 'slide') endpoint = '/api/slides';
+
+        const res = await fetch(endpoint);
+        const data = await res.json();
+        if (!ignore) {
+          const items = Array.isArray(data) ? data : data.products || data.categories || data.blogs || data.slides || [];
+          setEntityItems(items);
+          if (items.length > 0 && !selectedEntityId) {
+            setSelectedEntityId(items[0].id);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching entity items:', err);
+      }
+    };
+    loadItems();
+    return () => {
+      ignore = true;
+    };
+  }, [selectedEntityType, selectedEntityId]);
+
+  // Load specific Entity Translation whenever entityId or target lang changes
+  useEffect(() => {
+    if (!selectedEntityId || !selectedEntityLang) return;
+    let ignore = false;
+    const loadTranslation = async () => {
+      try {
+        const res = await fetch(`/api/translations/entity?entityType=${selectedEntityType}&entityId=${selectedEntityId}&langCode=${selectedEntityLang}`);
+        const data = await res.json();
+        if (!ignore) {
+          if (data.success && data.translations && data.translations.length > 0) {
+            setEntityForm(data.translations[0]);
+          } else {
+            // Fallback to base English entity values as template
+            const baseItem = entityItems.find((i) => i.id === selectedEntityId);
+            if (baseItem) {
+              setEntityForm({
+                entityType: selectedEntityType,
+                entityId: selectedEntityId,
+                langCode: selectedEntityLang,
+                name: baseItem.name || baseItem.title || '',
+                title: baseItem.title || baseItem.name || '',
+                shortDesc: baseItem.shortDesc || baseItem.excerpt || baseItem.description || '',
+                fullDesc: baseItem.fullDesc || baseItem.content || '',
+                materials: baseItem.materials || '',
+                metaTitle: baseItem.metaTitle || '',
+                metaDescription: baseItem.metaDescription || '',
+                metaKeywords: baseItem.metaKeywords || '',
+                slug: baseItem.slug || '',
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching entity translation:', err);
+      } finally {
+        if (!ignore) setEntityLoading(false);
+      }
+    };
+    loadTranslation();
+    return () => {
+      ignore = true;
+    };
+  }, [selectedEntityId, selectedEntityLang, selectedEntityType, entityItems]);
 
   // Toggle language enabled status
   const handleToggleLanguage = async (code: string) => {
@@ -594,7 +676,7 @@ export default function AdminLanguagesPage() {
                 <label className="text-xs font-bold text-slate-400">Target Language:</label>
                 <select
                   value={selectedUiLang}
-                  onChange={(e) => setSelectedUiLang(e.target.value)}
+                  onChange={(e) => handleSelectUiLang(e.target.value)}
                   className="bg-slate-950 border border-slate-700 text-sky-400 font-bold text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 >
                   {languages.map((l) => (
@@ -949,7 +1031,9 @@ export default function AdminLanguagesPage() {
 
             <form onSubmit={handleAddLanguage} className="space-y-4 text-xs">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Language Code (e.g. "sv", "pl", "vi"):</label>
+                <label className="block text-slate-300 font-bold mb-1">
+                  Language Code (e.g. &quot;sv&quot;, &quot;pl&quot;, &quot;vi&quot;):
+                </label>
                 <input
                   type="text"
                   required

@@ -41,16 +41,16 @@ export default function FeatureStrip() {
             return (
               <div 
                 key={index} 
-                className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-[#F2F8FC] dark:hover:bg-slate-800/60 transition-colors group"
+                className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-[#F0F7FC] dark:hover:bg-slate-800/60 transition-colors group"
               >
-                <div className="p-3 rounded-xl bg-[#F2F8FC] dark:bg-slate-800 text-[#67B0DF] border border-[#67B0DF]/20 group-hover:scale-105 transition-transform shrink-0">
-                  <Icon className="w-6 h-6 text-[#67B0DF]" />
+                <div className="p-3 rounded-xl bg-[#F0F7FC] dark:bg-slate-800 text-[#72AFDB] border border-[#72AFDB]/25 group-hover:scale-105 transition-transform shrink-0">
+                  <Icon className="w-6 h-6 text-[#72AFDB]" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[#333333] dark:text-slate-100 leading-tight">
+                  <h4 className="text-sm font-bold text-[#1E293B] dark:text-slate-100 leading-tight">
                     {item.title}
                   </h4>
-                  <p className="text-xs text-[#A7A7A7] dark:text-slate-400 mt-0.5 leading-snug">
+                  <p className="text-xs text-[#A5A5A5] dark:text-slate-400 mt-0.5 leading-snug">
                     {item.subtitle}
                   </p>
                 </div>

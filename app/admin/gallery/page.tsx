@@ -40,7 +40,6 @@ export default function AdminGalleryPage() {
 
   const fetchMedia = useCallback(async () => {
     try {
-      setLoading(true);
       const res = await fetch('/api/media');
       if (res.ok) {
         const data = await res.json();
@@ -54,14 +53,29 @@ export default function AdminGalleryPage() {
   }, []);
 
   useEffect(() => {
-    let active = true;
-    if (active) {
-      fetchMedia();
-    }
-    return () => {
-      active = false;
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/media');
+        if (res.ok) {
+          const data = await res.json();
+          if (!ignore) {
+            setMedia(data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load media:', err);
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
     };
-  }, [fetchMedia]);
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleCopyUrl = (id: string, url: string) => {
     navigator.clipboard.writeText(url);

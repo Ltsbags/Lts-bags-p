@@ -26,7 +26,7 @@ interface DatabaseSchema {
 const INITIAL_SETTINGS: SiteSettings = {
   logoUrl: '',
   logoText: 'LTS BAGS',
-  logoSubtitle: 'PRIVATE LIMITED',
+  logoSubtitle: '',
   updatedAt: new Date().toISOString(),
   contactInfo: {
     companyName: 'LTS BAGS PRIVATE LIMITED',

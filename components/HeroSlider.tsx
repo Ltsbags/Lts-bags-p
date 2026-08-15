@@ -124,7 +124,7 @@ export default function HeroSlider({
         <span>
           {parts.map((part, i) => 
             part.toUpperCase() === foundKeyword ? (
-              <span key={i} className="text-[#67B0DF] underline decoration-[#67B0DF]/30 underline-offset-8">
+              <span key={i} className="text-[#72AFDB] underline decoration-[#72AFDB]/30 underline-offset-8">
                 {part}
               </span>
             ) : (
@@ -139,9 +139,9 @@ export default function HeroSlider({
 
   if (isLoading) {
     return (
-      <div className="w-full h-[520px] sm:h-[600px] lg:h-[650px] bg-[#333333] animate-pulse flex items-center justify-center text-slate-400">
+      <div className="w-full h-[520px] sm:h-[600px] lg:h-[650px] bg-slate-900 animate-pulse flex items-center justify-center text-[#A5A5A5]">
         <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-[#67B0DF] border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="w-12 h-12 border-4 border-[#72AFDB] border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-sm font-medium">Loading LTS BAGS slides...</p>
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function HeroSlider({
   return (
     <>
       <section
-        className="relative w-full h-[540px] sm:h-[600px] lg:h-[650px] bg-[#1a1a1a] overflow-hidden text-white select-none"
+        className="relative w-full h-[540px] sm:h-[600px] lg:h-[650px] bg-[#1E293B] overflow-hidden text-white select-none"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onTouchStart={onTouchStart}
@@ -190,8 +190,8 @@ export default function HeroSlider({
                 />
 
                 {/* Dark Gradient Overlay for Maximum Readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/95 via-[#1a1a1a]/85 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-[#1a1a1a]/40" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#1E293B]/95 via-[#1E293B]/85 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B] via-transparent to-[#1E293B]/40" />
 
                 {/* Slide Content */}
                 <div className="absolute inset-0 flex items-center">
@@ -199,8 +199,8 @@ export default function HeroSlider({
                     <div className="max-w-2xl space-y-4 sm:space-y-6">
                       {/* Badge */}
                       {slide.badgeText && (
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#67B0DF]/15 border border-[#67B0DF]/40 text-[#67B0DF] font-mono text-xs uppercase tracking-widest font-bold shadow-sm backdrop-blur-sm">
-                          <Award className="w-4 h-4 text-[#67B0DF] shrink-0" />
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#72AFDB]/15 border border-[#72AFDB]/40 text-[#72AFDB] font-mono text-xs uppercase tracking-widest font-bold shadow-sm backdrop-blur-sm">
+                          <Award className="w-4 h-4 text-[#72AFDB] shrink-0" />
                           <span>{slide.badgeText}</span>
                         </div>
                       )}
@@ -221,7 +221,7 @@ export default function HeroSlider({
                       <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
                         <Link
                           href="/products"
-                          className="bg-[#67B0DF] hover:bg-[#529ecf] text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl shadow-lg transition-all flex items-center gap-2 text-sm sm:text-base cursor-pointer"
+                          className="bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl shadow-lg transition-all flex items-center gap-2 text-sm sm:text-base cursor-pointer shadow-[#72AFDB]/25"
                         >
                           <span>EXPLORE PRODUCTS</span>
                           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
@@ -231,7 +231,7 @@ export default function HeroSlider({
                           onClick={() => setQuoteModalOpen(true)}
                           className="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 sm:px-7 sm:py-4 rounded-xl border border-white/30 backdrop-blur-md transition-all flex items-center gap-2 text-sm sm:text-base cursor-pointer"
                         >
-                          <Send className="w-4 h-4 text-[#67B0DF]" />
+                          <Send className="w-4 h-4 text-[#72AFDB]" />
                           <span>REQUEST A QUOTE</span>
                         </button>
                       </div>
@@ -249,7 +249,7 @@ export default function HeroSlider({
             <button
               onClick={goToPrev}
               type="button"
-              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-[#67B0DF] text-white transition-all shadow-xl backdrop-blur-md group focus:outline-none"
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-[#72AFDB] text-white transition-all shadow-xl backdrop-blur-md group focus:outline-none"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
@@ -258,7 +258,7 @@ export default function HeroSlider({
             <button
               onClick={goToNext}
               type="button"
-              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-[#67B0DF] text-white transition-all shadow-xl backdrop-blur-md group focus:outline-none"
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-[#72AFDB] text-white transition-all shadow-xl backdrop-blur-md group focus:outline-none"
               aria-label="Next slide"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
@@ -274,7 +274,7 @@ export default function HeroSlider({
               type="button"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-slate-700/60 text-xs font-mono text-slate-300 hover:text-white transition-colors backdrop-blur-md"
             >
-              {isPaused ? <Play className="w-3.5 h-3.5 text-[#67B0DF]" /> : <Pause className="w-3.5 h-3.5 text-slate-400" />}
+              {isPaused ? <Play className="w-3.5 h-3.5 text-[#72AFDB]" /> : <Pause className="w-3.5 h-3.5 text-slate-400" />}
               <span className="hidden sm:inline">{isPaused ? 'Paused' : 'Playing'}</span>
             </button>
           </div>
@@ -288,7 +288,7 @@ export default function HeroSlider({
                   type="button"
                   className={`transition-all duration-300 rounded-full ${
                     idx === currentIndex
-                      ? 'w-8 h-2.5 bg-[#67B0DF]'
+                      ? 'w-8 h-2.5 bg-[#72AFDB]'
                       : 'w-2.5 h-2.5 bg-slate-600 hover:bg-slate-400'
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}

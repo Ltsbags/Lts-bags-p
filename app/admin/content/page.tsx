@@ -28,7 +28,6 @@ export default function AdminContentPage() {
 
   const fetchSettings = useCallback(async () => {
     try {
-      setLoading(true);
       const res = await fetch('/api/settings');
       if (res.ok) {
         const data = await res.json();
@@ -42,14 +41,29 @@ export default function AdminContentPage() {
   }, []);
 
   useEffect(() => {
-    let active = true;
-    if (active) {
-      fetchSettings();
-    }
-    return () => {
-      active = false;
+    let ignore = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+          const data = await res.json();
+          if (!ignore) {
+            setSettings(data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load settings:', err);
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
     };
-  }, [fetchSettings]);
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

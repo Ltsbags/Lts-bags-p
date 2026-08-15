@@ -3,11 +3,13 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-lts-blue: #67B0DF;
-  --color-lts-blue-hover: #529ecf;
-  --color-lts-gray: #A7A7A7;
+  --color-lts-blue: #72AFDB;
+  --color-lts-blue-hover: #5C9BC7;
+  --color-lts-blue-light: #F0F7FC;
+  --color-lts-gray: #A5A5A5;
+  --color-lts-gray-hover: #8E8E8E;
+  --color-lts-gray-light: #F4F5F7;
   --color-lts-dark: #333333;
-  --color-lts-light-blue: #F2F8FC;
 }
 
 @layer base {
