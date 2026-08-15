@@ -163,25 +163,11 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* Right Side Controls */}
-            <div className="hidden md:flex items-center gap-2.5">
-              {/* Request A Quote Button */}
-              <button
-                onClick={() => {
-                  setSelectedProductForQuote('');
-                  setQuoteModalOpen(true);
-                }}
-                className="bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-bold text-xs uppercase tracking-wider px-4.5 py-3 rounded-xl transition-all shadow-sm hover:shadow-md flex items-center gap-2 shrink-0 cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>Request a Quote</span>
-              </button>
-            </div>
-
             {/* Mobile Menu Controls */}
             <div className="flex lg:hidden items-center gap-2">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle Navigation Menu"
                 className="p-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
