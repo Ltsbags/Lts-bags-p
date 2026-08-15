@@ -120,23 +120,23 @@ export function generateProductSchema(product: {
     name: product.name,
     image: product.images,
     description: product.shortDesc,
-    sku: `APEX-${product.slug.toUpperCase()}`,
-    mpn: `APEX-${product.slug.toUpperCase()}`,
+    sku: `LTS-${product.slug.toUpperCase()}`,
+    mpn: `LTS-${product.slug.toUpperCase()}`,
     brand: {
       '@type': 'Brand',
-      name: 'ApexBags',
+      name: 'LTS BAGS PRIVATE LIMITED',
     },
     offers: {
       '@type': 'AggregateOffer',
-      priceCurrency: 'USD',
-      lowPrice: '5.00',
-      highPrice: '45.00',
+      priceCurrency: 'INR',
+      lowPrice: '150.00',
+      highPrice: '2500.00',
       offerCount: '1000',
       itemCondition: 'https://schema.org/NewCondition',
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
-        name: 'ApexBags',
+        name: 'LTS BAGS PRIVATE LIMITED',
       },
     },
   };
@@ -172,11 +172,11 @@ export function generateArticleSchema(blog: {
     datePublished: blog.publishedAt,
     author: {
       '@type': 'Organization',
-      name: blog.author || 'ApexBags Editorial',
+      name: blog.author || 'LTS Bags Editorial Team',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'ApexBags',
+      name: 'LTS BAGS PRIVATE LIMITED',
       logo: {
         '@type': 'ImageObject',
         url: `${SITE_URL}/logo.png`,

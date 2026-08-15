@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
       factoryAddress:
         'MIDC Industrial Area, Navi Mumbai, Maharashtra, India',
       workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM IST',
-      gstNumber: '27AABCL9876Q1Z5',
+      gstNumber: '27AAGCL1568H1ZC',
       isoCertificate: 'ISO 9001:2015 Certified',
       socialWhatsapp: '+91 98335 98338',
     };
@@ -157,7 +157,7 @@ Secondary Phone: ${contact.phone2 || '+91 96199 61971'}
 Sales Email: ${contact.email2 || contact.email1 || 'sales@ltsbags.com'}
 Factory Address: ${contact.factoryAddress || 'MIDC Industrial Area, Navi Mumbai, Maharashtra, India'}
 Working Hours: ${contact.workingHours || 'Mon - Sat: 9:00 AM - 7:00 PM IST'}
-Certifications: GST: ${contact.gstNumber || '27AABCL9876Q1Z5'} | ${contact.isoCertificate || 'ISO 9001:2015 Certified'}
+Certifications: GST: ${contact.gstNumber || '27AAGCL1568H1ZC'} | ${contact.isoCertificate || 'ISO 9001:2015 Certified'}
 WhatsApp Support: ${contact.socialWhatsapp || contact.phone1 || '+91 98335 98338'}
 
 === PRODUCT CATEGORIES (${categories.length} Categories) ===

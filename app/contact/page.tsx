@@ -268,7 +268,7 @@ export default function ContactPage() {
     factoryAddress: 'Plot No. 42, Sector 8, Industrial Area, MIDC, Navi Mumbai, Maharashtra 400708, India',
     googleMapsUrl: 'https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED',
     workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM IST',
-    gstNumber: '27AABCL9876Q1Z5',
+    gstNumber: '27AAGCL1568H1ZC',
     isoCertificate: 'ISO 9001:2015 Certified Manufacturing Facility',
   });
 

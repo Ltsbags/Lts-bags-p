@@ -32,12 +32,18 @@ import {
   Truck,
   Layers,
   Sliders,
-  Sparkles
+  Sparkles,
+  ExternalLink,
+  RefreshCw,
+  Search,
+  Code
 } from 'lucide-react';
 import { SiteSettings, StatItem, FeatureItem, ProcessStepItem, TestimonialItem, ClientLogoItem } from '@/lib/types';
 
 export default function AdminSettingsPage() {
-  const [activeTab, setActiveTab] = useState<'brand' | 'contact' | 'homepage' | 'features' | 'testimonials' | 'about' | 'footer'>('brand');
+  const [activeTab, setActiveTab] = useState<'brand' | 'contact' | 'homepage' | 'features' | 'testimonials' | 'about' | 'footer' | 'seo'>('brand');
+  const [isGeneratingSitemap, setIsGeneratingSitemap] = useState<boolean>(false);
+  const [sitemapStats, setSitemapStats] = useState<{ totalUrls?: number; counts?: any; generatedAt?: string } | null>(null);
   
   // Settings state
   const [logoUrl, setLogoUrl] = useState<string>('');
@@ -54,7 +60,7 @@ export default function AdminSettingsPage() {
   const [factoryAddress, setFactoryAddress] = useState('Plot No. 42, Sector 8, Industrial Area, MIDC, Navi Mumbai, Maharashtra 400708, India');
   const [googleMapsUrl, setGoogleMapsUrl] = useState('https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED');
   const [workingHours, setWorkingHours] = useState('Mon - Sat: 9:00 AM - 7:00 PM IST');
-  const [gstNumber, setGstNumber] = useState('27AABCL9876Q1Z5');
+  const [gstNumber, setGstNumber] = useState('27AAGCL1568H1ZC');
   const [isoCertificate, setIsoCertificate] = useState('ISO 9001:2015 Certified Manufacturing Facility');
   const [socialLinkedin, setSocialLinkedin] = useState('https://linkedin.com/company/ltsbags');
   const [socialFacebook, setSocialFacebook] = useState('https://facebook.com/ltsbags');
@@ -400,6 +406,30 @@ export default function AdminSettingsPage() {
     setClientLogos(clientLogos.filter(c => c.id !== id));
   };
 
+  const handleGenerateSitemap = async () => {
+    setIsGeneratingSitemap(true);
+    try {
+      const res = await fetch('/api/admin/generate-sitemap', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        setSitemapStats(data);
+        setNotification({
+          type: 'success',
+          message: `✅ sitemap.xml generated successfully with ${data.totalUrls || 0} total URLs indexed (${data.counts?.products || 0} products, ${data.counts?.categories || 0} categories, ${data.counts?.blogs || 0} blogs)!`,
+        });
+      } else {
+        throw new Error(data.error || 'Failed to generate sitemap');
+      }
+    } catch (err: any) {
+      setNotification({
+        type: 'error',
+        message: 'Failed to generate sitemap.xml: ' + (err.message || 'Unknown error'),
+      });
+    } finally {
+      setIsGeneratingSitemap(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans">
@@ -563,6 +593,18 @@ export default function AdminSettingsPage() {
             >
               <Layers className="w-4 h-4" />
               <span>Footer Content</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('seo')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'seo'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Globe className="w-4 h-4 text-emerald-500" />
+              <span>SEO &amp; XML Sitemap</span>
             </button>
           </div>
 
@@ -1260,6 +1302,122 @@ export default function AdminSettingsPage() {
                     onChange={(e) => setFooterCopyrightText(e.target.value)}
                     className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs"
                   />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 8: SEO & XML Sitemap */}
+          {activeTab === 'seo' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 font-serif flex items-center gap-2">
+                      <Globe className="w-5 h-5 text-sky-600" /> Search Engine Sitemap &amp; Indexing
+                    </h3>
+                    <p className="text-slate-500 text-xs">
+                      Automatically generated XML Sitemap for Google, Bing, and search engine crawlers.
+                    </p>
+                  </div>
+                  <span className="bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border border-emerald-200">
+                    Live XML Ready
+                  </span>
+                </div>
+
+                {/* Sitemap URLs Box */}
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">Official Live Sitemap Endpoint:</span>
+                    <a
+                      href="/sitemap.xml"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-bold text-sky-600 hover:underline flex items-center gap-1"
+                    >
+                      <span>Open /sitemap.xml</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                  <div className="font-mono text-xs bg-slate-900 text-emerald-400 p-3 rounded-lg border border-slate-800 break-all select-all flex items-center justify-between">
+                    <span>{typeof window !== 'undefined' ? `${window.location.origin}/sitemap.xml` : 'https://ltsbags.com/sitemap.xml'}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+                    <span className="text-xs font-bold text-slate-700">Robots.txt Configuration:</span>
+                    <a
+                      href="/robots.txt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-bold text-sky-600 hover:underline flex items-center gap-1"
+                    >
+                      <span>Open /robots.txt</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Actions & Regeneration */}
+                <div className="p-5 bg-sky-50/50 border border-sky-100 rounded-xl space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900">Regenerate &amp; Sync Sitemap.xml</h4>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        Scans all active products, category pages, blog articles, and core landing pages to rebuild the XML index.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleGenerateSitemap}
+                      disabled={isGeneratingSitemap}
+                      className="bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isGeneratingSitemap ? 'animate-spin' : ''}`} />
+                      <span>{isGeneratingSitemap ? 'Generating Index...' : 'Regenerate Sitemap Now'}</span>
+                    </button>
+                  </div>
+
+                  {sitemapStats && (
+                    <div className="bg-white p-3.5 rounded-lg border border-sky-200 text-xs text-slate-700 space-y-1.5 animate-in fade-in duration-200">
+                      <div className="font-bold text-emerald-600 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4" /> Latest Sitemap Build Successful
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
+                        <div className="bg-slate-50 p-2 rounded border">Products: <span className="font-bold text-sky-700">{sitemapStats.counts?.products || 0}</span></div>
+                        <div className="bg-slate-50 p-2 rounded border">Categories: <span className="font-bold text-sky-700">{sitemapStats.counts?.categories || 0}</span></div>
+                        <div className="bg-slate-50 p-2 rounded border">Blogs: <span className="font-bold text-sky-700">{sitemapStats.counts?.blogs || 0}</span></div>
+                        <div className="bg-slate-50 p-2 rounded border">Total URLs: <span className="font-bold text-emerald-700">{sitemapStats.totalUrls || 0}</span></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Developer CLI Commands */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <Code className="w-3.5 h-3.5 text-slate-500" /> CLI Script Commands
+                  </h4>
+                  <div className="bg-slate-900 text-slate-300 font-mono text-xs p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+                    <div className="text-slate-400"># Run automated sitemap build script:</div>
+                    <div className="text-emerald-400">npm run sitemap</div>
+                    <div className="text-slate-400 pt-1"># Or direct node execution:</div>
+                    <div className="text-sky-300">node scripts/generate-sitemap.mjs</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sidebar Guide */}
+              <div className="lg:col-span-4 space-y-4">
+                <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
+                  <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Search className="w-4 h-4 text-sky-600" /> Google Search Console
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Submit your sitemap URL in Google Search Console under <span className="font-bold text-slate-800">Index &gt; Sitemaps</span> to ensure new B2B products and bag models are indexed within 24–48 hours.
+                  </p>
+                  <div className="text-[11px] bg-amber-50 text-amber-800 p-2.5 rounded-lg border border-amber-200">
+                    💡 <strong>Automatic Updates:</strong> Whenever you add or edit products in the Admin Catalog, the dynamic sitemap at <code className="font-mono">/sitemap.xml</code> reflects changes immediately in real-time.
+                  </div>
                 </div>
               </div>
             </div>

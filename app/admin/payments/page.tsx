@@ -207,8 +207,8 @@ export default function AdminPaymentsPage() {
             </h4>
             <div className="text-xs text-slate-300 space-y-1 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800">
               <div><span className="text-slate-500">UPI ID:</span> ltsbags@yesbank</div>
-              <div><span className="text-slate-500">GSTIN:</span> 27AABCL9876Q1Z5</div>
-              <div><span className="text-slate-500">PAN Card:</span> AABCL9876Q</div>
+              <div><span className="text-slate-500">GSTIN:</span> 27AAGCL1568H1ZC</div>
+              <div><span className="text-slate-500">PAN Card:</span> AAGCL1568H</div>
               <div><span className="text-slate-500">Tax Residency:</span> Maharashtra, India</div>
             </div>
           </div>

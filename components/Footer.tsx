@@ -32,6 +32,7 @@ export default function Footer() {
     factoryAddress: 'Mumbai, Maharashtra, India',
     googleMapsUrl: 'https://www.google.com/search?kgmid=%2Fg%2F11qpsqysys&hl=en-IN&q=LTS%20BAGS%20PRIVATE%20LIMITED',
     workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM IST',
+    gstNumber: '27AAGCL1568H1ZC',
     isoCertificate: 'ISO 9001:2015 Certified Factory',
     socialLinkedin: 'https://linkedin.com/company/ltsbags',
     socialFacebook: 'https://facebook.com/ltsbags',
@@ -139,6 +140,11 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2.5 text-xs text-[#A5A5A5]">
               <li className="font-bold text-white">LTS BAGS PRIVATE LIMITED</li>
+              {contact.gstNumber && (
+                <li className="text-[11px] text-[#72AFDB] font-mono">
+                  GSTIN: {contact.gstNumber}
+                </li>
+              )}
               <li className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#72AFDB]" />
                 <a href="tel:+919833598338" className="hover:text-white">+91 9833598338</a>
