@@ -187,23 +187,35 @@ export default function AdminPaymentsPage() {
           </div>
         </div>
 
-        {/* Bank Wire Details Box */}
-        <div className="mt-6 bg-slate-900/90 p-5 rounded-xl border border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Bank Wire & Razorpay Details Box */}
+        <div className="mt-6 bg-slate-900/90 p-5 rounded-xl border border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <h4 className="text-xs font-extrabold text-sky-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
               <Building className="w-4 h-4" /> Company Bank Account Wire Details
             </h4>
             <div className="text-xs text-slate-300 space-y-1 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800">
               <div><span className="text-slate-500">Account Name:</span> LTS BAGS PRIVATE LIMITED</div>
-              <div><span className="text-slate-500">Bank Name:</span> Yes Bank (Lower Parel, Mumbai Branch)</div>
+              <div><span className="text-slate-500">Bank Name:</span> Yes Bank (Mumbai Branch)</div>
               <div><span className="text-slate-500">Current A/C #:</span> 041961900001163</div>
               <div><span className="text-slate-500">IFSC Code:</span> YESB0000419</div>
             </div>
           </div>
 
           <div>
+            <h4 className="text-xs font-extrabold text-blue-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+              <CreditCard className="w-4 h-4" /> Razorpay Payment Gateway
+            </h4>
+            <div className="text-xs text-slate-300 space-y-1.5 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <div><span className="text-slate-500">Payment Page:</span> <a href="https://razorpay.me/@Itsbags" target="_blank" rel="noreferrer" className="text-blue-400 hover:underline font-bold">razorpay.me/@Itsbags</a></div>
+              <div><span className="text-slate-500">Merchant Status:</span> <span className="text-emerald-400 font-bold">Active & Verified</span></div>
+              <div><span className="text-slate-500">Cards:</span> Visa, Master, RuPay, Amex</div>
+              <div><span className="text-slate-500">NetBanking:</span> 50+ Banks + UPI AutoPay</div>
+            </div>
+          </div>
+
+          <div>
             <h4 className="text-xs font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-              <QrCode className="w-4 h-4" /> Merchant UPI QR & Tax ID
+              <QrCode className="w-4 h-4" /> Merchant UPI & Tax ID
             </h4>
             <div className="text-xs text-slate-300 space-y-1 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800">
               <div><span className="text-slate-500">UPI ID:</span> ltsbags@yesbank</div>

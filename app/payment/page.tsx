@@ -29,7 +29,8 @@ import {
   Printer,
   Sparkles,
   Zap,
-  RefreshCw
+  RefreshCw,
+  ExternalLink
 } from 'lucide-react';
 
 function PaymentPageContent() {
@@ -70,7 +71,7 @@ function PaymentPageContent() {
   const [selectedGatewayMethod, setSelectedGatewayMethod] = useState<'UPI' | 'CARD' | 'NETBANKING'>('UPI');
   const [orderRef, setOrderRef] = useState<string>('');
 
-  // Official LTS Bags Bank Details (Yes Bank)
+  // Official LTS Bags Bank Details (Yes Bank & Razorpay)
   const bankDetails = {
     accountName: 'LTS BAGS PRIVATE LIMITED',
     bankName: 'Yes Bank',
@@ -79,6 +80,8 @@ function PaymentPageContent() {
     accountType: 'Current Account',
     branch: 'Lower Parel, Mumbai',
     upiId: 'ltsbags@yesbank',
+    razorpayHandle: 'razorpay.me/@Itsbags',
+    razorpayUrl: 'https://razorpay.me/@Itsbags',
   };
 
   useEffect(() => {
@@ -480,20 +483,75 @@ function PaymentPageContent() {
 
               {/* TAB 1: Online Instant Gateway & Cards / UPI Form */}
               {paymentMethodTab === 'razorpay' && (
-                <form
-                  onSubmit={handleInitiatePayment}
-                  className="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5 shadow-xl"
-                >
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                    <div>
-                      <h2 className="text-lg font-bold text-white">Online Payment Gateway</h2>
-                      <p className="text-xs text-slate-400">UPI (GPay / PhonePe / Paytm), Debit/Credit Cards &amp; NetBanking</p>
+                <div className="space-y-4">
+                  {/* Official Razorpay Fast Link Card */}
+                  <div className="bg-gradient-to-r from-blue-950/80 via-slate-950 to-slate-900 border border-blue-500/40 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 font-black text-base shrink-0 shadow-inner">
+                          <Zap className="w-6 h-6 text-blue-400" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-sm sm:text-base font-extrabold text-white">Razorpay Payment Gateway</h3>
+                            <span className="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] px-2 py-0.5 rounded-full font-bold">Official Merchant</span>
+                          </div>
+                          <p className="text-xs text-slate-400 font-mono mt-0.5">
+                            {bankDetails.razorpayHandle}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => copyToClipboard(bankDetails.razorpayUrl, 'razorpay_link')}
+                          className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+                          title="Copy Link"
+                        >
+                          {copiedBankField === 'razorpay_link' ? (
+                            <>
+                              <Check className="w-4 h-4 text-emerald-400" />
+                              <span className="text-emerald-400">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4" />
+                              <span>Copy Link</span>
+                            </>
+                          )}
+                        </button>
+                        <a
+                          href={bankDetails.razorpayUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex-1 sm:flex-initial px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/30 whitespace-nowrap cursor-pointer"
+                        >
+                          <span>Pay via Razorpay</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg">
-                      <Lock className="w-3.5 h-3.5" />
-                      <span>256-Bit SSL Secured</span>
-                    </div>
+
+                    <p className="text-[11px] text-slate-400 border-t border-slate-800/80 pt-3">
+                      Accepts Google Pay, PhonePe, Paytm, BHIM, Credit/Debit Cards (Visa, MasterCard, RuPay), EMI, and NetBanking across all major Indian banks.
+                    </p>
                   </div>
+
+                  <form
+                    onSubmit={handleInitiatePayment}
+                    className="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5 shadow-xl"
+                  >
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                      <div>
+                        <h2 className="text-lg font-bold text-white">Online Order Settlement</h2>
+                        <p className="text-xs text-slate-400">Enter payment details to generate factory advance receipt</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg">
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>256-Bit SSL Secured</span>
+                      </div>
+                    </div>
 
                   {/* Amount Field */}
                   <div>
@@ -634,7 +692,8 @@ function PaymentPageContent() {
                     <span>Net Banking (50+ Banks)</span>
                   </div>
                 </form>
-              )}
+              </div>
+            )}
 
               {/* TAB 2: Instant Dynamic UPI QR Code */}
               {paymentMethodTab === 'upi_qr' && (
@@ -879,6 +938,18 @@ function PaymentPageContent() {
                     <span className="text-slate-200">27AABCL9876Q1Z5</span>
                   </div>
                   <div className="flex justify-between">
+                    <span className="text-slate-500 font-sans">Razorpay Handle:</span>
+                    <a
+                      href={bankDetails.razorpayUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-400 hover:text-blue-300 flex items-center gap-1 font-bold"
+                    >
+                      <span>{bankDetails.razorpayHandle}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                  <div className="flex justify-between">
                     <span className="text-slate-500 font-sans">Bank:</span>
                     <span className="text-slate-200">Yes Bank (Lower Parel, Mumbai)</span>
                   </div>
@@ -1065,14 +1136,25 @@ function PaymentPageContent() {
 
                 {/* Sub-view for Card / NetBanking */}
                 {selectedGatewayMethod === 'CARD' && (
-                  <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs text-slate-300">
-                    <div className="flex items-center gap-2 text-white font-semibold">
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                      <span>Direct Gateway Authorization</span>
+                  <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3 text-xs text-slate-300">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-white font-semibold">
+                        <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                        <span>Razorpay / Yes Bank Corporate Gateway</span>
+                      </div>
                     </div>
                     <p className="text-[11px] text-slate-400">
-                      Instant transaction routing via LTS BAGS Yes Bank Corporate Merchant Account.
+                      You can pay directly via our official verified Razorpay merchant gateway link:
                     </p>
+                    <a
+                      href={bankDetails.razorpayUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm text-xs cursor-pointer"
+                    >
+                      <span>Pay on Razorpay Portal ({bankDetails.razorpayHandle})</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
                   </div>
                 )}
               </div>
