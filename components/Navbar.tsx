@@ -14,8 +14,7 @@ import {
   Linkedin,
   Facebook,
   Instagram,
-  Youtube,
-  CreditCard
+  Youtube
 } from 'lucide-react';
 import QuoteModal from './QuoteModal';
 import Logo from './Logo';
@@ -166,15 +165,6 @@ export default function Navbar() {
 
             {/* Right Side Controls */}
             <div className="hidden md:flex items-center gap-2.5">
-              {/* Pay Online Link (Razorpay) */}
-              <Link
-                href="/payment"
-                className="border border-[#72AFDB]/50 hover:bg-[#72AFDB]/10 text-[#72AFDB] font-bold text-xs uppercase tracking-wider px-3.5 py-3 rounded-xl transition-all flex items-center gap-1.5 shrink-0"
-              >
-                <CreditCard className="w-3.5 h-3.5" />
-                <span>Pay Online</span>
-              </Link>
-
               {/* Request A Quote Button */}
               <button
                 onClick={() => {
@@ -223,7 +213,7 @@ export default function Navbar() {
               })}
             </div>
 
-            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2.5">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

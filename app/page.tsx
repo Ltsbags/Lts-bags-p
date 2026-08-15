@@ -23,7 +23,8 @@ import {
   PhoneCall,
   Clock,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  CreditCard
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -257,7 +258,7 @@ export default function HomePage() {
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/contact"
-                className="w-full sm:w-auto bg-sky-600 hover:bg-sky-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-base"
+                className="w-full sm:w-auto bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-base"
               >
                 <Send className="w-5 h-5" />
                 <span>Submit Wholesale Quote Form</span>
@@ -267,10 +268,31 @@ export default function HomePage() {
                   href={`tel:${contact.phone1.replace(/\s+/g, '')}`}
                   className="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-4 rounded-xl border border-slate-700 transition-colors flex items-center justify-center gap-2 text-base"
                 >
-                  <PhoneCall className="w-4 h-4 text-sky-400" />
+                  <PhoneCall className="w-4 h-4 text-[#72AFDB]" />
                   <span>Call Sales: {contact.phone1}</span>
                 </a>
               )}
+            </div>
+
+            {/* Online Advance & Invoice Payment Box (As per design mockup) */}
+            <div className="mt-8 max-w-xl mx-auto bg-[#141E28]/95 border border-slate-700/70 rounded-2xl p-5 sm:p-6 shadow-2xl backdrop-blur-sm text-left">
+              <div className="flex items-center gap-3.5 mb-4">
+                <div className="w-11 h-11 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-[#72AFDB] shrink-0">
+                  <CreditCard className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-bold text-white tracking-tight">Online Advance &amp; Invoice Payment</h3>
+                  <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">Pay securely via UPI (GPay, PhonePe, Paytm), Debit/Credit Cards &amp; Net Banking.</p>
+                </div>
+              </div>
+              <Link
+                href="/payment"
+                className="w-full bg-[#72AFDB] hover:bg-[#5C9BC7] text-white font-extrabold text-xs uppercase tracking-wider py-3.5 px-6 rounded-xl transition-all shadow-md shadow-[#72AFDB]/25 flex items-center justify-center gap-2"
+              >
+                <CreditCard className="w-4 h-4" />
+                <span>PAY ONLINE NOW</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         </section>

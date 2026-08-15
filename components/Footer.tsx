@@ -14,7 +14,8 @@ import {
   Linkedin,
   Facebook,
   Instagram,
-  Youtube
+  Youtube,
+  CreditCard
 } from 'lucide-react';
 import Logo from './Logo';
 import LanguageSelector from './LanguageSelector';
@@ -191,7 +192,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#A5A5A5]">
+        <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#A5A5A5]">
           <p>Copyright © {new Date().getFullYear()} <strong className="text-white">LTS BAGS PRIVATE LIMITED</strong>. All Rights Reserved.</p>
           <div className="flex flex-wrap items-center gap-6">
             <LanguageSelector variant="footer" />
