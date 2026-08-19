@@ -129,11 +129,71 @@ export interface FooterContent {
   contactTitle?: string;
 }
 
+export interface CompanyMetrics {
+  yearsExperience: string; // e.g. "15+ Years"
+  factoryArea: string; // e.g. "25,000+ Sq. Ft."
+  dailyCapacity: string; // e.g. "10,000+ Bags/Day"
+  monthlyCapacity: string; // e.g. "250,000+ Bags/Month"
+  workforce: string; // e.g. "150+ Skilled Artisans"
+  minOrderQuantity: string; // e.g. "50 - 100 Units"
+  onTimeDeliveryRate: string; // e.g. "99.8%"
+  countriesServed: string; // e.g. "15+ Countries"
+  certificationsList: string; // e.g. "ISO 9001:2015"
+  qualityStandards: string; // e.g. "AQL 2.5 Strict Inspection"
+  clientSectionMode?: 'CLIENTS' | 'INDUSTRIES_SERVED';
+  clientSectionTitle?: string;
+}
+
+export type FactoryDepartment =
+  | 'Factory Exterior'
+  | 'Factory Interior'
+  | 'Cutting Department'
+  | 'Stitching Department'
+  | 'Printing Department'
+  | 'Embroidery Department'
+  | 'Quality Control'
+  | 'Packaging'
+  | 'Warehouse'
+  | 'Finished Goods'
+  | 'Dispatch'
+  | 'Machinery';
+
+export interface FactoryGalleryItem {
+  id: string;
+  imageUrl: string;
+  caption: string;
+  department: FactoryDepartment;
+  altText: string;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface Certification {
+  id: string;
+  name: string;
+  issuingOrganization: string;
+  certificateNumber: string;
+  issueDate: string; // YYYY-MM-DD
+  expiryDate: string; // YYYY-MM-DD
+  imageUrl?: string;
+  pdfUrl?: string;
+  description: string;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
 export interface SiteSettings {
   logoUrl?: string;
   logoText?: string;
   logoSubtitle?: string;
   contactInfo?: CompanyContactInfo;
+  metrics?: CompanyMetrics;
+  certifications?: Certification[];
+  factoryGallery?: FactoryGalleryItem[];
   homepage?: HomepageContent;
   about?: AboutPageContent;
   footer?: FooterContent;
@@ -212,18 +272,61 @@ export interface Blog {
   updatedAt: string;
 }
 
+export type EnquiryStatus =
+  | 'NEW'
+  | 'CONTACTED'
+  | 'QUOTE_SENT'
+  | 'SAMPLE_REQUESTED'
+  | 'SAMPLE_SENT'
+  | 'NEGOTIATION'
+  | 'ORDER_CONFIRMED'
+  | 'CLOSED'
+  | 'CANCELLED'
+  | 'IN_PROGRESS'
+  | 'QUOTED';
+
+export interface RfqProductItem {
+  category?: string;
+  productName: string;
+  quantity: number;
+  targetPrice?: string;
+  material?: string;
+  size?: string;
+  color?: string;
+  logoBranding?: string;
+  customNotes?: string;
+}
+
 export interface Enquiry {
   id: string;
   name: string;
   company: string;
   email: string;
   mobile: string;
+  whatsapp?: string;
+  country?: string;
   productRequirement: string;
   productId?: string;
+  category?: string;
   quantity: number;
+  targetPrice?: string;
+  material?: string;
+  size?: string;
+  color?: string;
+  logoBranding?: string;
+  printingType?: string;
+  embroideryType?: string;
+  sampleRequired?: boolean;
+  deliveryDate?: string;
+  deliveryLocation?: string;
+  deliveryAddress?: string;
+  referenceImageUrl?: string;
   message: string;
-  status: 'NEW' | 'IN_PROGRESS' | 'QUOTED' | 'CLOSED';
-  source?: 'FORM' | 'AI_CHATBOT';
+  items?: RfqProductItem[];
+  status: EnquiryStatus;
+  source?: 'FORM' | 'AI_CHATBOT' | 'SAMPLE_REQUEST' | 'WHATSAPP_LEAD';
+  internalNotes?: string;
+  assignedTo?: string;
   createdAt: string;
   updatedAt: string;
 }

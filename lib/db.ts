@@ -1,7 +1,7 @@
 import 'server-only';
 import fs from 'fs';
 import path from 'path';
-import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide, Quotation, Payment, MediaAsset, Client, LanguageConfig, EntityTranslation, LanguageSettings } from './types';
+import { Category, Product, Blog, Enquiry, SiteSettings, HeroSlide, Quotation, Payment, MediaAsset, Client, LanguageConfig, EntityTranslation, LanguageSettings, CompanyMetrics, Certification, FactoryGalleryItem, FactoryDepartment } from './types';
 import { INITIAL_LANGUAGES } from './i18n/languages';
 import { INITIAL_TRANSLATIONS_MAP } from './i18n/translations';
 
@@ -23,11 +23,194 @@ interface DatabaseSchema {
   entityTranslations?: EntityTranslation[];
 }
 
+const INITIAL_METRICS: CompanyMetrics = {
+  yearsExperience: '15+ Years',
+  factoryArea: '25,000+ Sq. Ft.',
+  dailyCapacity: '10,000+ Bags/Day',
+  monthlyCapacity: '250,000+ Bags/Month',
+  workforce: '150+ Skilled Artisans',
+  minOrderQuantity: '50 - 100 Units',
+  onTimeDeliveryRate: '99.8%',
+  countriesServed: '15+ Countries',
+  certificationsList: 'ISO 9001:2015, AQL 2.5 QC',
+  qualityStandards: '100% In-Line & Final Inspection',
+  clientSectionMode: 'INDUSTRIES_SERVED',
+  clientSectionTitle: 'Businesses & Industries We Serve',
+};
+
+const INITIAL_CERTIFICATIONS: Certification[] = [
+  {
+    id: 'cert-1',
+    name: 'ISO 9001:2015 Quality Management System',
+    issuingOrganization: 'International Organization for Standardization / TUV NORD',
+    certificateNumber: 'ISO-9001-2015-LTS-8842',
+    issueDate: '2023-01-15',
+    expiryDate: '2027-01-14',
+    imageUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800',
+    description: 'Certified for design, manufacturing, bulk cutting, heavy stitching, and global export of executive, travel, and promotional bags.',
+    displayOrder: 1,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'cert-2',
+    name: 'AQL 2.5 Final Quality Acceptance Protocol',
+    issuingOrganization: 'Bureau of International Quality Assurance',
+    certificateNumber: 'AQL-2.5-STITCH-QC-9921',
+    issueDate: '2024-03-01',
+    expiryDate: '2028-02-28',
+    imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800',
+    description: 'Standardized factory defect classification and rigorous load drop, seam tensile, and zipper pull cycle compliance.',
+    displayOrder: 2,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'cert-3',
+    name: 'MSME Registered Manufacturing Unit (Government of India)',
+    issuingOrganization: 'Ministry of Micro, Small & Medium Enterprises, India',
+    certificateNumber: 'UDYAM-MH-19-0098234',
+    issueDate: '2021-08-10',
+    expiryDate: '2031-08-09',
+    imageUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=800',
+    description: 'Officially recognized industrial OEM manufacturing enterprise for luggage, baggage, and textile merchandise.',
+    displayOrder: 3,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+];
+
+const INITIAL_FACTORY_GALLERY: FactoryGalleryItem[] = [
+  {
+    id: 'fac-1',
+    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Modern ISO-certified industrial manufacturing premises in Navi Mumbai, Maharashtra.',
+    department: 'Factory Exterior',
+    altText: 'LTS Bags Manufacturing Plant Exterior and Main Logistics Gate',
+    displayOrder: 1,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-2',
+    imageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1000',
+    caption: '25,000+ sq. ft. dust-controlled production floor with ergonomic conveyor workflow.',
+    department: 'Factory Interior',
+    altText: 'LTS Bags Main Production Floor and Assembly Lines',
+    displayOrder: 2,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-3',
+    imageUrl: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Multi-ply automated laser & CNC fabric cutting table for millimeter-precise pattern pieces.',
+    department: 'Cutting Department',
+    altText: 'Automated CNC Fabric Cutting Machines at LTS Bags Factory',
+    displayOrder: 3,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-4',
+    imageUrl: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Heavy-duty direct-drive programmable sewing machines and computer bar-tack stations.',
+    department: 'Stitching Department',
+    altText: 'High-speed automated sewing line for heavy 1680D nylon and canvas bags',
+    displayOrder: 4,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-5',
+    imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Automatic carousel screen printing and heat-transfer curing ovens for corporate logos.',
+    department: 'Printing Department',
+    altText: 'Precision multi-color screen printing station for custom bag logos',
+    displayOrder: 5,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-6',
+    imageUrl: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Multi-head computerized 3D embroidery machines rendering high-density thread branding.',
+    department: 'Embroidery Department',
+    altText: 'Computerized multi-head Tajima-style embroidery machines',
+    displayOrder: 6,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-7',
+    imageUrl: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&q=80&w=1000',
+    caption: 'In-line AQL 2.5 testing bench: Zipper cycling, 25kg handle drop load, and seam tensile test.',
+    department: 'Quality Control',
+    altText: 'Quality testing laboratory and inspection station at LTS Bags plant',
+    displayOrder: 7,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-8',
+    imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Individual poly-bag vacuum packaging, barcode labeling, and moisture-absorbing silica packets.',
+    department: 'Packaging',
+    altText: 'Bulk product polybagging and carton packaging line',
+    displayOrder: 8,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-9',
+    imageUrl: 'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&q=80&w=1000',
+    caption: 'High-density pallet racking storing raw 1680D nylon rolls, organic canvas, and hardware.',
+    department: 'Warehouse',
+    altText: 'Raw materials and textile warehouse inventory',
+    displayOrder: 9,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-10',
+    imageUrl: 'https://images.unsplash.com/photo-1586528116493-a029325540fa?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Palletized finished corporate backpacks and duffel cartons staged for client audit.',
+    department: 'Finished Goods',
+    altText: 'Finished bags boxed and palletized ready for dispatch',
+    displayOrder: 10,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-11',
+    imageUrl: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Dedicated loading bay with daily logistics pickups for Pan-India and global air/sea export.',
+    department: 'Dispatch',
+    altText: 'Logistics dispatch bay with transport freight trucks',
+    displayOrder: 11,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'fac-12',
+    imageUrl: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=1000',
+    caption: 'Computerized programmable pattern stitchers and ultrasonic edge sealers.',
+    department: 'Machinery',
+    altText: 'Industrial automated bag manufacturing machinery setup',
+    displayOrder: 12,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+];
+
 const INITIAL_SETTINGS: SiteSettings = {
   logoUrl: '',
   logoText: 'LTS BAGS',
   logoSubtitle: '',
   updatedAt: new Date().toISOString(),
+  metrics: INITIAL_METRICS,
+  certifications: INITIAL_CERTIFICATIONS,
+  factoryGallery: INITIAL_FACTORY_GALLERY,
   contactInfo: {
     companyName: 'LTS BAGS PRIVATE LIMITED',
     tagline: 'Premier OEM/ODM Custom Bag Manufacturer & Global Exporter',
@@ -1094,6 +1277,21 @@ export const db = {
     }
     return undefined;
   },
+  updateEnquiry(id: string, updates: Partial<Enquiry>): Enquiry | undefined {
+    const data = ensureDataFile();
+    const index = data.enquiries.findIndex((e) => e.id === id);
+    if (index >= 0) {
+      const updated: Enquiry = {
+        ...data.enquiries[index],
+        ...updates,
+        updatedAt: new Date().toISOString(),
+      };
+      data.enquiries[index] = updated;
+      saveData(data);
+      return updated;
+    }
+    return undefined;
+  },
   deleteEnquiry(id: string): boolean {
     const data = ensureDataFile();
     const lenBefore = data.enquiries.length;
@@ -1129,6 +1327,9 @@ export const db = {
     const settings: SiteSettings = {
       ...INITIAL_SETTINGS,
       ...raw,
+      metrics: { ...INITIAL_SETTINGS.metrics, ...(raw.metrics || {}) },
+      certifications: raw.certifications && raw.certifications.length > 0 ? raw.certifications : INITIAL_CERTIFICATIONS,
+      factoryGallery: raw.factoryGallery && raw.factoryGallery.length > 0 ? raw.factoryGallery : INITIAL_FACTORY_GALLERY,
       contactInfo: { ...INITIAL_SETTINGS.contactInfo, ...(raw.contactInfo || {}) },
       homepage: { 
         ...INITIAL_SETTINGS.homepage, 
@@ -1486,6 +1687,138 @@ export const db = {
     data.clients = clients;
     saveData(data);
     return true;
+  },
+
+  // Factory Gallery (12 Departments)
+  getFactoryGallery(department?: string, onlyActive = false): FactoryGalleryItem[] {
+    const data = ensureDataFile();
+    const items = data.settings?.factoryGallery || INITIAL_FACTORY_GALLERY;
+    let list = items;
+    if (onlyActive) {
+      list = list.filter((item) => item.isActive);
+    }
+    if (department && department !== 'ALL') {
+      list = list.filter((item) => item.department.toLowerCase() === department.toLowerCase());
+    }
+    return [...list].sort((a, b) => a.displayOrder - b.displayOrder);
+  },
+
+  saveFactoryGalleryItem(itemData: Partial<FactoryGalleryItem> & { imageUrl: string; department: FactoryDepartment; caption: string }): FactoryGalleryItem {
+    const data = ensureDataFile();
+    const settings = data.settings || INITIAL_SETTINGS;
+    const gallery = settings.factoryGallery || INITIAL_FACTORY_GALLERY;
+    const now = new Date().toISOString();
+    const index = itemData.id ? gallery.findIndex((g) => g.id === itemData.id) : -1;
+
+    if (index >= 0) {
+      const updated: FactoryGalleryItem = {
+        ...gallery[index],
+        ...itemData,
+        updatedAt: now,
+      };
+      gallery[index] = updated;
+      settings.factoryGallery = gallery;
+      data.settings = settings;
+      saveData(data);
+      return updated;
+    } else {
+      const maxOrder = gallery.reduce((max, g) => (g.displayOrder > max ? g.displayOrder : max), 0);
+      const newItem: FactoryGalleryItem = {
+        id: 'fac-' + Date.now(),
+        imageUrl: itemData.imageUrl,
+        caption: itemData.caption,
+        department: itemData.department,
+        altText: itemData.altText || itemData.caption,
+        displayOrder: itemData.displayOrder !== undefined ? itemData.displayOrder : maxOrder + 1,
+        isActive: itemData.isActive !== undefined ? itemData.isActive : true,
+        createdAt: now,
+        updatedAt: now,
+      };
+      gallery.push(newItem);
+      settings.factoryGallery = gallery;
+      data.settings = settings;
+      saveData(data);
+      return newItem;
+    }
+  },
+
+  deleteFactoryGalleryItem(id: string): boolean {
+    const data = ensureDataFile();
+    const settings = data.settings || INITIAL_SETTINGS;
+    const gallery = settings.factoryGallery || INITIAL_FACTORY_GALLERY;
+    const filtered = gallery.filter((g) => g.id !== id);
+    if (filtered.length !== gallery.length) {
+      settings.factoryGallery = filtered;
+      data.settings = settings;
+      saveData(data);
+      return true;
+    }
+    return false;
+  },
+
+  // Certifications
+  getCertifications(onlyActive = false): Certification[] {
+    const data = ensureDataFile();
+    const certs = data.settings?.certifications || INITIAL_CERTIFICATIONS;
+    const list = onlyActive ? certs.filter((c) => c.isActive) : certs;
+    return [...list].sort((a, b) => a.displayOrder - b.displayOrder);
+  },
+
+  saveCertification(certData: Partial<Certification> & { name: string; issuingOrganization: string; certificateNumber: string; expiryDate: string }): Certification {
+    const data = ensureDataFile();
+    const settings = data.settings || INITIAL_SETTINGS;
+    const certs = settings.certifications || INITIAL_CERTIFICATIONS;
+    const now = new Date().toISOString();
+    const index = certData.id ? certs.findIndex((c) => c.id === certData.id) : -1;
+
+    if (index >= 0) {
+      const updated: Certification = {
+        ...certs[index],
+        ...certData,
+        updatedAt: now,
+      };
+      certs[index] = updated;
+      settings.certifications = certs;
+      data.settings = settings;
+      saveData(data);
+      return updated;
+    } else {
+      const maxOrder = certs.reduce((max, c) => (c.displayOrder > max ? c.displayOrder : max), 0);
+      const newCert: Certification = {
+        id: 'cert-' + Date.now(),
+        name: certData.name,
+        issuingOrganization: certData.issuingOrganization,
+        certificateNumber: certData.certificateNumber,
+        issueDate: certData.issueDate || now.split('T')[0],
+        expiryDate: certData.expiryDate,
+        imageUrl: certData.imageUrl || '',
+        pdfUrl: certData.pdfUrl || '',
+        description: certData.description || '',
+        displayOrder: certData.displayOrder !== undefined ? certData.displayOrder : maxOrder + 1,
+        isActive: certData.isActive !== undefined ? certData.isActive : true,
+        createdAt: now,
+        updatedAt: now,
+      };
+      certs.push(newCert);
+      settings.certifications = certs;
+      data.settings = settings;
+      saveData(data);
+      return newCert;
+    }
+  },
+
+  deleteCertification(id: string): boolean {
+    const data = ensureDataFile();
+    const settings = data.settings || INITIAL_SETTINGS;
+    const certs = settings.certifications || INITIAL_CERTIFICATIONS;
+    const filtered = certs.filter((c) => c.id !== id);
+    if (filtered.length !== certs.length) {
+      settings.certifications = filtered;
+      data.settings = settings;
+      saveData(data);
+      return true;
+    }
+    return false;
   },
 };
 

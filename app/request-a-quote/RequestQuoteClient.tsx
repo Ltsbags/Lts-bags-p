@@ -42,9 +42,12 @@ export default function RequestQuoteClient() {
     category: initialCategory,
     productRequirement: initialProduct,
     quantity: '100',
-    brandingType: 'Embroidery',
-    targetFabric: '1680D Ballistic Nylon',
+    targetPrice: '',
+    brandingType: '3D High-Density Embroidery',
+    targetFabric: '1680D Ballistic Nylon (Heavy Duty)',
     deliveryTimeline: 'Standard (15-20 Days)',
+    deliveryLocation: '',
+    sampleRequired: false,
     message: '',
   });
 
@@ -103,8 +106,15 @@ export default function RequestQuoteClient() {
           company: formData.company,
           email: formData.email,
           mobile: formData.mobile,
+          category: formData.category,
           productRequirement: formData.productRequirement || formData.category || 'Custom Bag Batch',
           quantity: formData.quantity,
+          targetPrice: formData.targetPrice,
+          material: formData.targetFabric,
+          printingType: formData.brandingType,
+          sampleRequired: formData.sampleRequired,
+          deliveryLocation: formData.deliveryLocation,
+          source: formData.sampleRequired ? 'SAMPLE_REQUEST' : 'FORM',
           message: detailedMessage,
         }),
       });
@@ -124,9 +134,12 @@ export default function RequestQuoteClient() {
         category: '',
         productRequirement: '',
         quantity: '100',
+        targetPrice: '',
         brandingType: '3D High-Density Embroidery',
         targetFabric: '1680D Ballistic Nylon (Heavy Duty)',
         deliveryTimeline: 'Standard (15-20 Days)',
+        deliveryLocation: '',
+        sampleRequired: false,
         message: '',
       });
     } catch (err: any) {
@@ -367,6 +380,54 @@ export default function RequestQuoteClient() {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Target Unit Budget / Price Range (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. ₹350 - ₹500 / $5 - $8 per unit"
+                    value={formData.targetPrice}
+                    onChange={(e) => setFormData({ ...formData, targetPrice: e.target.value })}
+                    className="w-full px-3 py-2.5 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-[#72AFDB] outline-none bg-slate-50/50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Delivery Destination City / Port
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Mumbai, Bengaluru, Dubai, London"
+                    value={formData.deliveryLocation}
+                    onChange={(e) => setFormData({ ...formData, deliveryLocation: e.target.value })}
+                    className="w-full px-3 py-2.5 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-[#72AFDB] outline-none bg-slate-50/50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Sample Batch Request Checkbox */}
+              <div className="bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/60 rounded-2xl p-4">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.sampleRequired}
+                    onChange={(e) => setFormData({ ...formData, sampleRequired: e.target.checked })}
+                    className="w-4 h-4 mt-0.5 text-purple-600 rounded bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 focus:ring-purple-500"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white block">
+                      Request Pre-Production Physical Sample Batch
+                    </span>
+                    <span className="text-[11px] text-slate-600 dark:text-slate-300 leading-normal block mt-0.5">
+                      Check this box if you require a physical sample with custom embroidery/print dispatched to your office for board/client approval before bulk cutting.
+                    </span>
+                  </div>
+                </label>
               </div>
 
               <div>

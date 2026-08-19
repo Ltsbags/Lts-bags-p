@@ -75,6 +75,7 @@ export default function Navbar() {
     { name: t('nav.categories', 'Categories'), href: '/categories' },
     { name: t('nav.customization', 'Customization'), href: '/customization' },
     { name: t('nav.manufacturing', 'Manufacturing'), href: '/manufacturing' },
+    { name: 'Factory Tour', href: '/factory-tour' },
     { name: t('nav.clients', 'Our Clients'), href: '/clients' },
     { name: t('nav.contact', 'Contact Us'), href: '/contact' },
   ];

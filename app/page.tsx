@@ -6,6 +6,7 @@ import HeroSlider from '@/components/HeroSlider';
 import ProductCard from '@/components/ProductCard';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ManufacturingProcess from '@/components/ManufacturingProcess';
+import HowToOrderSection from '@/components/HowToOrderSection';
 import SchemaScript from '@/components/SchemaScript';
 import { db } from '@/lib/db';
 import { generatePageMetadata, generateOrganizationSchema } from '@/lib/seo';
@@ -176,6 +177,9 @@ export default function HomePage() {
 
         {/* MANUFACTURING PROCESS */}
         <ManufacturingProcess />
+
+        {/* B2B HOW TO ORDER WORKFLOW */}
+        <HowToOrderSection />
 
         {/* LATEST BLOGS */}
         <section className="py-20 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">

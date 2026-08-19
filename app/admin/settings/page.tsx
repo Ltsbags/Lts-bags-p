@@ -41,10 +41,24 @@ import {
 import { SiteSettings, StatItem, FeatureItem, ProcessStepItem, TestimonialItem, ClientLogoItem } from '@/lib/types';
 
 export default function AdminSettingsPage() {
-  const [activeTab, setActiveTab] = useState<'brand' | 'contact' | 'homepage' | 'features' | 'testimonials' | 'about' | 'footer' | 'seo'>('brand');
+  const [activeTab, setActiveTab] = useState<'brand' | 'contact' | 'homepage' | 'features' | 'testimonials' | 'about' | 'footer' | 'metrics' | 'seo'>('brand');
   const [isGeneratingSitemap, setIsGeneratingSitemap] = useState<boolean>(false);
   const [sitemapStats, setSitemapStats] = useState<{ totalUrls?: number; counts?: any; generatedAt?: string } | null>(null);
   
+  // Factory Metrics & Trust Claims
+  const [yearsExperience, setYearsExperience] = useState('15+ Years');
+  const [factoryArea, setFactoryArea] = useState('25,000+ Sq. Ft.');
+  const [dailyCapacity, setDailyCapacity] = useState('10,000+ Bags/Day');
+  const [monthlyCapacity, setMonthlyCapacity] = useState('250,000+ Bags/Month');
+  const [workforce, setWorkforce] = useState('150+ Skilled Artisans');
+  const [minOrderQuantity, setMinOrderQuantity] = useState('50 - 100 Units');
+  const [onTimeDeliveryRate, setOnTimeDeliveryRate] = useState('99.8%');
+  const [countriesServed, setCountriesServed] = useState('15+ Countries');
+  const [certificationsList, setCertificationsList] = useState('ISO 9001:2015, AQL 2.5 QC');
+  const [qualityStandards, setQualityStandards] = useState('100% In-Line & Final Inspection');
+  const [clientSectionMode, setClientSectionMode] = useState<'CLIENTS' | 'INDUSTRIES_SERVED'>('INDUSTRIES_SERVED');
+  const [clientSectionTitle, setClientSectionTitle] = useState('Businesses & Industries We Serve');
+
   // Settings state
   const [logoUrl, setLogoUrl] = useState<string>('');
   const [logoText, setLogoText] = useState<string>('LTS BAGS');
@@ -199,6 +213,22 @@ export default function AdminSettingsPage() {
             if (f.categoriesTitle) setFooterCategoriesTitle(f.categoriesTitle);
             if (f.contactTitle) setFooterContactTitle(f.contactTitle);
           }
+
+          if (data.metrics) {
+            const m = data.metrics;
+            if (m.yearsExperience) setYearsExperience(m.yearsExperience);
+            if (m.factoryArea) setFactoryArea(m.factoryArea);
+            if (m.dailyCapacity) setDailyCapacity(m.dailyCapacity);
+            if (m.monthlyCapacity) setMonthlyCapacity(m.monthlyCapacity);
+            if (m.workforce) setWorkforce(m.workforce);
+            if (m.minOrderQuantity) setMinOrderQuantity(m.minOrderQuantity);
+            if (m.onTimeDeliveryRate) setOnTimeDeliveryRate(m.onTimeDeliveryRate);
+            if (m.countriesServed) setCountriesServed(m.countriesServed);
+            if (m.certificationsList) setCertificationsList(m.certificationsList);
+            if (m.qualityStandards) setQualityStandards(m.qualityStandards);
+            if (m.clientSectionMode) setClientSectionMode(m.clientSectionMode);
+            if (m.clientSectionTitle) setClientSectionTitle(m.clientSectionTitle);
+          }
         }
       })
       .catch((err) => {
@@ -318,6 +348,20 @@ export default function AdminSettingsPage() {
         quickLinksTitle: footerQuickLinksTitle,
         categoriesTitle: footerCategoriesTitle,
         contactTitle: footerContactTitle,
+      },
+      metrics: {
+        yearsExperience,
+        factoryArea,
+        dailyCapacity,
+        monthlyCapacity,
+        workforce,
+        minOrderQuantity,
+        onTimeDeliveryRate,
+        countriesServed,
+        certifications: certificationsList,
+        qualityStandards,
+        clientSectionMode,
+        clientSectionTitle,
       },
       updatedAt: new Date().toISOString(),
     };
@@ -593,6 +637,18 @@ export default function AdminSettingsPage() {
             >
               <Layers className="w-4 h-4" />
               <span>Footer Content</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('metrics')}
+              className={`px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                activeTab === 'metrics'
+                  ? 'bg-sky-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <Factory className="w-4 h-4 text-amber-500" />
+              <span>Factory Metrics &amp; Claims</span>
             </button>
 
             <button
@@ -1307,7 +1363,218 @@ export default function AdminSettingsPage() {
             </div>
           )}
 
-          {/* TAB 8: SEO & XML Sitemap */}
+          {/* TAB 8: Factory Metrics & Claims */}
+          {activeTab === 'metrics' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">
+                <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 font-serif flex items-center gap-2">
+                      <Factory className="w-5 h-5 text-amber-600" /> Real Manufacturing Metrics &amp; Trust Claims
+                    </h3>
+                    <p className="text-slate-500 text-xs">
+                      Set authentic, verifiable factory capacity figures, minimum order limits, quality protocol, and client transparency toggles.
+                    </p>
+                  </div>
+                  <span className="bg-amber-100 text-amber-900 text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border border-amber-200">
+                    B2B Trust Authority
+                  </span>
+                </div>
+
+                {/* Capacity & Production Numbers */}
+                <div className="space-y-4">
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    1. Factory Scale &amp; Production Capacity
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Years of Manufacturing Experience</label>
+                      <input
+                        type="text"
+                        value={yearsExperience}
+                        onChange={(e) => setYearsExperience(e.target.value)}
+                        placeholder="e.g. 15+ Years"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Factory Floor Space / Area</label>
+                      <input
+                        type="text"
+                        value={factoryArea}
+                        onChange={(e) => setFactoryArea(e.target.value)}
+                        placeholder="e.g. 25,000+ Sq. Ft."
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Daily Bag Production Capacity</label>
+                      <input
+                        type="text"
+                        value={dailyCapacity}
+                        onChange={(e) => setDailyCapacity(e.target.value)}
+                        placeholder="e.g. 10,000+ Bags/Day"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Monthly Throughput Capacity</label>
+                      <input
+                        type="text"
+                        value={monthlyCapacity}
+                        onChange={(e) => setMonthlyCapacity(e.target.value)}
+                        placeholder="e.g. 250,000+ Bags/Month"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Skilled Workforce / Artisans</label>
+                      <input
+                        type="text"
+                        value={workforce}
+                        onChange={(e) => setWorkforce(e.target.value)}
+                        placeholder="e.g. 150+ Skilled Artisans"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Minimum Order Quantity (MOQ)</label>
+                      <input
+                        type="text"
+                        value={minOrderQuantity}
+                        onChange={(e) => setMinOrderQuantity(e.target.value)}
+                        placeholder="e.g. 50 - 100 Units"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quality & Reliability Claims */}
+                <div className="space-y-4 pt-4 border-t border-slate-100">
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    2. Quality Control &amp; Delivery SLA
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">On-Time Dispatch Rate</label>
+                      <input
+                        type="text"
+                        value={onTimeDeliveryRate}
+                        onChange={(e) => setOnTimeDeliveryRate(e.target.value)}
+                        placeholder="e.g. 99.8%"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Countries / Regions Supplied</label>
+                      <input
+                        type="text"
+                        value={countriesServed}
+                        onChange={(e) => setCountriesServed(e.target.value)}
+                        placeholder="e.g. 15+ Countries"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Quality Inspection Protocol</label>
+                      <input
+                        type="text"
+                        value={qualityStandards}
+                        onChange={(e) => setQualityStandards(e.target.value)}
+                        placeholder="e.g. 100% In-Line & Final Inspection (AQL 2.5)"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Key Compliance Badges</label>
+                      <input
+                        type="text"
+                        value={certificationsList}
+                        onChange={(e) => setCertificationsList(e.target.value)}
+                        placeholder="e.g. ISO 9001:2015, MSME Registered"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Client Authenticity Toggle */}
+                <div className="space-y-4 pt-4 border-t border-slate-100">
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    3. Client Claims &amp; Social Proof Authenticity
+                  </h4>
+                  
+                  <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-4 space-y-3">
+                    <div className="text-xs text-amber-900 font-medium">
+                      ⚠️ <strong>B2B Verification Rule:</strong> If you do not have written consent to display specific corporate client logos, switch mode to <strong>Industries &amp; Business Sectors Served</strong> to maintain 100% truth in marketing.
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">Social Proof Section Mode</label>
+                        <select
+                          value={clientSectionMode}
+                          onChange={(e) => setClientSectionMode(e.target.value as 'CLIENTS' | 'INDUSTRIES_SERVED')}
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-bold bg-white"
+                        >
+                          <option value="INDUSTRIES_SERVED">Industries &amp; Sectors We Supply (Recommended)</option>
+                          <option value="CLIENTS">Verified Official Client Logos</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 mb-1">Section Display Title</label>
+                        <input
+                          type="text"
+                          value={clientSectionTitle}
+                          onChange={(e) => setClientSectionTitle(e.target.value)}
+                          placeholder="e.g. Industries &amp; Corporate Sectors We Supply"
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs font-medium bg-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Live Preview Column */}
+              <div className="lg:col-span-4 space-y-4">
+                <div className="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 space-y-4 shadow-sm">
+                  <h4 className="text-xs font-mono uppercase text-amber-400 font-bold tracking-wider">
+                    Live Verified Metrics Card
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block">Experience</span>
+                      <span className="text-base font-bold text-white font-mono">{yearsExperience}</span>
+                    </div>
+                    <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block">Facility Area</span>
+                      <span className="text-base font-bold text-amber-400 font-mono">{factoryArea}</span>
+                    </div>
+                    <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block">Daily Output</span>
+                      <span className="text-base font-bold text-sky-400 font-mono">{dailyCapacity}</span>
+                    </div>
+                    <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                      <span className="text-[10px] text-slate-400 block">Workforce</span>
+                      <span className="text-base font-bold text-emerald-400 font-mono">{workforce}</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
+                    <div>MOQ: <span className="text-slate-200 font-bold">{minOrderQuantity}</span></div>
+                    <div>Dispatch SLA: <span className="text-emerald-400 font-bold">{onTimeDeliveryRate}</span></div>
+                    <div>Quality: <span className="text-slate-200">{qualityStandards}</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 9: SEO & XML Sitemap */}
           {activeTab === 'seo' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-6">

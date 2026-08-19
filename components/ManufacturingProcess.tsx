@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { 
   PencilRuler, 
   Layers, 
@@ -8,8 +9,9 @@ import {
   Printer, 
   ShieldCheck, 
   Package, 
-  Truck,
-  Factory
+  Truck, 
+  Factory,
+  ArrowRight
 } from 'lucide-react';
 
 export default function ManufacturingProcess() {
@@ -107,6 +109,16 @@ export default function ManufacturingProcess() {
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Link
+            href="/factory-tour"
+            className="inline-flex items-center gap-2 bg-[#72AFDB] hover:bg-[#5C9BC7] text-slate-950 font-bold px-7 py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#72AFDB]/20"
+          >
+            <span>Explore Real Factory Photos &amp; Machine Lines</span>
+            <ArrowRight className="w-4 h-4 text-slate-950" />
+          </Link>
         </div>
       </div>
     </section>
