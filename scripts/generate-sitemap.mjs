@@ -59,6 +59,7 @@ async function generateSitemap() {
   // 1. Static Key Pages with priorities and change frequencies
   const staticPages = [
     { path: '', priority: '1.0', changefreq: 'daily' },
+    { path: '/request-a-quote', priority: '0.9', changefreq: 'daily' },
     { path: '/products', priority: '0.9', changefreq: 'daily' },
     { path: '/categories', priority: '0.9', changefreq: 'weekly' },
     { path: '/customization', priority: '0.8', changefreq: 'weekly' },
